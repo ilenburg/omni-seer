@@ -13,6 +13,9 @@ public class GameView extends GLSurfaceView {
 
     public GameView(Context context) {
         super(context);
+
+        setEGLContextClientVersion(2);
+
         this.gameRenderer = new GameRenderer(context);
         setRenderer(gameRenderer);
     }

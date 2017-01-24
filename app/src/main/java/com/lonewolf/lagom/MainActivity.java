@@ -16,6 +16,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        gameView.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        gameView.onResume();
+    }
+
+    @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
