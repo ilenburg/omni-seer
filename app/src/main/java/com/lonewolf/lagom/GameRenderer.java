@@ -46,10 +46,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         initShaders();
         initEntities();
 
-        GLES20.glUseProgram(shaderPrograms[0]);
-
-        //GLES20.glEnable(GLES20.GL_BLEND);
-        //GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
     }
 
@@ -129,7 +127,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         return shader;
     }
 
-    public static void checkGlError(String glOperation) {
+    private static void checkGlError(String glOperation) {
         int error;
         while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
             Log.e(TAG, glOperation + ": glError " + error);
