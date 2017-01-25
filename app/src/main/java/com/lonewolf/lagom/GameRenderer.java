@@ -111,6 +111,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glAttachShader(shaderProgram, vertexShader);
         GLES20.glAttachShader(shaderProgram, fragmentShader);
+
+        GLES20.glBindAttribLocation(shaderProgram, 0, "vPosition");
+
         GLES20.glLinkProgram(shaderProgram);
 
         return shaderProgram;

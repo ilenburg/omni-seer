@@ -5,6 +5,7 @@ import android.opengl.GLES20;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 
 /**
  * Created by Ian on 23/01/2017.
@@ -16,11 +17,18 @@ public class Player {
 
     private FloatBuffer vertexBuffer;
 
+    private ShortBuffer orderBuffer;
+
+    private int vPosition = 0;
+
     private float[] geometry = {
-            -0.75f, 0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
+            -0.25f, 0.25f, 0.0f,
+            -0.25f, -0.25f, 0.0f,
+            0.25f, -0.25f, 0.0f,
+            0.25f, 0.25f, 0.0f
     };
+
+    private final short drawOrder[] = { 0, 1, 2, 0, 2, 3 };
 
     public Player(int shaderProgram) {
         this.shaderProgram = shaderProgram;
@@ -32,21 +40,27 @@ public class Player {
 
         GLES20.glUseProgram(shaderProgram);
 
-        int mPositionHandle = GLES20.glGetAttribLocation(shaderProgram, "vPosition");
+        GLES20.glEnableVertexAttribArray(vPosition);
 
-        GLES20.glEnableVertexAttribArray(mPositionHandle);
+        GLES20.glVertexAttribPointer(vPosition, 3, GLES20.GL_FLOAT, false, 3 * 4, vertexBuffer);
 
-        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, 3 * 4, vertexBuffer);
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, drawOrder.length, GLES20.GL_UNSIGNED_SHORT, orderBuffer);
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 3);
     }
-    
+
     private void generateBuffers() {
+
         ByteBuffer bb = ByteBuffer.allocateDirect(geometry.length * 4);
         bb.order(ByteOrder.nativeOrder());
         vertexBuffer = bb.asFloatBuffer();
         vertexBuffer.put(geometry);
         vertexBuffer.rewind();
+
+        ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
+        dlb.order(ByteOrder.nativeOrder());
+        orderBuffer = dlb.asShortBuffer();
+        orderBuffer.put(drawOrder);
+        orderBuffer.rewind();
     }
 
 
