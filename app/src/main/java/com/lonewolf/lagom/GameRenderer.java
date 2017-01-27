@@ -1,8 +1,11 @@
 package com.lonewolf.lagom;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.Log;
 
@@ -24,7 +27,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     private final Context context;
 
-    private int[] shaderPrograms = new int [6];
+    private int[] shaderPrograms = new int[6];
+    private int[] textures = new int[6];
 
     private float[] mMVPMatrix = new float[16];
     private float[] mProjectionMatrix = new float[16];
@@ -44,6 +48,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mViewMatrix, 0);
 
         initShaders();
+        initTextures();
         initEntities();
 
         GLES20.glEnable(GLES20.GL_BLEND);
@@ -69,6 +74,13 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         player.draw(mMVPMatrix);
 
+        checkGlError("Draw");
+
+    }
+
+    private void initTextures() {
+
+        loadTexture(R.drawable.final_dude);
 
     }
 
@@ -79,8 +91,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         try {
             vertexShader = getShaderCode(R.raw.base_vert);
             fragmentShader = getShaderCode(R.raw.base_frag);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -90,7 +101,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     }
 
     private void initEntities() {
-        this.player = new Player(shaderPrograms[0]);
+
+        this.player = new Player(shaderPrograms[0], textures[0]);
     }
 
     private String getShaderCode(int resourceId) throws IOException {
@@ -114,9 +126,48 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glBindAttribLocation(shaderProgram, 0, "vPosition");
 
+        GLES20.glBindAttribLocation(shaderProgram, 1, "texCoordIn");
+
         GLES20.glLinkProgram(shaderProgram);
 
         return shaderProgram;
+    }
+
+    private void loadTexture(int texture) {
+
+        InputStream imagestream = context.getResources().openRawResource(texture);
+
+        //android.graphics.Matrix flip = new android.graphics.Matrix();
+        //flip.postScale(-1f, -1f);
+
+        Bitmap bitmap = null;
+
+        try {
+
+            bitmap = BitmapFactory.decodeStream(imagestream);
+
+        } catch (Exception e) {
+
+        } finally {
+            try {
+                imagestream.close();
+            } catch (IOException e) {
+
+            }
+        }
+
+        GLES20.glGenTextures(1, textures, 0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
+
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+
+        bitmap.recycle();
     }
 
     private static int loadShader(int type, String shaderCode) {
