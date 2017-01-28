@@ -66,7 +66,7 @@ public class ResourceManager {
     private void initEntities() {
 
         this.player = new Player(shaderPrograms[0], textures[0]);
-        //this.background = new Background(shaderPrograms[0], textures[0]);
+        this.background = new Background(shaderPrograms[0], textures[0]);
     }
 
     private String getShaderCode(int resourceId) throws IOException {

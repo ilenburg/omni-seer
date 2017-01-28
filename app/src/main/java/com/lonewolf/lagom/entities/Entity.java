@@ -53,7 +53,7 @@ public abstract class Entity {
 
         GLES20.glEnableVertexAttribArray(vPosition);
 
-        GLES20.glVertexAttribPointer(vPosition, 3, GLES20.GL_FLOAT, false, 3 * 4, vertexBuffer);
+        GLES20.glVertexAttribPointer(vPosition, 2, GLES20.GL_FLOAT, false, 2 * 4, vertexBuffer);
 
         GLES20.glEnableVertexAttribArray(tPosition);
 
