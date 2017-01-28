@@ -15,20 +15,20 @@ public abstract class Entity {
 
     private static final short drawOrder[] = {0, 1, 2, 0, 2, 3};
 
-    private float[] geometry;
-    private float[] texturePos;
+    private final float[] geometry;
+    private final float[] texturePos;
 
-    private int shaderProgram;
-    private int texture;
+    private final int shaderProgram;
+    private final int texture;
 
     private FloatBuffer vertexBuffer;
     private FloatBuffer textureBuffer;
 
     private ShortBuffer orderBuffer;
 
-    private final int vPosition = 0;
-    private final int tPosition = 1;
-    private int uMVPMatrixPosition;
+    private final int vPosition;
+    private final int tPosition;
+    private final int uMVPMatrixPosition;
 
     protected Entity(int shaderProgram, int texture, float[] geometry, float[] texturePos) {
 
@@ -36,6 +36,10 @@ public abstract class Entity {
         this.texture = texture;
 
         this.uMVPMatrixPosition = GLES20.glGetUniformLocation(shaderProgram, "uMVPMatrix");
+
+        this.vPosition = GLES20.glGetAttribLocation(shaderProgram, "vPosition");
+
+        this.tPosition = GLES20.glGetAttribLocation(shaderProgram, "texCoordIn");
 
         this.geometry = geometry;
         this.texturePos = texturePos;

@@ -57,6 +57,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
+        //resourceManager.background.draw(mMVPMatrix);
+
         resourceManager.player.draw(mMVPMatrix);
 
         checkGlError("Draw");

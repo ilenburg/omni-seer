@@ -7,6 +7,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import com.lonewolf.lagom.R;
+import com.lonewolf.lagom.entities.Background;
 import com.lonewolf.lagom.entities.Player;
 
 import org.apache.commons.io.IOUtils;
@@ -28,6 +29,7 @@ public class ResourceManager {
     private int[] textures = new int[6];
 
     public Player player;
+    public Background background;
 
     public ResourceManager(Context context) {
 
@@ -57,13 +59,14 @@ public class ResourceManager {
 
     private void initTextures() {
 
-        loadTexture(R.drawable.final_dude);
+        loadTexture(R.drawable.final_dude, 0);
 
     }
 
     private void initEntities() {
 
         this.player = new Player(shaderPrograms[0], textures[0]);
+        //this.background = new Background(shaderPrograms[0], textures[0]);
     }
 
     private String getShaderCode(int resourceId) throws IOException {
@@ -75,9 +78,9 @@ public class ResourceManager {
         return shaderCode;
     }
 
-    private void loadTexture(int texture) {
+    private void loadTexture(int textureImage, int texturePosition) {
 
-        InputStream imagestream = context.getResources().openRawResource(texture);
+        InputStream imagestream = context.getResources().openRawResource(textureImage);
 
         Bitmap bitmap = null;
 
@@ -96,7 +99,8 @@ public class ResourceManager {
         }
 
         GLES20.glGenTextures(1, textures, 0);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[texturePosition]);
 
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
@@ -107,6 +111,8 @@ public class ResourceManager {
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
 
         bitmap.recycle();
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
         checkGlError("LoadTexture");
     }
@@ -120,10 +126,6 @@ public class ResourceManager {
 
         GLES20.glAttachShader(shaderProgram, vertexShader);
         GLES20.glAttachShader(shaderProgram, fragmentShader);
-
-        GLES20.glBindAttribLocation(shaderProgram, 0, "vPosition");
-
-        GLES20.glBindAttribLocation(shaderProgram, 1, "texCoordIn");
 
         GLES20.glLinkProgram(shaderProgram);
 
