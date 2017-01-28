@@ -25,19 +25,20 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private float[] mViewMatrix = new float[16];
 
     public GameRenderer(ResourceManager resourceManager) {
-
         this.resourceManager = resourceManager;
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+
+        resourceManager.loadResources();
+
         GLES20.glClearColor(0.0f, 0.5f, 0.75f, 1f);
 
         Matrix.setIdentityM(mViewMatrix, 0);
 
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-
     }
 
     @Override

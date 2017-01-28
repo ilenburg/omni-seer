@@ -33,10 +33,12 @@ public class ResourceManager {
 
         this.context = context;
 
+    }
+
+    public void loadResources() {
         initShaders();
         initTextures();
         initEntities();
-
     }
 
     private void initShaders() {
@@ -51,8 +53,6 @@ public class ResourceManager {
         }
 
         shaderPrograms[0] = generateShaderProgram(vertexShader, fragmentShader);
-
-        checkGlError("GenerateShaderProgram");
     }
 
     private void initTextures() {
@@ -73,25 +73,6 @@ public class ResourceManager {
         inputStream.close();
 
         return shaderCode;
-    }
-
-    private static int generateShaderProgram(String vertexShaderCode, String fragmentShaderCode) {
-
-        int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-        int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
-
-        int shaderProgram = GLES20.glCreateProgram();
-
-        GLES20.glAttachShader(shaderProgram, vertexShader);
-        GLES20.glAttachShader(shaderProgram, fragmentShader);
-
-        GLES20.glBindAttribLocation(shaderProgram, 0, "vPosition");
-
-        GLES20.glBindAttribLocation(shaderProgram, 1, "texCoordIn");
-
-        GLES20.glLinkProgram(shaderProgram);
-
-        return shaderProgram;
     }
 
     private void loadTexture(int texture) {
@@ -126,6 +107,29 @@ public class ResourceManager {
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
 
         bitmap.recycle();
+
+        checkGlError("LoadTexture");
+    }
+
+    private static int generateShaderProgram(String vertexShaderCode, String fragmentShaderCode) {
+
+        int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
+        int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+
+        int shaderProgram = GLES20.glCreateProgram();
+
+        GLES20.glAttachShader(shaderProgram, vertexShader);
+        GLES20.glAttachShader(shaderProgram, fragmentShader);
+
+        GLES20.glBindAttribLocation(shaderProgram, 0, "vPosition");
+
+        GLES20.glBindAttribLocation(shaderProgram, 1, "texCoordIn");
+
+        GLES20.glLinkProgram(shaderProgram);
+
+        checkGlError("GenerateShaderProgram");
+
+        return shaderProgram;
     }
 
     private static int loadShader(int type, String shaderCode) {

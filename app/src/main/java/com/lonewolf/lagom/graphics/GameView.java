@@ -12,23 +12,20 @@ import com.lonewolf.lagom.resources.ResourceManager;
 
 public class GameView extends GLSurfaceView {
 
-    private final GameRenderer gameRenderer;
     private final GameEngine gameEngine;
-    private final ResourceManager resourceManager;
+    private final GameRenderer gameRenderer;
 
     public GameView(Context context) {
         super(context);
 
         setEGLContextClientVersion(2);
 
-        this.resourceManager = new ResourceManager(context);
+        ResourceManager resourceManager = new ResourceManager(context);
 
+        this.gameEngine = new GameEngine(resourceManager);
         this.gameRenderer = new GameRenderer(resourceManager);
+
         setRenderer(gameRenderer);
-
-        this.gameEngine = new GameEngine();
-
-        //gameEngine.run();
     }
 
     @Override
