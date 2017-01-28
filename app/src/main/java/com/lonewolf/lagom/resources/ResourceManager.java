@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 import com.lonewolf.lagom.R;
 import com.lonewolf.lagom.entities.Background;
@@ -15,6 +16,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static android.content.ContentValues.TAG;
 import static com.lonewolf.lagom.graphics.GameRenderer.checkGlError;
 
 /**
@@ -83,22 +85,14 @@ public class ResourceManager {
 
         InputStream imageStream = context.getResources().openRawResource(textureImage);
 
-        Bitmap bitmap = null;
+        Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
 
         try {
-
-            bitmap = BitmapFactory.decodeStream(imageStream);
-
-        } catch (Exception e) {
-
-        } finally {
-            try {
-                imageStream.close();
-            } catch (IOException e) {
-
-            }
+            imageStream.close();
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
         }
-
+        
         GLES20.glGenTextures(1, textures, texturePosition);
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[texturePosition]);

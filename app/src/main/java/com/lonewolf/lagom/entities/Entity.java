@@ -15,16 +15,13 @@ public abstract class Entity {
 
     private static final short drawOrder[] = {0, 1, 2, 0, 2, 3};
 
-    private final float[] geometry;
-    private final float[] texturePos;
-
     private final int shaderProgram;
     private final int texture;
 
-    private FloatBuffer vertexBuffer;
-    private FloatBuffer textureBuffer;
+    private final FloatBuffer vertexBuffer;
+    private final FloatBuffer textureBuffer;
 
-    private ShortBuffer orderBuffer;
+    private final ShortBuffer orderBuffer;
 
     private final int vPosition;
     private final int tPosition;
@@ -41,10 +38,23 @@ public abstract class Entity {
 
         this.tPosition = GLES20.glGetAttribLocation(shaderProgram, "texCoordIn");
 
-        this.geometry = geometry;
-        this.texturePos = texturePos;
+        ByteBuffer bb = ByteBuffer.allocateDirect(geometry.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        vertexBuffer = bb.asFloatBuffer();
+        vertexBuffer.put(geometry);
+        vertexBuffer.rewind();
 
-        generateBuffers();
+        bb = ByteBuffer.allocateDirect(texturePos.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        textureBuffer = bb.asFloatBuffer();
+        textureBuffer.put(texturePos);
+        textureBuffer.rewind();
+
+        ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
+        dlb.order(ByteOrder.nativeOrder());
+        orderBuffer = dlb.asShortBuffer();
+        orderBuffer.put(drawOrder);
+        orderBuffer.rewind();
     }
 
     public void draw(float[] mvpMatrix) {
@@ -65,27 +75,6 @@ public abstract class Entity {
 
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, drawOrder.length, GLES20.GL_UNSIGNED_SHORT, orderBuffer);
 
-    }
-
-    private void generateBuffers() {
-
-        ByteBuffer bb = ByteBuffer.allocateDirect(geometry.length * 4);
-        bb.order(ByteOrder.nativeOrder());
-        vertexBuffer = bb.asFloatBuffer();
-        vertexBuffer.put(geometry);
-        vertexBuffer.rewind();
-
-        bb = ByteBuffer.allocateDirect(texturePos.length * 4);
-        bb.order(ByteOrder.nativeOrder());
-        textureBuffer = bb.asFloatBuffer();
-        textureBuffer.put(texturePos);
-        textureBuffer.rewind();
-
-        ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
-        dlb.order(ByteOrder.nativeOrder());
-        orderBuffer = dlb.asShortBuffer();
-        orderBuffer.put(drawOrder);
-        orderBuffer.rewind();
     }
 
 }
