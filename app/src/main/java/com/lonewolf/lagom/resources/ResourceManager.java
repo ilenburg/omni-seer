@@ -46,17 +46,21 @@ public class ResourceManager {
     }
 
     private void initShaders() {
+
         String vertexShader = null;
         String fragmentShader = null;
+        String fragmentScrollShader = null;
 
         try {
             vertexShader = getShaderCode(R.raw.base_vert);
             fragmentShader = getShaderCode(R.raw.base_frag);
+            fragmentScrollShader = getShaderCode(R.raw.scroll_frag);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         shaderPrograms[0] = generateShaderProgram(vertexShader, fragmentShader);
+        shaderPrograms[1] = generateShaderProgram(vertexShader, fragmentScrollShader);
     }
 
     private void initTextures() {
@@ -69,7 +73,7 @@ public class ResourceManager {
     private void initEntities() {
 
         this.player = new Player(shaderPrograms[0], textures[0]);
-        this.background = new Background(shaderPrograms[0], textures[1]);
+        this.background = new Background(shaderPrograms[1], textures[1]);
     }
 
     private String getShaderCode(int resourceId) throws IOException {
@@ -81,7 +85,7 @@ public class ResourceManager {
         return shaderCode;
     }
 
-    private void loadTexture(int textureImage, int texturePosition, boolean tileable) {
+    private void loadTexture(int textureImage, int texturePosition, boolean tileAble) {
 
         InputStream imageStream = context.getResources().openRawResource(textureImage);
 
@@ -92,12 +96,12 @@ public class ResourceManager {
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }
-        
+
         GLES20.glGenTextures(1, textures, texturePosition);
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[texturePosition]);
 
-        float repeatParam = tileable ? GLES20.GL_REPEAT : GLES20.GL_CLAMP_TO_EDGE;
+        float repeatParam = tileAble ? GLES20.GL_REPEAT : GLES20.GL_CLAMP_TO_EDGE;
 
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, repeatParam);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, repeatParam);

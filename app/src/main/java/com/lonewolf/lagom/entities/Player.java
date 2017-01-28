@@ -20,6 +20,9 @@ public class Player extends Entity {
                 1.0f, 0.0f
         });
     }
+    
+    @Override
+    void extraDraw() {
 
-
+    }
 }
