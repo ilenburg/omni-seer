@@ -1,8 +1,10 @@
-package com.lonewolf.lagom;
+package com.lonewolf.lagom.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import com.lonewolf.lagom.graphics.GameView;
 
 public class MainActivity extends AppCompatActivity {
 

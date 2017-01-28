@@ -1,4 +1,4 @@
-package com.lonewolf.lagom;
+package com.lonewolf.lagom.graphics;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,6 +8,9 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.Log;
+
+import com.lonewolf.lagom.entities.Player;
+import com.lonewolf.lagom.R;
 
 import org.apache.commons.io.IOUtils;
 

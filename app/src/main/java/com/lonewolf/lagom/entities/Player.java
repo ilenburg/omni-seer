@@ -1,4 +1,4 @@
-package com.lonewolf.lagom;
+package com.lonewolf.lagom.entities;
 
 /**
  * Created by Ian on 23/01/2017.

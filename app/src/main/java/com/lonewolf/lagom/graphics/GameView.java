@@ -1,4 +1,4 @@
-package com.lonewolf.lagom;
+package com.lonewolf.lagom.graphics;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
