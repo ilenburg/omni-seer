@@ -59,14 +59,15 @@ public class ResourceManager {
 
     private void initTextures() {
 
-        loadTexture(R.drawable.final_dude, 0);
+        loadTexture(R.drawable.final_dude, 0, false);
+        loadTexture(R.drawable.background, 1, true);
 
     }
 
     private void initEntities() {
 
         this.player = new Player(shaderPrograms[0], textures[0]);
-        this.background = new Background(shaderPrograms[0], textures[0]);
+        this.background = new Background(shaderPrograms[0], textures[1]);
     }
 
     private String getShaderCode(int resourceId) throws IOException {
@@ -78,32 +79,34 @@ public class ResourceManager {
         return shaderCode;
     }
 
-    private void loadTexture(int textureImage, int texturePosition) {
+    private void loadTexture(int textureImage, int texturePosition, boolean tileable) {
 
-        InputStream imagestream = context.getResources().openRawResource(textureImage);
+        InputStream imageStream = context.getResources().openRawResource(textureImage);
 
         Bitmap bitmap = null;
 
         try {
 
-            bitmap = BitmapFactory.decodeStream(imagestream);
+            bitmap = BitmapFactory.decodeStream(imageStream);
 
         } catch (Exception e) {
 
         } finally {
             try {
-                imagestream.close();
+                imageStream.close();
             } catch (IOException e) {
 
             }
         }
 
-        GLES20.glGenTextures(1, textures, 0);
+        GLES20.glGenTextures(1, textures, texturePosition);
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[texturePosition]);
 
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        float repeatParam = tileable ? GLES20.GL_REPEAT : GLES20.GL_CLAMP_TO_EDGE;
+
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, repeatParam);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, repeatParam);
 
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
