@@ -60,15 +60,15 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
 
-        Matrix.setIdentityM(mProjectionMatrix, 0);
+        float ratio = (float) width / height;
+
+        Matrix.orthoM(mProjectionMatrix, 0, -ratio, +ratio, -1, 1, -1, 1);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-
-        Matrix.setIdentityM(mMVPMatrix, 0);
 
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
@@ -137,9 +137,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         InputStream imagestream = context.getResources().openRawResource(texture);
 
-        //android.graphics.Matrix flip = new android.graphics.Matrix();
-        //flip.postScale(-1f, -1f);
-
         Bitmap bitmap = null;
 
         try {
@@ -159,11 +156,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         GLES20.glGenTextures(1, textures, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
 
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
 
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
 
@@ -174,7 +171,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         int shader = GLES20.glCreateShader(type);
 
-        // add the source code to the shader and compile it
         GLES20.glShaderSource(shader, shaderCode);
         GLES20.glCompileShader(shader);
 

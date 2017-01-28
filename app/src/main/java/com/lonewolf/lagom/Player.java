@@ -25,12 +25,13 @@ public class Player {
 
     private final int vPosition = 0;
     private final int tPosition = 1;
+    private int uMVPMatrixPosition;
 
     private float[] geometry = {
-            -0.25f, 0.25f, 0.0f,
-            -0.25f, -0.25f, 0.0f,
-            0.25f, -0.25f, 0.0f,
-            0.25f, 0.25f, 0.0f
+            -0.2f, 0.2f, 0.0f,
+            -0.2f, -0.2f, 0.0f,
+            0.2f, -0.2f, 0.0f,
+            0.2f, 0.2f, 0.0f
     };
 
     private float texturePos[] = {
@@ -46,6 +47,8 @@ public class Player {
         this.shaderProgram = shaderProgram;
         this.texture = texture;
 
+        this.uMVPMatrixPosition = GLES20.glGetUniformLocation(shaderProgram, "uMVPMatrix");
+
         generateBuffers();
     }
 
@@ -60,6 +63,10 @@ public class Player {
         GLES20.glEnableVertexAttribArray(tPosition);
 
         GLES20.glVertexAttribPointer(tPosition, 2, GLES20.GL_FLOAT, false, 2 * 4, textureBuffer);
+
+        GLES20.glUniformMatrix4fv(uMVPMatrixPosition, 1, false, mvpMatrix, 0);
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture);
 
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, drawOrder.length, GLES20.GL_UNSIGNED_SHORT, orderBuffer);
 
