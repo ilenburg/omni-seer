@@ -65,7 +65,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         resourceManager.player.draw(mMVPMatrix);
 
-        //checkGlError("Draw");
+        checkGlError("Draw");
 
     }
 

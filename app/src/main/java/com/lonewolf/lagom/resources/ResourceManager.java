@@ -76,7 +76,7 @@ public class ResourceManager {
     private void initEntities() {
 
         this.player = new Player(shaderPrograms[0], textures[0]);
-        this.background = new Panorama(shaderPrograms[1], textures[1], 1.0f);
+        this.background = new Panorama(shaderPrograms[1], textures[1], 0.5f);
         this.panorama = new Panorama(shaderPrograms[1], textures[2], 1.0f);
         this.panoramaFar = new Panorama(shaderPrograms[1], textures[3], 0.5f);
     }
