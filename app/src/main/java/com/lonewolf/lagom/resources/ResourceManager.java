@@ -32,6 +32,7 @@ public class ResourceManager {
 
     public Player player;
     public Panorama background;
+    public Panorama foreground;
     public Panorama panorama;
     public Panorama panoramaFar;
 
@@ -71,14 +72,16 @@ public class ResourceManager {
         loadTexture(R.drawable.background, 1, true);
         loadTexture(R.drawable.panorama, 2, true);
         loadTexture(R.drawable.panorama_far, 3, true);
+        loadTexture(R.drawable.foreground, 4, true);
     }
 
     private void initEntities() {
 
-        this.player = new Player(shaderPrograms[0], textures[0]);
-        this.background = new Panorama(shaderPrograms[1], textures[1], 0.5f);
-        this.panorama = new Panorama(shaderPrograms[1], textures[2], 1.0f);
+        this.background = new Panorama(shaderPrograms[1], textures[1], 0.25f);
         this.panoramaFar = new Panorama(shaderPrograms[1], textures[3], 0.5f);
+        this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.75f);
+        this.player = new Player(shaderPrograms[0], textures[0]);
+        this.foreground = new Panorama(shaderPrograms[1], textures[4], 1.0f);
     }
 
     private String getShaderCode(int resourceId) throws IOException {

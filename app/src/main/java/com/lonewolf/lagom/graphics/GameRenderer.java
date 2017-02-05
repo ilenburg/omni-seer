@@ -63,7 +63,17 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         resourceManager.panorama.draw(mMVPMatrix, 0.001f);
 
-        resourceManager.player.draw(mMVPMatrix);
+        float[] moveMatrix = new float[16];
+
+        Matrix.setIdentityM(moveMatrix, 0);
+
+        Matrix.translateM(moveMatrix, 0, -1.0f, -0.51f, 0);
+
+        Matrix.multiplyMM(moveMatrix, 0, mMVPMatrix, 0, moveMatrix, 0);
+
+        resourceManager.player.draw(moveMatrix);
+
+        resourceManager.foreground.draw(mMVPMatrix, 0.001f);
 
         checkGlError("Draw");
 

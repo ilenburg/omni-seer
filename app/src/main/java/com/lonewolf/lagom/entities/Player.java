@@ -9,10 +9,10 @@ public class Player extends Entity {
     public Player(int shaderProgram, int texture) {
 
         super(shaderProgram, texture, new float[]{
-                -0.15f, 0.15f,
-                -0.15f, -0.15f,
-                0.15f, -0.15f,
-                0.15f, 0.15f
+                -0.125f, 0.125f,
+                -0.125f, -0.125f,
+                0.125f, -0.125f,
+                0.125f, 0.125f
         }, new float[]{
                 0.0f, 0.0f,
                 0.0f, 1.0f,
