@@ -57,9 +57,13 @@ public abstract class Entity {
         orderBuffer.rewind();
     }
 
-    abstract void extraDraw();
+    abstract void extraDraw(float cameraMove);
 
     public void draw(float[] mvpMatrix) {
+        draw(mvpMatrix, 0.0f);
+    }
+
+    public void draw(float[] mvpMatrix, float cameraMove) {
 
         GLES20.glUseProgram(shaderProgram);
 
@@ -75,7 +79,7 @@ public abstract class Entity {
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture);
 
-        extraDraw();
+        extraDraw(cameraMove);
 
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, drawOrder.length, GLES20.GL_UNSIGNED_SHORT, orderBuffer);
 

@@ -8,7 +8,7 @@ import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.lonewolf.lagom.R;
-import com.lonewolf.lagom.entities.Background;
+import com.lonewolf.lagom.entities.Panorama;
 import com.lonewolf.lagom.entities.Player;
 
 import org.apache.commons.io.IOUtils;
@@ -31,7 +31,9 @@ public class ResourceManager {
     private int[] textures = new int[6];
 
     public Player player;
-    public Background background;
+    public Panorama background;
+    public Panorama panorama;
+    public Panorama panoramaFar;
 
     public ResourceManager(Context context) {
 
@@ -67,13 +69,16 @@ public class ResourceManager {
 
         loadTexture(R.drawable.final_dude, 0, false);
         loadTexture(R.drawable.background, 1, true);
-
+        loadTexture(R.drawable.panorama, 2, true);
+        loadTexture(R.drawable.panorama_far, 3, true);
     }
 
     private void initEntities() {
 
         this.player = new Player(shaderPrograms[0], textures[0]);
-        this.background = new Background(shaderPrograms[1], textures[1]);
+        this.background = new Panorama(shaderPrograms[1], textures[1], 1.0f);
+        this.panorama = new Panorama(shaderPrograms[1], textures[2], 1.0f);
+        this.panoramaFar = new Panorama(shaderPrograms[1], textures[3], 0.5f);
     }
 
     private String getShaderCode(int resourceId) throws IOException {

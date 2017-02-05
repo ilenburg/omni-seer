@@ -48,6 +48,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         float ratio = (float) width / height;
 
         Matrix.orthoM(mProjectionMatrix, 0, -ratio, +ratio, -1, 1, -1, 1);
+
+        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
     }
 
     @Override
@@ -55,13 +57,15 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
+        resourceManager.background.draw(mMVPMatrix, 0.001f);
 
-        resourceManager.background.draw(mMVPMatrix);
+        resourceManager.panoramaFar.draw(mMVPMatrix, 0.001f);
+
+        resourceManager.panorama.draw(mMVPMatrix, 0.001f);
 
         resourceManager.player.draw(mMVPMatrix);
 
-        checkGlError("Draw");
+        //checkGlError("Draw");
 
     }
 

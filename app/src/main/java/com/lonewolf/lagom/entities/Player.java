@@ -9,10 +9,10 @@ public class Player extends Entity {
     public Player(int shaderProgram, int texture) {
 
         super(shaderProgram, texture, new float[]{
-                -0.2f, 0.2f,
-                -0.2f, -0.2f,
-                0.2f, -0.2f,
-                0.2f, 0.2f
+                -0.15f, 0.15f,
+                -0.15f, -0.15f,
+                0.15f, -0.15f,
+                0.15f, 0.15f
         }, new float[]{
                 0.0f, 0.0f,
                 0.0f, 1.0f,
@@ -20,9 +20,9 @@ public class Player extends Entity {
                 1.0f, 0.0f
         });
     }
-    
+
     @Override
-    void extraDraw() {
+    void extraDraw(float cameraMove) {
 
     }
 }
