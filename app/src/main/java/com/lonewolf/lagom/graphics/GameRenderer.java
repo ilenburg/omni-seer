@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.lonewolf.lagom.physics.GameEngine;
 import com.lonewolf.lagom.resources.ResourceManager;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -19,13 +20,15 @@ import static android.content.ContentValues.TAG;
 public class GameRenderer implements GLSurfaceView.Renderer {
 
     private final ResourceManager resourceManager;
+    private final GameEngine gameEngine;
 
     private float[] mMVPMatrix = new float[16];
     private float[] mProjectionMatrix = new float[16];
     private float[] mViewMatrix = new float[16];
 
-    public GameRenderer(ResourceManager resourceManager) {
+    public GameRenderer(ResourceManager resourceManager, GameEngine gameEngine) {
         this.resourceManager = resourceManager;
+        this.gameEngine = gameEngine;
     }
 
     @Override
@@ -57,11 +60,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-        resourceManager.background.draw(mMVPMatrix, 0.001f);
+        resourceManager.background.draw(mMVPMatrix, gameEngine.cameraMovement);
 
-        resourceManager.panoramaFar.draw(mMVPMatrix, 0.001f);
+        resourceManager.panoramaFar.draw(mMVPMatrix, gameEngine.cameraMovement);
 
-        resourceManager.panorama.draw(mMVPMatrix, 0.001f);
+        resourceManager.panorama.draw(mMVPMatrix, gameEngine.cameraMovement);
 
         float[] moveMatrix = new float[16];
 
@@ -73,7 +76,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         resourceManager.player.draw(moveMatrix);
 
-        resourceManager.foreground.draw(mMVPMatrix, 0.001f);
+        resourceManager.foreground.draw(mMVPMatrix, gameEngine.cameraMovement);
 
         checkGlError("Draw");
 

@@ -27,9 +27,10 @@ public class GameView extends GLSurfaceView {
         ResourceManager resourceManager = new ResourceManager(context);
 
         this.gameEngine = new GameEngine(resourceManager);
-        this.gameRenderer = new GameRenderer(resourceManager);
+        this.gameRenderer = new GameRenderer(resourceManager, gameEngine);
 
         setRenderer(gameRenderer);
+        new Thread(gameEngine).start();
     }
 
     @Override
