@@ -67,7 +67,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         Matrix.setIdentityM(moveMatrix, 0);
 
-        Matrix.translateM(moveMatrix, 0, -1.0f, -0.51f, 0);
+        Matrix.translateM(moveMatrix, 0, -1.0f, -0.53f, 0);
 
         Matrix.multiplyMM(moveMatrix, 0, mMVPMatrix, 0, moveMatrix, 0);
 
