@@ -19,12 +19,12 @@ public abstract class Entity {
     private final int texture;
 
     private final FloatBuffer vertexBuffer;
-    private final FloatBuffer textureBuffer;
+    protected final FloatBuffer textureBuffer;
 
     private final ShortBuffer orderBuffer;
 
     private final int vPosition;
-    private final int tPosition;
+    protected final int tPosition;
     private final int uMVPMatrixPosition;
 
     protected Entity(int shaderProgram, int texture, float[] geometry, float[] texturePos) {
