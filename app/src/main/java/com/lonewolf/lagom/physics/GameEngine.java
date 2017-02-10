@@ -12,9 +12,13 @@ public class GameEngine implements Runnable {
     private long lastTime;
     private long deltaTime;
 
-    public float cameraMovement;
+    private float cameraMovement;
 
     private final ResourceManager resourceManager;
+
+    public float getCameraMovement() {
+        return cameraMovement;
+    }
 
     public GameEngine(ResourceManager resourceManager) {
         this.resourceManager = resourceManager;
@@ -37,7 +41,7 @@ public class GameEngine implements Runnable {
                 cameraMovement *= 1.1;
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

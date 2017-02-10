@@ -5,6 +5,8 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.lonewolf.lagom.entities.Scroll;
+import com.lonewolf.lagom.entities.Sprite;
 import com.lonewolf.lagom.physics.GameEngine;
 import com.lonewolf.lagom.resources.ResourceManager;
 
@@ -60,11 +62,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-        resourceManager.background.draw(mMVPMatrix, gameEngine.cameraMovement);
+        draw(resourceManager.background.getSprite());
 
-        resourceManager.panoramaFar.draw(mMVPMatrix, gameEngine.cameraMovement);
+        draw(resourceManager.panoramaFar.getSprite());
 
-        resourceManager.panorama.draw(mMVPMatrix, gameEngine.cameraMovement);
+        draw(resourceManager.panorama.getSprite());
 
         float[] moveMatrix = new float[16];
 
@@ -74,12 +76,40 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         Matrix.multiplyMM(moveMatrix, 0, mMVPMatrix, 0, moveMatrix, 0);
 
-        resourceManager.player.draw(moveMatrix);
+        draw(resourceManager.player.getSprite());
 
-        resourceManager.foreground.draw(mMVPMatrix, gameEngine.cameraMovement);
+        draw(resourceManager.foreground.getSprite());
 
         checkGlError("Draw");
 
+    }
+
+    private void draw(Sprite sprite) {
+        {
+
+            GLES20.glUseProgram(sprite.getShaderProgram());
+
+            GLES20.glEnableVertexAttribArray(sprite.getVertexPosition());
+
+            GLES20.glVertexAttribPointer(sprite.getVertexPosition(), 2, GLES20.GL_FLOAT, false, 2 * 4, sprite.getVertexBuffer());
+
+            GLES20.glEnableVertexAttribArray(sprite.getTexturePosition());
+
+            GLES20.glVertexAttribPointer(sprite.getTexturePosition(), 2, GLES20.GL_FLOAT, false, 2 * 4, sprite.getTextureBuffer());
+
+            GLES20.glUniformMatrix4fv(sprite.getUniformMVPMatrixPosition(), 1, false, mMVPMatrix, 0);
+
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, sprite.getTexture());
+
+            if (sprite.isScrollable()) {
+                Scroll scroll = sprite.getScroll();
+                scroll.addDiaplacement(gameEngine.getCameraMovement() * scroll.getRatio());
+                GLES20.glUniform1f(scroll.getScrollPosition(), scroll.getDisplacement());
+            }
+
+            GLES20.glDrawElements(GLES20.GL_TRIANGLES, sprite.getDrawOrder().length, GLES20.GL_UNSIGNED_SHORT, sprite.getOrderBuffer());
+
+        }
     }
 
     public static void checkGlError(String glOperation) {
