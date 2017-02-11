@@ -62,11 +62,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-        draw(resourceManager.background.getSprite());
+        draw(resourceManager.getBackground().getSprite());
 
-        draw(resourceManager.panoramaFar.getSprite());
+        draw(resourceManager.getPanoramaFar().getSprite());
 
-        draw(resourceManager.panorama.getSprite());
+        draw(resourceManager.getPanorama().getSprite());
 
         float[] moveMatrix = new float[16];
 
@@ -76,9 +76,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         Matrix.multiplyMM(moveMatrix, 0, mMVPMatrix, 0, moveMatrix, 0);
 
-        draw(resourceManager.player.getSprite());
+        draw(resourceManager.getPlayer().getSprite());
 
-        draw(resourceManager.foreground.getSprite());
+        draw(resourceManager.getForeground().getSprite());
 
         checkGlError("Draw");
 
@@ -105,6 +105,10 @@ public class GameRenderer implements GLSurfaceView.Renderer {
                 Scroll scroll = sprite.getScroll();
                 scroll.addDiaplacement(gameEngine.getCameraMovement() * scroll.getRatio());
                 GLES20.glUniform1f(scroll.getScrollPosition(), scroll.getDisplacement());
+            }
+
+            if(sprite.isAnimated()) {
+                sprite.getAnimation().update(20);
             }
 
             GLES20.glDrawElements(GLES20.GL_TRIANGLES, sprite.getDrawOrder().length, GLES20.GL_UNSIGNED_SHORT, sprite.getOrderBuffer());

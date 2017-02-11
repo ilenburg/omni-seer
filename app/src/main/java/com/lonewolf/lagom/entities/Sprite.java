@@ -30,6 +30,9 @@ public class Sprite {
     private final Scroll scroll;
     private final boolean scrollable;
 
+    private final Animation animation;
+    private final boolean animated;
+
     public static short[] getDrawOrder() {
         return drawOrder;
     }
@@ -74,7 +77,27 @@ public class Sprite {
         return scrollable;
     }
 
-    protected Sprite(int shaderProgram, int texture, float[] geometry, float[] texturePos, Scroll scroll) {
+    public Animation getAnimation() {
+        return animation;
+    }
+
+    public boolean isAnimated() {
+        return animated;
+    }
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates) {
+        this(shaderProgram, texture, geometry, textureCoordinates, null, null);
+    }
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll) {
+        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null);
+    }
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Animation animation) {
+        this(shaderProgram, texture, geometry, textureCoordinates, null, animation);
+    }
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, Animation animation) {
 
         this.shaderProgram = shaderProgram;
         this.texture = texture;
@@ -99,10 +122,10 @@ public class Sprite {
         vertexBuffer.put(geometry);
         vertexBuffer.rewind();
 
-        bb = ByteBuffer.allocateDirect(texturePos.length * 4);
+        bb = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
         bb.order(ByteOrder.nativeOrder());
         textureBuffer = bb.asFloatBuffer();
-        textureBuffer.put(texturePos);
+        textureBuffer.put(textureCoordinates);
         textureBuffer.rewind();
 
         ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
@@ -110,6 +133,15 @@ public class Sprite {
         orderBuffer = dlb.asShortBuffer();
         orderBuffer.put(drawOrder);
         orderBuffer.rewind();
+
+        if (animation != null) {
+            this.animation = animation;
+            this.animation.setTextureBuffer(textureBuffer);
+            this.animated = true;
+        } else {
+            this.animation = null;
+            this.animated = false;
+        }
     }
 
 }

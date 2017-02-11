@@ -18,14 +18,14 @@ public class Panorama {
 
         int scrollPosition = GLES20.glGetUniformLocation(shaderProgram, "scroll");
 
-        float[] vertexPosition = new float[]{
+        float[] geometry = new float[]{
                 -3.0f, 1.0f,
                 -3.0f, -1.0f,
                 3.0f, -1.0f,
                 3.0f, 1.0f
         };
 
-        float[] texturePosition = new float[]{
+        float[] textureCoordinates = new float[]{
                 0.0f, 0.0f,
                 0.0f, 1.0f,
                 3.0f, 1.0f,
@@ -33,6 +33,6 @@ public class Panorama {
         };
 
         this.sprite = new Sprite(shaderProgram, texture,
-                vertexPosition, texturePosition, new Scroll(scrollRatio, scrollPosition));
+                geometry, textureCoordinates, new Scroll(scrollRatio, scrollPosition));
     }
 }

@@ -1,6 +1,10 @@
 package com.lonewolf.lagom.physics;
 
+import android.util.Log;
+
 import com.lonewolf.lagom.resources.ResourceManager;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Ian on 28/01/2017.
@@ -9,12 +13,17 @@ import com.lonewolf.lagom.resources.ResourceManager;
 public class GameEngine implements Runnable {
 
     private GameState gameState;
+
     private long lastTime;
     private long deltaTime;
 
     private float cameraMovement;
 
     private final ResourceManager resourceManager;
+
+    public GameState getGameState() {
+        return gameState;
+    }
 
     public float getCameraMovement() {
         return cameraMovement;
@@ -37,13 +46,10 @@ public class GameEngine implements Runnable {
             deltaTime = System.currentTimeMillis() - lastTime;
             lastTime = System.currentTimeMillis();
 
-            if (cameraMovement < 0.01) {
-                cameraMovement *= 1.1;
-            }
             try {
-                Thread.sleep(100);
+                Thread.sleep(20);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage());
             }
         }
     }

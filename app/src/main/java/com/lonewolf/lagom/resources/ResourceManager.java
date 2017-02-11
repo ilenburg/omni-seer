@@ -30,11 +30,31 @@ public class ResourceManager {
     private int[] shaderPrograms = new int[6];
     private int[] textures = new int[6];
 
-    public Player player;
-    public Panorama background;
-    public Panorama foreground;
-    public Panorama panorama;
-    public Panorama panoramaFar;
+    private Player player;
+    private Panorama background;
+    private Panorama foreground;
+    private Panorama panorama;
+    private Panorama panoramaFar;
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Panorama getBackground() {
+        return background;
+    }
+
+    public Panorama getForeground() {
+        return foreground;
+    }
+
+    public Panorama getPanorama() {
+        return panorama;
+    }
+
+    public Panorama getPanoramaFar() {
+        return panoramaFar;
+    }
 
     public ResourceManager(Context context) {
 
