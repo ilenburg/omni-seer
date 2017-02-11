@@ -27,14 +27,14 @@ public class Animation {
     public Animation(float[][] textureFramesCoordinates, float cicleDuration) {
         this.textureFramesCoordinates = textureFramesCoordinates;
         this.cicleDuration = cicleDuration;
-        this.cicleStepDuration = cicleDuration /  textureFramesCoordinates.length;
+        this.cicleStepDuration = cicleDuration / textureFramesCoordinates.length;
         this.cicleStep = 0.0f;
     }
 
     public void update(float delta) {
         this.cicleStep += delta;
 
-        if(cicleStep >= cicleDuration) {
+        if (cicleStep >= cicleDuration) {
             cicleStep = cicleStep - cicleDuration;
         }
 

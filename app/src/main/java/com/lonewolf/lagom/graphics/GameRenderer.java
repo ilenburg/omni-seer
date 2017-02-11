@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.lonewolf.lagom.entities.Scroll;
 import com.lonewolf.lagom.entities.Sprite;
+import com.lonewolf.lagom.entities.Transition;
 import com.lonewolf.lagom.physics.GameEngine;
 import com.lonewolf.lagom.resources.ResourceManager;
 
@@ -92,24 +93,31 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             GLES20.glUseProgram(sprite.getShaderProgram());
 
             GLES20.glEnableVertexAttribArray(sprite.getVertexPosition());
-
             GLES20.glVertexAttribPointer(sprite.getVertexPosition(), 2, GLES20.GL_FLOAT, false, 2 * 4, sprite.getVertexBuffer());
 
             GLES20.glEnableVertexAttribArray(sprite.getTexturePosition());
-
             GLES20.glVertexAttribPointer(sprite.getTexturePosition(), 2, GLES20.GL_FLOAT, false, 2 * 4, sprite.getTextureBuffer());
 
             GLES20.glUniformMatrix4fv(sprite.getUniformMVPMatrixPosition(), 1, false, mMVPMatrix, 0);
 
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, sprite.getTexture());
+
+            if (sprite.isTransitional()) {
+                Transition transition = sprite.getTransition();
+                GLES20.glUniform1f(transition.getTimePosition(), transition.getTime());
+                GLES20.glUniform1i(transition.getTexturePosition(), 1);
+                GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, transition.getTexture());
+            }
 
             if (sprite.isScrollable()) {
                 Scroll scroll = sprite.getScroll();
-                scroll.addDiaplacement(0.001f * scroll.getRatio());
+                scroll.setDisplacement(gameEngine.getCameraPositon(), sprite.getTexture() == 2);
                 GLES20.glUniform1f(scroll.getScrollPosition(), scroll.getDisplacement());
             }
 
-            if(sprite.isAnimated()) {
+            if (sprite.isAnimated()) {
                 sprite.getAnimation().update(20);
             }
 

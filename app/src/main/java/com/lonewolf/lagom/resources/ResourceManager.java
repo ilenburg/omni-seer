@@ -8,6 +8,7 @@ import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.lonewolf.lagom.R;
+import com.lonewolf.lagom.entities.Background;
 import com.lonewolf.lagom.entities.Panorama;
 import com.lonewolf.lagom.entities.Player;
 
@@ -31,7 +32,7 @@ public class ResourceManager {
     private int[] textures = new int[6];
 
     private Player player;
-    private Panorama background;
+    private Background background;
     private Panorama foreground;
     private Panorama panorama;
     private Panorama panoramaFar;
@@ -40,7 +41,7 @@ public class ResourceManager {
         return player;
     }
 
-    public Panorama getBackground() {
+    public Background getBackground() {
         return background;
     }
 
@@ -73,17 +74,20 @@ public class ResourceManager {
         String vertexShader = null;
         String fragmentShader = null;
         String fragmentScrollShader = null;
+        String doubleTexFragmentScrollShader = null;
 
         try {
             vertexShader = getShaderCode(R.raw.base_vert);
             fragmentShader = getShaderCode(R.raw.base_frag);
             fragmentScrollShader = getShaderCode(R.raw.scroll_frag);
+            doubleTexFragmentScrollShader = getShaderCode(R.raw.double_tex_scroll_frag);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         shaderPrograms[0] = generateShaderProgram(vertexShader, fragmentShader);
         shaderPrograms[1] = generateShaderProgram(vertexShader, fragmentScrollShader);
+        shaderPrograms[2] = generateShaderProgram(vertexShader, doubleTexFragmentScrollShader);
     }
 
     private void initTextures() {
@@ -93,11 +97,12 @@ public class ResourceManager {
         loadTexture(R.drawable.panorama, 2, true);
         loadTexture(R.drawable.panorama_far, 3, true);
         loadTexture(R.drawable.foreground, 4, true);
+        loadTexture(R.drawable.night, 5, true);
     }
 
     private void initEntities() {
 
-        this.background = new Panorama(shaderPrograms[1], textures[1], 0.25f);
+        this.background = new Background(shaderPrograms[2], textures[1], textures[5], 0.25f);
         this.panoramaFar = new Panorama(shaderPrograms[1], textures[3], 0.5f);
         this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.75f);
         this.player = new Player(shaderPrograms[0], textures[0]);

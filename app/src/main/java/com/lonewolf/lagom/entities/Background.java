@@ -1,10 +1,10 @@
 package com.lonewolf.lagom.entities;
 
 /**
- * Created by Ian on 10/02/2017.
+ * Created by Ian on 11/02/2017.
  */
 
-public class Panorama {
+public class Background{
 
     private final Sprite sprite;
 
@@ -12,8 +12,7 @@ public class Panorama {
         return sprite;
     }
 
-    public Panorama(int shaderProgram, int texture, float scrollRatio) {
-
+    public Background(int shaderProgram, int texture1, int texture2, float scrollRatio) {
         float[] geometry = new float[]{
                 -3.0f, 1.0f,
                 -3.0f, -1.0f,
@@ -28,7 +27,7 @@ public class Panorama {
                 3.0f, 0.0f
         };
 
-        this.sprite = new Sprite(shaderProgram, texture,
-                geometry, textureCoordinates, new Scroll(scrollRatio));
+        this.sprite = new Sprite(shaderProgram, texture1,
+                geometry, textureCoordinates, new Scroll(scrollRatio), new Transition(texture2));
     }
 }

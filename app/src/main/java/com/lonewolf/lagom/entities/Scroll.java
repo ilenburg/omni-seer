@@ -10,12 +10,12 @@ public class Scroll {
 
     private int scrollPosition;
 
-    private float ratio;
+    private final float ratio;
     private float displacement;
+    //private static final float max = 1000.0f;
 
-    public Scroll(float ratio, int scrollPosition) {
+    public Scroll(float ratio) {
         this.ratio = ratio;
-        this.scrollPosition = scrollPosition;
         this.displacement = 0;
     }
 
@@ -23,20 +23,22 @@ public class Scroll {
         return displacement;
     }
 
-    public void addDiaplacement(float displacement) {
-        this.displacement += displacement;
-        //this.displacement += 0.001f;
+    public void setDisplacement(float displacement, boolean log) {
+        //this.displacement = (Math.round(displacement * this.ratio * max) / max);
 
-        //this.displacement = Math.round(this.displacement * 10000.0f) / 10000.0f;
-        if (this.displacement > 1.0f) {
-            this.displacement = this.displacement - 1.0f;
+        displacement *= ratio;
+
+        this.displacement = displacement - (long) displacement;
+
+        if (log) {
+            //Log.v("", Long.toString(Math.round(displacement)));
+            Log.v("Displacement", Float.toString(this.displacement));
         }
 
-        Log.v("Displacement", Float.toString(this.displacement));
     }
 
-    public float getRatio() {
-        return ratio;
+    public void setScrollPosition(int scrollPosition) {
+        this.scrollPosition = scrollPosition;
     }
 
     public int getScrollPosition() {
