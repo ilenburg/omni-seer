@@ -42,6 +42,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         Matrix.setIdentityM(mViewMatrix, 0);
 
+        Matrix.scaleM(mViewMatrix, 0, 1.1f, 1.1f, 0);
+
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
     }
@@ -80,7 +82,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         draw(resourceManager.getForeground().getSprite());
 
-        checkGlError("Draw");
+        //checkGlError("Draw");
 
     }
 
@@ -103,7 +105,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
             if (sprite.isScrollable()) {
                 Scroll scroll = sprite.getScroll();
-                scroll.addDiaplacement(gameEngine.getCameraMovement() * scroll.getRatio());
+                scroll.addDiaplacement(0.001f * scroll.getRatio());
                 GLES20.glUniform1f(scroll.getScrollPosition(), scroll.getDisplacement());
             }
 

@@ -40,7 +40,7 @@ public class Animation {
 
         int frame = (int) Math.floor(cicleStep / cicleStepDuration);
 
-        //this.textureBuffer.clear();
+        this.textureBuffer.clear();
         this.textureBuffer.put(textureFramesCoordinates[frame]);
         this.textureBuffer.rewind();
     }
