@@ -8,7 +8,9 @@ import com.lonewolf.lagom.physics.Vector2;
  * Created by Ian on 11/02/2017.
  */
 
-public class Movement {
+public class RigidBody {
+
+    private final float mass;
 
     private Vector2 position;
     private Vector2 velocity;
@@ -16,9 +18,18 @@ public class Movement {
 
     private final float[] mModelMatrix;
 
-    public Movement() {
-        this.position = new Vector2(-1.0f, -0.535f);
-        this.velocity = new Vector2();
+    public RigidBody(float mass) {
+        this(mass, new Vector2());
+    }
+
+    public RigidBody(float mass, Vector2 position) {
+        this(mass, position, new Vector2());
+    }
+
+    public RigidBody(float mass, Vector2 position, Vector2 velocity) {
+        this.mass = mass;
+        this.position = position;
+        this.velocity = velocity;
         this.acceleration = new Vector2();
         this.mModelMatrix = new float[16];
     }

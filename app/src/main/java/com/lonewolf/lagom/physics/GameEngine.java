@@ -2,6 +2,7 @@ package com.lonewolf.lagom.physics;
 
 import android.util.Log;
 
+import com.lonewolf.lagom.entities.RigidBody;
 import com.lonewolf.lagom.resources.ResourceManager;
 
 import static android.content.ContentValues.TAG;
@@ -19,8 +20,6 @@ public class GameEngine implements Runnable {
     private float totalTime;
 
     private float cameraPositon;
-
-    private final float cameraMovement;
 
     private final ResourceManager resourceManager;
 
@@ -49,7 +48,6 @@ public class GameEngine implements Runnable {
 
         this.totalTime = 0.0f;
         this.cameraPositon = 0.0f;
-        this.cameraMovement = 0.002f;
     }
 
     @Override
@@ -60,7 +58,11 @@ public class GameEngine implements Runnable {
             totalTime +=  deltaTime / 1000;
             lastTime = System.currentTimeMillis();
 
-            cameraPositon += cameraMovement;
+            RigidBody playerRigidBody = resourceManager.getPlayer().getRigidBody();
+
+            cameraPositon += playerRigidBody.getVelocity().getX();
+
+            //playerRigidBody.setVelocity(new Vector2(playerRigidBody.getVelocity().getX() * 1.001f, 0.0f));
 
             try {
                 Thread.sleep(20);

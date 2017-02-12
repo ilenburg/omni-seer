@@ -30,7 +30,6 @@ public class GameView extends GLSurfaceView {
         this.gameRenderer = new GameRenderer(resourceManager, gameEngine);
 
         setRenderer(gameRenderer);
-        new Thread(gameEngine).start();
     }
 
     @Override

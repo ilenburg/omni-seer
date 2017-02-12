@@ -1,5 +1,7 @@
 package com.lonewolf.lagom.entities;
 
+import com.lonewolf.lagom.physics.Vector2;
+
 /**
  * Created by Ian on 23/01/2017.
  */
@@ -7,14 +9,14 @@ package com.lonewolf.lagom.entities;
 public class Player {
 
     private final Sprite sprite;
-    private final Movement movement;
+    private final RigidBody rigidBody;
 
     public Sprite getSprite() {
         return sprite;
     }
 
-    public Movement getMovement() {
-        return movement;
+    public RigidBody getRigidBody() {
+        return rigidBody;
     }
 
     public Player(int shaderProgram, int texture) {
@@ -55,10 +57,10 @@ public class Player {
                 0.5f, 0.5f
         }};
 
-        Animation animation = new Animation(animationCoordinates, 1000);
+        this.rigidBody = new RigidBody(1, new Vector2(-1.0f, -0.535f), new Vector2(0.002f, 0.0f));
+        Animation animation = new Animation(animationCoordinates, 2, rigidBody);
 
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates, animation);
-        this.movement = new Movement();
 
     }
 }

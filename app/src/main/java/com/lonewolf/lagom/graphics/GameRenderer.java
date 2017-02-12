@@ -40,6 +40,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         resourceManager.loadResources();
 
+        new Thread(gameEngine).start();
+
         GLES20.glClearColor(0.0f, 0.5f, 0.75f, 1f);
 
         Matrix.setIdentityM(mViewMatrix, 0);
@@ -80,7 +82,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         Matrix.multiplyMM(moveMatrix, 0, mMVPMatrix, 0, moveMatrix, 0);*/
 
-        draw(resourceManager.getPlayer().getSprite(), resourceManager.getPlayer().getMovement().getModelMatrix());
+        draw(resourceManager.getPlayer().getSprite(), resourceManager.getPlayer().getRigidBody().getModelMatrix());
 
         draw(resourceManager.getForeground().getSprite());
 
@@ -113,7 +115,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         if (sprite.isTransitional()) {
             Transition transition = sprite.getTransition();
-            transition.setTime(gameEngine.getCameraPositon());
+            transition.setTime(gameEngine.getTotalTime());
             GLES20.glUniform1f(transition.getTimePosition(), transition.getTime());
             GLES20.glUniform1i(transition.getTexturePosition(), 1);
             GLES20.glActiveTexture(GLES20.GL_TEXTURE1);

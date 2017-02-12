@@ -16,6 +16,9 @@ public class Animation {
 
     private float cicleStep;
 
+    private final RigidBody rigidBody;
+    private boolean movementBased;
+
     public void setTextureBuffer(FloatBuffer textureBuffer) {
         this.textureBuffer = textureBuffer;
     }
@@ -25,20 +28,35 @@ public class Animation {
     }
 
     public Animation(float[][] textureFramesCoordinates, float cicleDuration) {
+        this(textureFramesCoordinates, cicleDuration, null);
+    }
+
+    public Animation(float[][] textureFramesCoordinates, float cicleDuration, RigidBody rigidBody) {
         this.textureFramesCoordinates = textureFramesCoordinates;
         this.cicleDuration = cicleDuration;
         this.cicleStepDuration = cicleDuration / textureFramesCoordinates.length;
         this.cicleStep = 0.0f;
+        this.rigidBody = rigidBody;
+
+        if (this.rigidBody != null) {
+            this.movementBased = true;
+        } else {
+            this.movementBased = false;
+        }
     }
 
     public void update(float delta) {
-        this.cicleStep += delta;
+        this.cicleStep += movementBased ? rigidBody.getVelocity().getX() * delta : delta;
 
         if (cicleStep >= cicleDuration) {
             cicleStep = cicleStep - cicleDuration;
         }
 
         int frame = (int) Math.floor(cicleStep / cicleStepDuration);
+
+        if(frame >= textureFramesCoordinates.length) {
+            frame = 0;
+        }
 
         this.textureBuffer.clear();
         this.textureBuffer.put(textureFramesCoordinates[frame]);

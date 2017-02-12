@@ -123,23 +123,23 @@ public class Sprite {
 
         this.texturePosition = GLES20.glGetAttribLocation(shaderProgram, "texCoordIn");
 
-        if (scroll != null) {
-            this.scroll = scroll;
+        this.scroll = scroll;
+
+        if (this.scroll != null) {
             this.scroll.setScrollPosition(GLES20.glGetUniformLocation(shaderProgram, "scroll"));
             this.scrollable = true;
         } else {
-            this.scroll = null;
             this.scrollable = false;
         }
 
-        if(transition != null) {
-            this.transition = transition;
+        this.transition = transition;
+
+        if(this.transition != null) {
             this.transition.setTexturePosition(GLES20.glGetUniformLocation(shaderProgram, "tex2"));
             this.transition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
             this.transitional = true;
         }
         else {
-            this.transition = null;
             this.transitional = false;
         }
 
@@ -161,12 +161,12 @@ public class Sprite {
         orderBuffer.put(drawOrder);
         orderBuffer.rewind();
 
-        if (animation != null) {
-            this.animation = animation;
+        this.animation = animation;
+
+        if (this.animation != null) {
             this.animation.setTextureBuffer(textureBuffer);
             this.animated = true;
         } else {
-            this.animation = null;
             this.animated = false;
         }
     }
