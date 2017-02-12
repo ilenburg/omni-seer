@@ -1,4 +1,4 @@
-package com.lonewolf.lagom.physics;
+package com.lonewolf.lagom.states;
 
 /**
  * Created by Ian on 28/01/2017.

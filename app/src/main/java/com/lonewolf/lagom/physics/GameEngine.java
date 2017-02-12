@@ -2,8 +2,8 @@ package com.lonewolf.lagom.physics;
 
 import android.util.Log;
 
-import com.lonewolf.lagom.entities.RigidBody;
 import com.lonewolf.lagom.resources.ResourceManager;
+import com.lonewolf.lagom.states.GameState;
 
 import static android.content.ContentValues.TAG;
 
@@ -20,6 +20,8 @@ public class GameEngine implements Runnable {
     private float totalTime;
 
     private float cameraPositon;
+
+    private final float groundPosition;
 
     private final ResourceManager resourceManager;
 
@@ -48,6 +50,7 @@ public class GameEngine implements Runnable {
 
         this.totalTime = 0.0f;
         this.cameraPositon = 0.0f;
+        this.groundPosition = -0.535f;
     }
 
     @Override
@@ -57,6 +60,8 @@ public class GameEngine implements Runnable {
             deltaTime = System.currentTimeMillis() - lastTime;
             totalTime += deltaTime / 1000;
             lastTime = System.currentTimeMillis();
+
+            //Log.v("DeltaTime", Float.toString(deltaTime));
 
             updatePlayer();
 
@@ -70,6 +75,20 @@ public class GameEngine implements Runnable {
 
     private void updatePlayer() {
         RigidBody playerRigidBody = resourceManager.getPlayer().getRigidBody();
+
+        if(playerRigidBody.getPosition().getY() > groundPosition) {
+            playerRigidBody.setAccelerationY(-0.0000098f);
+        }
+        else {
+            playerRigidBody.setAccelerationY(0.0f);
+            playerRigidBody.setVelocityY(0.0f);
+            playerRigidBody.setPositionY(groundPosition);
+        }
+
+        if(resourceManager.getPlayer().getInput().isJumping()) {
+            resourceManager.getPlayer().getInput().setJumping(false);
+            playerRigidBody.setVelocityY(0.002f);
+        }
 
         cameraPositon += playerRigidBody.getVelocity().getX() * 10;
 

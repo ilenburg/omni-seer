@@ -1,4 +1,4 @@
-package com.lonewolf.lagom.entities;
+package com.lonewolf.lagom.graphics;
 
 import android.opengl.GLES20;
 

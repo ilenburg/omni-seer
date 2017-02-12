@@ -1,5 +1,9 @@
 package com.lonewolf.lagom.entities;
 
+import com.lonewolf.lagom.graphics.Scroll;
+import com.lonewolf.lagom.graphics.Sprite;
+import com.lonewolf.lagom.graphics.Transition;
+
 /**
  * Created by Ian on 11/02/2017.
  */

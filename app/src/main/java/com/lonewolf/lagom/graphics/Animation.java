@@ -1,4 +1,6 @@
-package com.lonewolf.lagom.entities;
+package com.lonewolf.lagom.graphics;
+
+import com.lonewolf.lagom.physics.RigidBody;
 
 import java.nio.FloatBuffer;
 

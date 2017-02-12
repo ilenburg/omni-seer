@@ -2,6 +2,7 @@ package com.lonewolf.lagom.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -46,4 +47,11 @@ public class MainActivity extends AppCompatActivity {
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        gameView.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
 }

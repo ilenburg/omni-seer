@@ -2,13 +2,12 @@ package com.lonewolf.lagom.graphics;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
+import android.support.v4.view.MotionEventCompat;
 import android.view.MotionEvent;
 
 import com.lonewolf.lagom.physics.GameEngine;
+import com.lonewolf.lagom.physics.Input;
 import com.lonewolf.lagom.resources.ResourceManager;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Ian on 22/01/2017.
@@ -18,40 +17,43 @@ public class GameView extends GLSurfaceView {
 
     private final GameEngine gameEngine;
     private final GameRenderer gameRenderer;
+    private final ResourceManager resourceManager;
+
+    private float touchY;
 
     public GameView(Context context) {
         super(context);
 
         setEGLContextClientVersion(2);
 
-        ResourceManager resourceManager = new ResourceManager(context);
+        this.resourceManager = new ResourceManager(context);
 
         this.gameEngine = new GameEngine(resourceManager);
         this.gameRenderer = new GameRenderer(resourceManager, gameEngine);
+        this.touchY = 0.0f;
 
         setRenderer(gameRenderer);
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent e) {
+    public boolean onTouchEvent(MotionEvent event) {
 
-        if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            Log.v(TAG, "Touch");
+        int action = MotionEventCompat.getActionMasked(event);
+
+        switch (action) {
+            case (MotionEvent.ACTION_DOWN):
+                touchY = event.getY();
+                return true;
+            case (MotionEvent.ACTION_UP):
+                if (touchY > event.getY() && touchY - event.getY() > 200) {
+                    Input playerInput = resourceManager.getPlayer().getInput();
+                    if (playerInput.isGrounded()) {
+                        playerInput.setJumping(true);
+                    }
+                }
+                return true;
+            default:
+                return super.onTouchEvent(event);
         }
-
-        return super.onTouchEvent(e);
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
 }

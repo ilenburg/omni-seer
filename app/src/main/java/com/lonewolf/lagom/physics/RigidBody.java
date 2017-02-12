@@ -1,8 +1,6 @@
-package com.lonewolf.lagom.entities;
+package com.lonewolf.lagom.physics;
 
 import android.opengl.Matrix;
-
-import com.lonewolf.lagom.physics.Vector2;
 
 /**
  * Created by Ian on 11/02/2017.
@@ -56,6 +54,18 @@ public class RigidBody {
 
     public void setAcceleration(Vector2 acceleration) {
         this.acceleration = acceleration;
+    }
+
+    public void setAccelerationY(float accelerationY) {
+        this.acceleration.setY(accelerationY);
+    }
+
+    public void setVelocityY(float velocityY) {
+        this.velocity.setY(velocityY);
+    }
+
+    public void setPositionY(float positionY) {
+        this.position.setY(positionY);
     }
 
     public float[] getModelMatrix() {

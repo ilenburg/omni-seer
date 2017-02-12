@@ -5,9 +5,6 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.lonewolf.lagom.entities.Scroll;
-import com.lonewolf.lagom.entities.Sprite;
-import com.lonewolf.lagom.entities.Transition;
 import com.lonewolf.lagom.physics.GameEngine;
 import com.lonewolf.lagom.resources.ResourceManager;
 
