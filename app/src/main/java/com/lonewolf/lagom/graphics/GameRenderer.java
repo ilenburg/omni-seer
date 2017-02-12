@@ -28,6 +28,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private float[] mMVPMatrix = new float[16];
     private float[] mProjectionMatrix = new float[16];
     private float[] mViewMatrix = new float[16];
+    private float[] mVPMatrix = new float[16];
 
     public GameRenderer(ResourceManager resourceManager, GameEngine gameEngine) {
         this.resourceManager = resourceManager;
@@ -57,7 +58,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         Matrix.orthoM(mProjectionMatrix, 0, -ratio, +ratio, -1, 1, -1, 1);
 
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
+        Matrix.multiplyMM(mVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
     }
 
     @Override
@@ -71,15 +72,15 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         draw(resourceManager.getPanorama().getSprite());
 
-        float[] moveMatrix = new float[16];
+        /*float[] moveMatrix = new float[16];
 
         Matrix.setIdentityM(moveMatrix, 0);
 
         Matrix.translateM(moveMatrix, 0, -1.0f, -0.53f, 0);
 
-        Matrix.multiplyMM(moveMatrix, 0, mMVPMatrix, 0, moveMatrix, 0);
+        Matrix.multiplyMM(moveMatrix, 0, mMVPMatrix, 0, moveMatrix, 0);*/
 
-        draw(resourceManager.getPlayer().getSprite());
+        draw(resourceManager.getPlayer().getSprite(), resourceManager.getPlayer().getMovement().getModelMatrix());
 
         draw(resourceManager.getForeground().getSprite());
 
@@ -88,42 +89,49 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     }
 
     private void draw(Sprite sprite) {
-        {
+        float[] mModelMatrix = new float[16];
+        Matrix.setIdentityM(mModelMatrix, 0);
+        draw(sprite, mModelMatrix);
+    }
 
-            GLES20.glUseProgram(sprite.getShaderProgram());
+    private void draw(Sprite sprite, float[] mModelMatrix) {
 
-            GLES20.glEnableVertexAttribArray(sprite.getVertexPosition());
-            GLES20.glVertexAttribPointer(sprite.getVertexPosition(), 2, GLES20.GL_FLOAT, false, 2 * 4, sprite.getVertexBuffer());
+        GLES20.glUseProgram(sprite.getShaderProgram());
 
-            GLES20.glEnableVertexAttribArray(sprite.getTexturePosition());
-            GLES20.glVertexAttribPointer(sprite.getTexturePosition(), 2, GLES20.GL_FLOAT, false, 2 * 4, sprite.getTextureBuffer());
+        GLES20.glEnableVertexAttribArray(sprite.getVertexPosition());
+        GLES20.glVertexAttribPointer(sprite.getVertexPosition(), 2, GLES20.GL_FLOAT, false, 2 * 4, sprite.getVertexBuffer());
 
-            GLES20.glUniformMatrix4fv(sprite.getUniformMVPMatrixPosition(), 1, false, mMVPMatrix, 0);
+        GLES20.glEnableVertexAttribArray(sprite.getTexturePosition());
+        GLES20.glVertexAttribPointer(sprite.getTexturePosition(), 2, GLES20.GL_FLOAT, false, 2 * 4, sprite.getTextureBuffer());
 
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, sprite.getTexture());
+        Matrix.multiplyMM(mMVPMatrix, 0, mVPMatrix, 0, mModelMatrix, 0);
 
-            if (sprite.isTransitional()) {
-                Transition transition = sprite.getTransition();
-                GLES20.glUniform1f(transition.getTimePosition(), transition.getTime());
-                GLES20.glUniform1i(transition.getTexturePosition(), 1);
-                GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
-                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, transition.getTexture());
-            }
+        GLES20.glUniformMatrix4fv(sprite.getUniformMVPMatrixPosition(), 1, false, mMVPMatrix, 0);
 
-            if (sprite.isScrollable()) {
-                Scroll scroll = sprite.getScroll();
-                scroll.setDisplacement(gameEngine.getCameraPositon(), sprite.getTexture() == 2);
-                GLES20.glUniform1f(scroll.getScrollPosition(), scroll.getDisplacement());
-            }
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, sprite.getTexture());
 
-            if (sprite.isAnimated()) {
-                sprite.getAnimation().update(20);
-            }
-
-            GLES20.glDrawElements(GLES20.GL_TRIANGLES, sprite.getDrawOrder().length, GLES20.GL_UNSIGNED_SHORT, sprite.getOrderBuffer());
-
+        if (sprite.isTransitional()) {
+            Transition transition = sprite.getTransition();
+            transition.setTime(gameEngine.getCameraPositon());
+            GLES20.glUniform1f(transition.getTimePosition(), transition.getTime());
+            GLES20.glUniform1i(transition.getTexturePosition(), 1);
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, transition.getTexture());
         }
+
+        if (sprite.isScrollable()) {
+            Scroll scroll = sprite.getScroll();
+            scroll.setDisplacement(gameEngine.getCameraPositon(), sprite.getTexture() == 2);
+            GLES20.glUniform1f(scroll.getScrollPosition(), scroll.getDisplacement());
+        }
+
+        if (sprite.isAnimated()) {
+            sprite.getAnimation().update(gameEngine.getDeltaTime());
+        }
+
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, sprite.getDrawOrder().length, GLES20.GL_UNSIGNED_SHORT, sprite.getOrderBuffer());
+
     }
 
     public static void checkGlError(String glOperation) {

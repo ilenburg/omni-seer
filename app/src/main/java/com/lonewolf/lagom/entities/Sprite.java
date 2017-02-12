@@ -132,12 +132,13 @@ public class Sprite {
             this.scrollable = false;
         }
 
-        if (transition != null) {
+        if(transition != null) {
             this.transition = transition;
             this.transition.setTexturePosition(GLES20.glGetUniformLocation(shaderProgram, "tex2"));
             this.transition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
             this.transitional = true;
-        } else {
+        }
+        else {
             this.transition = null;
             this.transitional = false;
         }

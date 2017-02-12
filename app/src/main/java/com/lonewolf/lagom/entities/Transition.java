@@ -12,16 +12,20 @@ public class Transition {
     private int texturePosition;
     private final int texture;
 
+    public float getTime() {
+        return time;
+    }
+
+    public void setTime(float time) {
+        this.time = (float) Math.abs(Math.sin(time));
+    }
+
     public int getTexturePosition() {
         return texturePosition;
     }
 
     public void setTexturePosition(int texturePosition) {
         this.texturePosition = texturePosition;
-    }
-
-    public float getTime() {
-        return time;
     }
 
     public int getTimePosition() {

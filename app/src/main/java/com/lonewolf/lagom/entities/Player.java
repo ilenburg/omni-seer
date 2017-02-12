@@ -7,9 +7,14 @@ package com.lonewolf.lagom.entities;
 public class Player {
 
     private final Sprite sprite;
+    private final Movement movement;
 
     public Sprite getSprite() {
         return sprite;
+    }
+
+    public Movement getMovement() {
+        return movement;
     }
 
     public Player(int shaderProgram, int texture) {
@@ -53,6 +58,7 @@ public class Player {
         Animation animation = new Animation(animationCoordinates, 1000);
 
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates, animation);
+        this.movement = new Movement();
 
     }
 }

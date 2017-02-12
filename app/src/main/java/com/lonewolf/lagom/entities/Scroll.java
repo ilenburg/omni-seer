@@ -1,7 +1,5 @@
 package com.lonewolf.lagom.entities;
 
-import android.util.Log;
-
 /**
  * Created by Ian on 10/02/2017.
  */
@@ -32,7 +30,7 @@ public class Scroll {
 
         if (log) {
             //Log.v("", Long.toString(Math.round(displacement)));
-            Log.v("Displacement", Float.toString(this.displacement));
+            //Log.v("Displacement", Float.toString(this.displacement));
         }
 
     }

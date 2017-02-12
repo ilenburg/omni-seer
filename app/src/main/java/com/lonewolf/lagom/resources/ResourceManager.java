@@ -93,7 +93,7 @@ public class ResourceManager {
     private void initTextures() {
 
         loadTexture(R.drawable.player_sprite, 0, false);
-        loadTexture(R.drawable.background, 1, true);
+        loadTexture(R.drawable.day, 1, true);
         loadTexture(R.drawable.panorama, 2, true);
         loadTexture(R.drawable.panorama_far, 3, true);
         loadTexture(R.drawable.foreground, 4, true);
