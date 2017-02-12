@@ -55,14 +55,10 @@ public class GameEngine implements Runnable {
         while (gameState == GameState.RUNNING) {
 
             deltaTime = System.currentTimeMillis() - lastTime;
-            totalTime +=  deltaTime / 1000;
+            totalTime += deltaTime / 1000;
             lastTime = System.currentTimeMillis();
 
-            RigidBody playerRigidBody = resourceManager.getPlayer().getRigidBody();
-
-            cameraPositon += playerRigidBody.getVelocity().getX();
-
-            //playerRigidBody.setVelocity(new Vector2(playerRigidBody.getVelocity().getX() * 1.001f, 0.0f));
+            updatePlayer();
 
             try {
                 Thread.sleep(20);
@@ -71,4 +67,17 @@ public class GameEngine implements Runnable {
             }
         }
     }
+
+    private void updatePlayer() {
+        RigidBody playerRigidBody = resourceManager.getPlayer().getRigidBody();
+
+        cameraPositon += playerRigidBody.getVelocity().getX() * 10;
+
+        playerRigidBody.setVelocity(Calc.EulerMethod(playerRigidBody.getVelocity(), playerRigidBody.getAcceleration(), deltaTime));
+
+        Vector2 newPosition = Calc.EulerMethod(playerRigidBody.getPosition(), playerRigidBody.getVelocity(), deltaTime);
+
+        playerRigidBody.setPosition(new Vector2(playerRigidBody.getPosition().getX(), newPosition.getY()));
+    }
+
 }

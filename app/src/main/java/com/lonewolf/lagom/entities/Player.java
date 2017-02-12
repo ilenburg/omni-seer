@@ -57,8 +57,8 @@ public class Player {
                 0.5f, 0.5f
         }};
 
-        this.rigidBody = new RigidBody(1, new Vector2(-1.0f, -0.535f), new Vector2(0.002f, 0.0f));
-        Animation animation = new Animation(animationCoordinates, 2, rigidBody);
+        this.rigidBody = new RigidBody(1, new Vector2(-1.0f, -0.535f), new Vector2(0.0002f, 0.0f));
+        Animation animation = new Animation(animationCoordinates, 0.2f, rigidBody);
 
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates, animation);
 
