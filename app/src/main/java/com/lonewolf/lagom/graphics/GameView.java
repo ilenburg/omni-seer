@@ -41,31 +41,6 @@ public class GameView extends GLSurfaceView {
         mDetector = new GestureDetectorCompat(context, new GestureListener(resourceManager));
     }
 
-    /*@Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-        int action = MotionEventCompat.getActionMasked(event);
-
-        switch (action) {
-            case (MotionEvent.ACTION_DOWN):
-                touchY = event.getY();
-                return true;
-            case (MotionEvent.ACTION_UP):
-                if (touchY > event.getY() && touchY - event.getY() > 200) {
-                    Input playerInput = resourceManager.getPlayer().getInput();
-                    if (playerInput.isGrounded()) {
-                        playerInput.setJumping(true);
-                    }
-                }
-                return true;
-            case (MotionEvent.ACTION_MOVE):
-                Log.v(TAG, "Action was MOVE");
-                return true;
-            default:
-                return super.onTouchEvent(event);
-        }
-    }*/
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         this.mDetector.onTouchEvent(event);

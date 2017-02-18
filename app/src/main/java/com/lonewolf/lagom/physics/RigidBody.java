@@ -8,6 +8,8 @@ import android.opengl.Matrix;
 
 public class RigidBody {
 
+    private static final float POSITION_RATION = 1000.0f;
+
     private final float mass;
 
     private Vector2 position;

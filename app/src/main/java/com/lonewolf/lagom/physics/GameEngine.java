@@ -13,6 +13,9 @@ import static android.content.ContentValues.TAG;
 
 public class GameEngine implements Runnable {
 
+    private static final float GRAVITY_ACCELERATION = -0.0000098f;
+    private static final float ZERO = 0.0f;
+
     private GameState gameState;
 
     private long lastTime;
@@ -79,9 +82,9 @@ public class GameEngine implements Runnable {
 
         float playerJumpPower = playerInput.getJumpPower();
 
-        if (playerJumpPower != 0.0f) {
-            playerRigidBody.setVelocityY(0.002f * playerJumpPower);
-            playerInput.setJumpPower(0.0f);
+        if (playerJumpPower != ZERO) {
+            playerRigidBody.setVelocityY(playerJumpPower);
+            playerInput.setJumpPower(ZERO);
         }
 
         cameraPositon += playerRigidBody.getVelocity().getX() * 10;
@@ -93,10 +96,10 @@ public class GameEngine implements Runnable {
         playerRigidBody.setPosition(new Vector2(playerRigidBody.getPosition().getX(), newPosition.getY()));
 
         if (playerRigidBody.getPosition().getY() > groundPosition) {
-            playerRigidBody.setAccelerationY(-0.0000098f);
+            playerRigidBody.setAccelerationY(GRAVITY_ACCELERATION);
         } else {
-            playerRigidBody.setAccelerationY(0.0f);
-            playerRigidBody.setVelocityY(0.0f);
+            playerRigidBody.setAccelerationY(ZERO);
+            playerRigidBody.setVelocityY(ZERO);
             playerRigidBody.setPositionY(groundPosition);
             playerInput.setGrounded(true);
         }
