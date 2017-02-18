@@ -75,19 +75,13 @@ public class GameEngine implements Runnable {
 
     private void updatePlayer() {
         RigidBody playerRigidBody = resourceManager.getPlayer().getRigidBody();
+        Input playerInput = resourceManager.getPlayer().getInput();
 
-        if(playerRigidBody.getPosition().getY() > groundPosition) {
-            playerRigidBody.setAccelerationY(-0.0000098f);
-        }
-        else {
-            playerRigidBody.setAccelerationY(0.0f);
-            playerRigidBody.setVelocityY(0.0f);
-            playerRigidBody.setPositionY(groundPosition);
-        }
+        float playerJumpPower = playerInput.getJumpPower();
 
-        if(resourceManager.getPlayer().getInput().isJumping()) {
-            resourceManager.getPlayer().getInput().setJumping(false);
-            playerRigidBody.setVelocityY(0.002f);
+        if (playerJumpPower != 0.0f) {
+            playerRigidBody.setVelocityY(0.002f * playerJumpPower);
+            playerInput.setJumpPower(0.0f);
         }
 
         cameraPositon += playerRigidBody.getVelocity().getX() * 10;
@@ -97,6 +91,16 @@ public class GameEngine implements Runnable {
         Vector2 newPosition = Calc.EulerMethod(playerRigidBody.getPosition(), playerRigidBody.getVelocity(), deltaTime);
 
         playerRigidBody.setPosition(new Vector2(playerRigidBody.getPosition().getX(), newPosition.getY()));
+
+        if (playerRigidBody.getPosition().getY() > groundPosition) {
+            playerRigidBody.setAccelerationY(-0.0000098f);
+        } else {
+            playerRigidBody.setAccelerationY(0.0f);
+            playerRigidBody.setVelocityY(0.0f);
+            playerRigidBody.setPositionY(groundPosition);
+            playerInput.setGrounded(true);
+        }
+
     }
 
 }

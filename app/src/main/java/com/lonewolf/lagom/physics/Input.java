@@ -6,15 +6,15 @@ package com.lonewolf.lagom.physics;
 
 public class Input {
 
-    private boolean jumping;
+    private float jumpPower;
     private boolean grounded;
 
-    public boolean isJumping() {
-        return jumping;
+    public float getJumpPower() {
+        return jumpPower;
     }
 
-    public void setJumping(boolean jumping) {
-        this.jumping = jumping;
+    public void setJumpPower(float jumpPower) {
+        this.jumpPower = jumpPower;
     }
 
     public boolean isGrounded() {
@@ -26,7 +26,7 @@ public class Input {
     }
 
     public Input() {
-        this.jumping = false;
+        this.jumpPower = 0.0f;
         this.grounded = true;
     }
 

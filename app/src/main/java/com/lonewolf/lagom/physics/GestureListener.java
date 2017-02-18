@@ -46,10 +46,14 @@ public class GestureListener implements GestureDetector.OnGestureListener {
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if (e1.getY() > e2.getY()) {
+
+        float distance = (e1.getY() - e2.getY()) / 500;
+
+        if (distance > 0) {
             Input playerInput = resourceManager.getPlayer().getInput();
             if (playerInput.isGrounded()) {
-                playerInput.setJumping(true);
+                playerInput.setJumpPower(distance);
+                playerInput.setGrounded(false);
             }
         }
         return true;
