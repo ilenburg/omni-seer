@@ -21,9 +21,6 @@ public class GameView extends GLSurfaceView {
     private final GameRenderer gameRenderer;
     private final ResourceManager resourceManager;
 
-    private float touchY;
-    private boolean isSwipe;
-
     public GameView(Context context) {
         super(context);
 
@@ -33,18 +30,15 @@ public class GameView extends GLSurfaceView {
 
         this.gameEngine = new GameEngine(resourceManager);
         this.gameRenderer = new GameRenderer(resourceManager, gameEngine);
-        this.touchY = 0.0f;
-        this.isSwipe = false;
 
         setRenderer(gameRenderer);
 
-        mDetector = new GestureDetectorCompat(context, new GestureListener(resourceManager));
+        this.mDetector = new GestureDetectorCompat(context, new GestureListener(resourceManager));
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         this.mDetector.onTouchEvent(event);
-        // Be sure to call the superclass implementation
         return super.onTouchEvent(event);
     }
 }

@@ -77,6 +77,7 @@ public class GameEngine implements Runnable {
     }
 
     private void updatePlayer() {
+        
         RigidBody playerRigidBody = resourceManager.getPlayer().getRigidBody();
         Input playerInput = resourceManager.getPlayer().getInput();
 
@@ -93,7 +94,7 @@ public class GameEngine implements Runnable {
 
         Vector2 newPosition = Calc.EulerMethod(playerRigidBody.getPosition(), playerRigidBody.getVelocity(), deltaTime);
 
-        playerRigidBody.setPosition(new Vector2(playerRigidBody.getPosition().getX(), newPosition.getY()));
+        playerRigidBody.setPositionY(newPosition.getY());
 
         if (playerRigidBody.getPosition().getY() > groundPosition) {
             playerRigidBody.setAccelerationY(GRAVITY_ACCELERATION);

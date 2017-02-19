@@ -21,10 +21,6 @@ public class Animation {
     private final RigidBody rigidBody;
     private boolean movementBased;
 
-    public void setTextureBuffer(FloatBuffer textureBuffer) {
-        this.textureBuffer = textureBuffer;
-    }
-
     public Animation(float[][] textureFramesCoordinates) {
         this(textureFramesCoordinates, 0);
     }
@@ -47,6 +43,10 @@ public class Animation {
         }
     }
 
+    public void setTextureBuffer(FloatBuffer textureBuffer) {
+        this.textureBuffer = textureBuffer;
+    }
+
     public void update(float delta) {
         this.cicleStep += movementBased ? rigidBody.getVelocity().getX() * delta : delta;
 
@@ -56,7 +56,7 @@ public class Animation {
 
         int frame = (int) Math.floor(cicleStep / cicleStepDuration);
 
-        if(frame >= textureFramesCoordinates.length) {
+        if (frame >= textureFramesCoordinates.length) {
             frame = 0;
         }
 

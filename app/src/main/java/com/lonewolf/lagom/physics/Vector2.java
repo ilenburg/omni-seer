@@ -47,4 +47,14 @@ public class Vector2 {
         return new Vector2(this.x * scalar, this.y * scalar);
     }
 
+    public Vector2 divide(float scalar) {
+        return new Vector2(this.x / scalar, this.y / scalar);
+    }
+
+    public boolean isBounded() {
+        if (this.x > 3.0f || this.y > 1.0f || this.x < -3.0f || this.y < -1.0f)
+            return false;
+        return true;
+    }
+
 }

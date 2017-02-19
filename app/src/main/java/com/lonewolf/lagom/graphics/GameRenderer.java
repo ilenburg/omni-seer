@@ -40,7 +40,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         resourceManager.loadResources();
 
-        if(!initialized) {
+        if (!initialized) {
             new Thread(gameEngine).start();
         }
 
@@ -60,6 +60,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         GLES20.glViewport(0, 0, width, height);
 
         float ratio = (float) width / height;
+
+        resourceManager.getPlayer().getInput().setScreenSize(width, height, ratio);
 
         Matrix.orthoM(mProjectionMatrix, 0, -ratio, +ratio, -1, 1, -1, 1);
 
@@ -88,6 +90,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         draw(resourceManager.getPlayer().getSprite(), resourceManager.getPlayer().getRigidBody().getModelMatrix());
 
         draw(resourceManager.getForeground().getSprite());
+
+        draw(resourceManager.getSpell().getSprite(), resourceManager.getSpell().getRigidBody().getModelMatrix());
 
         //checkGlError("Draw");
 

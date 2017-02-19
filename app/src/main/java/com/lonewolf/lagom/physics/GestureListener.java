@@ -1,6 +1,5 @@
 package com.lonewolf.lagom.physics;
 
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -30,7 +29,7 @@ public class GestureListener implements GestureDetector.OnGestureListener {
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        Log.v("ok", "Can't touch this!");
+        resourceManager.getPlayer().getInput().setSpellTarget(e.getX(), e.getY());
         return true;
     }
 

@@ -11,6 +11,7 @@ import com.lonewolf.lagom.R;
 import com.lonewolf.lagom.entities.Background;
 import com.lonewolf.lagom.entities.Panorama;
 import com.lonewolf.lagom.entities.Player;
+import com.lonewolf.lagom.entities.Spell;
 
 import org.apache.commons.io.IOUtils;
 
@@ -29,13 +30,15 @@ public class ResourceManager {
     private final Context context;
 
     private int[] shaderPrograms = new int[6];
-    private int[] textures = new int[6];
+    private int[] textures = new int[7];
 
     private Player player;
     private Background background;
     private Panorama foreground;
     private Panorama panorama;
     private Panorama panoramaFar;
+
+    private Spell spell;
 
     public Player getPlayer() {
         return player;
@@ -57,10 +60,12 @@ public class ResourceManager {
         return panoramaFar;
     }
 
+    public Spell getSpell() {
+        return spell;
+    }
+
     public ResourceManager(Context context) {
-
         this.context = context;
-
     }
 
     public void loadResources() {
@@ -98,6 +103,7 @@ public class ResourceManager {
         loadTexture(R.drawable.panorama_far, 3, true);
         loadTexture(R.drawable.foreground, 4, true);
         loadTexture(R.drawable.night, 5, true);
+        loadTexture(R.drawable.fire_sprite, 6, false);
     }
 
     private void initEntities() {
@@ -107,6 +113,7 @@ public class ResourceManager {
         this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.75f);
         this.player = new Player(shaderPrograms[0], textures[0]);
         this.foreground = new Panorama(shaderPrograms[1], textures[4], 1.0f);
+        this.spell = new Spell(shaderPrograms[0], textures[6]);
     }
 
     private String getShaderCode(int resourceId) throws IOException {
