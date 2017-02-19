@@ -35,8 +35,8 @@ public class Vector2 {
         this.y = y;
     }
 
-    public Vector2 dotProduct(Vector2 vector2) {
-        return new Vector2(this.x * vector2.x, this.y * vector2.y);
+    public float dotProduct(Vector2 vector2) {
+        return (this.x * vector2.x + this.y * vector2.y);
     }
 
     public Vector2 add(Vector2 vector2) {
@@ -55,13 +55,7 @@ public class Vector2 {
         return new Vector2(this.x / scalar, this.y / scalar);
     }
 
-    public boolean isBounded() {
-        if (this.x > 3.0f || this.y > 1.0f || this.x < -3.0f || this.y < -1.0f)
-            return false;
-        return true;
-    }
-
-    public Vector2 getUnitVector() {
+    public Vector2 normalize() {
         float length = getLength();
         return new Vector2(this.x / length, this.y / length);
     }
@@ -75,8 +69,22 @@ public class Vector2 {
         this.y = 0.0f;
     }
 
+    public Vector2 copy () {
+        return new Vector2(this.x, this.y);
+    }
+
+    public boolean isBounded() {
+        if (this.x > 3.0f || this.y > 1.0f || this.x < -3.0f || this.y < -1.0f)
+            return false;
+        return true;
+    }
+
     public boolean isZero() {
         return (this.x == 0.0f && this.y == 0.0f);
     }
 
+    @Override
+    public String toString() {
+        return "X: " + this.x + "Y: " + this.y;
+    }
 }

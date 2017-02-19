@@ -12,14 +12,11 @@ import com.lonewolf.lagom.entities.Background;
 import com.lonewolf.lagom.entities.Panorama;
 import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.Spell;
-import com.lonewolf.lagom.physics.Vector2;
 
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import static android.content.ContentValues.TAG;
 import static com.lonewolf.lagom.graphics.GameRenderer.checkGlError;
@@ -35,13 +32,17 @@ public class ResourceManager {
     private int[] shaderPrograms = new int[6];
     private int[] textures = new int[7];
 
+    private Spell[] activeSpells = new Spell[30];
+
     private Player player;
     private Background background;
     private Panorama foreground;
     private Panorama panorama;
     private Panorama panoramaFar;
 
-    private List<Spell> activeSpells;
+    public ResourceManager(Context context) {
+        this.context = context;
+    }
 
     public Player getPlayer() {
         return player;
@@ -63,23 +64,14 @@ public class ResourceManager {
         return panoramaFar;
     }
 
-    public List<Spell> getActiveSpells() {
+    public Spell[] getActiveSpells() {
         return activeSpells;
-    }
-
-    public ResourceManager(Context context) {
-        this.context = context;
-        this.activeSpells = new ArrayList<Spell>();
     }
 
     public void loadResources() {
         initShaders();
         initTextures();
         initEntities();
-    }
-
-    public void createSpell(Vector2 origin, Vector2 startingVelocity) {
-        this.activeSpells.add(new Spell(shaderPrograms[0], textures[6], origin, startingVelocity));
     }
 
     private void initShaders() {
@@ -121,8 +113,12 @@ public class ResourceManager {
         this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.75f);
         this.player = new Player(shaderPrograms[0], textures[0]);
         this.foreground = new Panorama(shaderPrograms[1], textures[4], 1.0f);
-        createSpell(new Vector2(-0.8f, -0.535f), new Vector2(0.0002f, 0.0f));
-        createSpell(new Vector2(-0.5f, -0.535f), new Vector2(0.0002f, 0.0f));
+
+        int size = activeSpells.length;
+        for (int i = 0; i < size; ++i) {
+            activeSpells[i] = new Spell(shaderPrograms[0], textures[6]);
+        }
+
     }
 
     private String getShaderCode(int resourceId) throws IOException {

@@ -12,6 +12,8 @@ public class RigidBody {
 
     private final float mass;
 
+    private float angle;
+
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 acceleration;
@@ -28,6 +30,7 @@ public class RigidBody {
 
     public RigidBody(float mass, Vector2 position, Vector2 velocity) {
         this.mass = mass;
+        this.angle = 0.0f;
         this.position = position;
         this.velocity = velocity;
         this.acceleration = new Vector2();
@@ -79,9 +82,14 @@ public class RigidBody {
         this.acceleration = force.divide(this.mass).add(this.acceleration);
     }
 
+    public void setAngle(float angle) {
+        this.angle = angle;
+    }
+
     public float[] getModelMatrix() {
         Matrix.setIdentityM(this.mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, this.position.getX(), this.position.getY(), 0);
+        Matrix.rotateM(mModelMatrix, 0, angle, 0, 0, 1);
         return mModelMatrix;
     }
 }

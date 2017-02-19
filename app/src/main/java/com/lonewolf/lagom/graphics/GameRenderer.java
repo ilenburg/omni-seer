@@ -88,17 +88,15 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         Matrix.multiplyMM(moveMatrix, 0, mMVPMatrix, 0, moveMatrix, 0);*/
 
+        for (Spell spell : resourceManager.getActiveSpells()) {
+            if (spell.isActive()) {
+                draw(spell.getSprite(), spell.getRigidBody().getModelMatrix());
+            }
+        }
+
         draw(resourceManager.getPlayer().getSprite(), resourceManager.getPlayer().getRigidBody().getModelMatrix());
 
         draw(resourceManager.getForeground().getSprite());
-
-        gameEngine.lock = true;
-
-        for (Spell spell : resourceManager.getActiveSpells()) {
-            draw(spell.getSprite(), spell.getRigidBody().getModelMatrix());
-        }
-
-        gameEngine.lock = false;
 
         //checkGlError("Draw");
 

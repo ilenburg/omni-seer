@@ -48,7 +48,7 @@ public class Animation {
     }
 
     public void update(float delta) {
-        this.cicleStep += movementBased ? rigidBody.getVelocity().getX() * delta : delta;
+        this.cicleStep += movementBased ? Math.abs(rigidBody.getVelocity().getLength()) * delta : delta;
 
         if (cicleStep >= cicleDuration) {
             cicleStep = cicleStep - cicleDuration;
