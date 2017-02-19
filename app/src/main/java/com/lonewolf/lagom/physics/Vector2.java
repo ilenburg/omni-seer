@@ -15,8 +15,8 @@ public class Vector2 {
     }
 
     public Vector2() {
-        this.x = 0;
-        this.y = 0;
+        this.x = 0.0f;
+        this.y = 0.0f;
     }
 
     public float getX() {
@@ -43,6 +43,10 @@ public class Vector2 {
         return new Vector2(this.x + vector2.x, this.y + vector2.y);
     }
 
+    public Vector2 sub(Vector2 vector2) {
+        return new Vector2(this.x - vector2.x, this.y - vector2.y);
+    }
+
     public Vector2 multiply(float scalar) {
         return new Vector2(this.x * scalar, this.y * scalar);
     }
@@ -55,6 +59,24 @@ public class Vector2 {
         if (this.x > 3.0f || this.y > 1.0f || this.x < -3.0f || this.y < -1.0f)
             return false;
         return true;
+    }
+
+    public Vector2 getUnitVector() {
+        float length = getLength();
+        return new Vector2(this.x / length, this.y / length);
+    }
+
+    public float getLength() {
+        return (float) Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+    }
+
+    public void setZero() {
+        this.x = 0.0f;
+        this.y = 0.0f;
+    }
+
+    public boolean isZero() {
+        return (this.x == 0.0f && this.y == 0.0f);
     }
 
 }

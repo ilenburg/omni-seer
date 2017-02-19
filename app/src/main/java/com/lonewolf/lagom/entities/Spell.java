@@ -22,7 +22,7 @@ public class Spell {
         return rigidBody;
     }
 
-    public Spell(int shaderProgram, int texture) {
+    public Spell(int shaderProgram, int texture, Vector2 origin, Vector2 startingVelocity) {
 
         float[] geometry = new float[]{
                 -0.08f, 0.08f,
@@ -60,7 +60,7 @@ public class Spell {
                 1.0f, 0.0f
         }};
 
-        this.rigidBody = new RigidBody(1, new Vector2(-0.8f, -0.535f), new Vector2(0.0002f, 0.0f));
+        this.rigidBody = new RigidBody(1, origin, startingVelocity);
         Animation animation = new Animation(animationCoordinates, 0.2f, rigidBody);
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates, animation);
 

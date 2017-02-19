@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.physics.GameEngine;
 import com.lonewolf.lagom.resources.ResourceManager;
 
@@ -91,7 +92,13 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         draw(resourceManager.getForeground().getSprite());
 
-        draw(resourceManager.getSpell().getSprite(), resourceManager.getSpell().getRigidBody().getModelMatrix());
+        gameEngine.lock = true;
+
+        for (Spell spell : resourceManager.getActiveSpells()) {
+            draw(spell.getSprite(), spell.getRigidBody().getModelMatrix());
+        }
+
+        gameEngine.lock = false;
 
         //checkGlError("Draw");
 

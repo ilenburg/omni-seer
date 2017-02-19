@@ -26,7 +26,9 @@ public class GameEngine implements Runnable {
 
     private final float groundPosition;
 
-    private final ResourceManager resourceManager;
+    private ResourceManager resourceManager;
+
+    public boolean lock = false;
 
     public GameState getGameState() {
         return gameState;
@@ -77,9 +79,16 @@ public class GameEngine implements Runnable {
     }
 
     private void updatePlayer() {
-        
+
         RigidBody playerRigidBody = resourceManager.getPlayer().getRigidBody();
         Input playerInput = resourceManager.getPlayer().getInput();
+
+        if(!playerInput.getSpellTarget().isZero() && !lock) {
+            Vector2 startingVelocity = (playerInput.getSpellTarget().sub(playerRigidBody.getPosition())).getUnitVector().multiply(1.1f);
+            //resourceManager.createSpell(playerRigidBody.getPosition(), startingVelocity);
+            resourceManager.createSpell(new Vector2(-0.8f, -0.535f), new Vector2(0.0002f, 0.0f));
+            playerInput.getSpellTarget().setZero();
+        }
 
         float playerJumpPower = playerInput.getJumpPower();
 

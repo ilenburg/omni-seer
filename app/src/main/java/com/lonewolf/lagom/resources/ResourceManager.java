@@ -12,11 +12,14 @@ import com.lonewolf.lagom.entities.Background;
 import com.lonewolf.lagom.entities.Panorama;
 import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.Spell;
+import com.lonewolf.lagom.physics.Vector2;
 
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 import static com.lonewolf.lagom.graphics.GameRenderer.checkGlError;
@@ -38,7 +41,7 @@ public class ResourceManager {
     private Panorama panorama;
     private Panorama panoramaFar;
 
-    private Spell spell;
+    private List<Spell> activeSpells;
 
     public Player getPlayer() {
         return player;
@@ -60,18 +63,23 @@ public class ResourceManager {
         return panoramaFar;
     }
 
-    public Spell getSpell() {
-        return spell;
+    public List<Spell> getActiveSpells() {
+        return activeSpells;
     }
 
     public ResourceManager(Context context) {
         this.context = context;
+        this.activeSpells = new ArrayList<Spell>();
     }
 
     public void loadResources() {
         initShaders();
         initTextures();
         initEntities();
+    }
+
+    public void createSpell(Vector2 origin, Vector2 startingVelocity) {
+        this.activeSpells.add(new Spell(shaderPrograms[0], textures[6], origin, startingVelocity));
     }
 
     private void initShaders() {
@@ -113,7 +121,8 @@ public class ResourceManager {
         this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.75f);
         this.player = new Player(shaderPrograms[0], textures[0]);
         this.foreground = new Panorama(shaderPrograms[1], textures[4], 1.0f);
-        this.spell = new Spell(shaderPrograms[0], textures[6]);
+        createSpell(new Vector2(-0.8f, -0.535f), new Vector2(0.0002f, 0.0f));
+        createSpell(new Vector2(-0.5f, -0.535f), new Vector2(0.0002f, 0.0f));
     }
 
     private String getShaderCode(int resourceId) throws IOException {
@@ -184,5 +193,4 @@ public class ResourceManager {
 
         return shader;
     }
-
 }
