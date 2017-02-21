@@ -46,19 +46,20 @@ public class GestureListener implements GestureDetector.OnGestureListener {
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-        float distance = (e1.getY() - e2.getY()) / 800000;
+        float distanceY = (e1.getY() - e2.getY());
+        float distanceX = e2.getX() - e1.getX();
 
-        distance *= Math.abs(velocityY / 2000.0f);
+        Input playerInput = resourceManager.getPlayer().getInput();
 
-        if (distance > 0) {
-            if (distance > 0.004f) {
-                distance = 0.004f;
-            }
-            Input playerInput = resourceManager.getPlayer().getInput();
+        if (distanceY > 300 && distanceY > distanceX) {
             if (playerInput.isGrounded()) {
-                playerInput.setJumpPower(distance);
+                playerInput.setJumpPower(distanceY / 300000.0f);
                 playerInput.setGrounded(false);
             }
+        } else if (distanceX > 300) {
+            playerInput.setMegaSpell(true);
+        } else {
+            return onSingleTapUp(e2);
         }
         return true;
     }

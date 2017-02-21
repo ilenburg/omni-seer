@@ -2,7 +2,7 @@ package com.lonewolf.lagom.entities;
 
 import com.lonewolf.lagom.graphics.Scroll;
 import com.lonewolf.lagom.graphics.Sprite;
-import com.lonewolf.lagom.graphics.Transition;
+import com.lonewolf.lagom.graphics.TextureTransition;
 
 /**
  * Created by Ian on 11/02/2017.
@@ -32,6 +32,6 @@ public class Background{
         };
 
         this.sprite = new Sprite(shaderProgram, texture1,
-                geometry, textureCoordinates, new Scroll(scrollRatio), new Transition(texture2));
+                geometry, textureCoordinates, new Scroll(scrollRatio), new TextureTransition(texture2));
     }
 }

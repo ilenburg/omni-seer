@@ -4,7 +4,7 @@ package com.lonewolf.lagom.graphics;
  * Created by Ian on 11/02/2017.
  */
 
-public class Transition {
+public class TextureTransition {
 
     private float time;
     private int timePosition;
@@ -40,7 +40,7 @@ public class Transition {
         return texture;
     }
 
-    public Transition(int texture) {
+    public TextureTransition(int texture) {
         this.texture = texture;
         this.time = 0.0f;
     }

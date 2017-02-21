@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.physics.GameEngine;
 import com.lonewolf.lagom.resources.ResourceManager;
@@ -94,6 +95,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         }
 
+        MegaSpell megaSpell = resourceManager.getMegaSpell();
+
+        if (megaSpell.isActive()) {
+            draw(megaSpell.getSprite(), megaSpell.getRigidBody().getModelMatrix());
+        }
+
         draw(resourceManager.getPlayer().getSprite(), resourceManager.getPlayer().getRigidBody().getModelMatrix());
 
         draw(resourceManager.getForeground().getSprite());
@@ -126,12 +133,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, sprite.getTexture());
 
         if (sprite.isTransitional()) {
-            Transition transition = sprite.getTransition();
-            transition.setTime(gameEngine.getTotalTime());
-            GLES20.glUniform1f(transition.getTimePosition(), transition.getTime());
-            GLES20.glUniform1i(transition.getTexturePosition(), 1);
+            TextureTransition textureTransition = sprite.getTextureTransition();
+            textureTransition.setTime(gameEngine.getTotalTime());
+            GLES20.glUniform1f(textureTransition.getTimePosition(), textureTransition.getTime());
+            GLES20.glUniform1i(textureTransition.getTexturePosition(), 1);
             GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, transition.getTexture());
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureTransition.getTexture());
         }
 
         if (sprite.isScrollable()) {

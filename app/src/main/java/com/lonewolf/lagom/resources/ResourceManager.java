@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.lonewolf.lagom.R;
 import com.lonewolf.lagom.entities.Background;
+import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Panorama;
 import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.Spell;
@@ -34,6 +35,7 @@ public class ResourceManager {
 
     private Spell[] activeSpells = new Spell[30];
 
+    private MegaSpell megaSpell;
     private Player player;
     private Background background;
     private Panorama foreground;
@@ -42,6 +44,10 @@ public class ResourceManager {
 
     public ResourceManager(Context context) {
         this.context = context;
+    }
+
+    public MegaSpell getMegaSpell() {
+        return megaSpell;
     }
 
     public Player getPlayer() {
@@ -113,6 +119,7 @@ public class ResourceManager {
         this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.75f);
         this.player = new Player(shaderPrograms[0], textures[0]);
         this.foreground = new Panorama(shaderPrograms[1], textures[4], 1.0f);
+        this.megaSpell = new MegaSpell(shaderPrograms[0],textures[6]);
 
         int size = activeSpells.length;
         for (int i = 0; i < size; ++i) {

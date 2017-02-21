@@ -2,6 +2,7 @@ package com.lonewolf.lagom.physics;
 
 import android.util.Log;
 
+import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.states.GameState;
@@ -83,14 +84,32 @@ public class GameEngine implements Runnable {
 
         RigidBody spellRigidBody;
 
+        MegaSpell megaSpell = resourceManager.getMegaSpell();
+
+        if (megaSpell.isActive()) {
+            spellRigidBody = megaSpell.getRigidBody();
+            if (spellRigidBody.getPosition().getY() <= groundPosition - 0.06f) {
+                megaSpell.setActive(false);
+            }
+
+            spellRigidBody.setVelocity(Calc.EulerMethod(spellRigidBody.getVelocity(), spellRigidBody.getAcceleration(), deltaTime));
+
+            Vector2 newPosition = Calc.EulerMethod(spellRigidBody.getPosition(), spellRigidBody.getVelocity(), deltaTime);
+
+            spellRigidBody.setPosition(newPosition.getX(), newPosition.getY());
+            if (!spellRigidBody.getPosition().isBounded()) {
+                megaSpell.setActive(false);
+            }
+        }
+
         for (Spell spell : resourceManager.getActiveSpells()) {
             if (spell.isActive()) {
                 spellRigidBody = spell.getRigidBody();
-                if (spellRigidBody.getPosition().getY() <= groundPosition -0.06f) {
+                if (spellRigidBody.getPosition().getY() <= groundPosition - 0.06f) {
                     spell.setActive(false);
                     continue;
                 }
-                spell.getRigidBody().setVelocity(Calc.EulerMethod(spellRigidBody.getVelocity(), spellRigidBody.getAcceleration(), deltaTime));
+                spellRigidBody.setVelocity(Calc.EulerMethod(spellRigidBody.getVelocity(), spellRigidBody.getAcceleration(), deltaTime));
 
                 Vector2 newPosition = Calc.EulerMethod(spellRigidBody.getPosition(), spellRigidBody.getVelocity(), deltaTime);
 
@@ -107,6 +126,15 @@ public class GameEngine implements Runnable {
         RigidBody playerRigidBody = resourceManager.getPlayer().getRigidBody();
         Input playerInput = resourceManager.getPlayer().getInput();
 
+        if (playerInput.isMegaSpell()) {
+            MegaSpell megaSpell = resourceManager.getMegaSpell();
+            Vector2 startingPosition = playerRigidBody.getPosition();
+            megaSpell.getRigidBody().setPosition(startingPosition.getX() + 0.1f, startingPosition.getY());
+            megaSpell.getRigidBody().setVelocity(new Vector2(0.002f, ZERO));
+            megaSpell.setActive(true);
+            playerInput.setMegaSpell(false);
+        }
+
         if (!playerInput.getSpellTarget().isZero()) {
             Vector2 startingVelocity = playerInput.getSpellTarget().sub(playerRigidBody.getPosition()).normalize();
             for (Spell spell : resourceManager.getActiveSpells()) {
@@ -114,7 +142,7 @@ public class GameEngine implements Runnable {
                     spell.getRigidBody().setPosition(playerRigidBody.getPosition().copy());
                     spell.getRigidBody().setVelocity(startingVelocity.divide(600.0f));
                     float angle = Calc.Angle(startingVelocity, new Vector2(1, 0));
-                    if(startingVelocity.getY() < ZERO) {
+                    if (startingVelocity.getY() < ZERO) {
                         angle *= -1;
                     }
                     spell.getRigidBody().setAngle(angle);

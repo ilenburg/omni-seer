@@ -33,7 +33,7 @@ public class Sprite {
     private final Animation animation;
     private final boolean animated;
 
-    private final Transition transition;
+    private final TextureTransition textureTransition;
     private final boolean transitional;
 
     public static short[] getDrawOrder() {
@@ -88,8 +88,8 @@ public class Sprite {
         return animated;
     }
 
-    public Transition getTransition() {
-        return transition;
+    public TextureTransition getTextureTransition() {
+        return textureTransition;
     }
 
     public boolean isTransitional() {
@@ -100,8 +100,8 @@ public class Sprite {
         this(shaderProgram, texture, geometry, textureCoordinates, null, null, null);
     }
 
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, Transition transition) {
-        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, transition);
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, TextureTransition textureTransition) {
+        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, textureTransition);
     }
 
     public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll) {
@@ -112,7 +112,7 @@ public class Sprite {
         this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null);
     }
 
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, Animation animation, Transition transition) {
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, Animation animation, TextureTransition textureTransition) {
 
         this.shaderProgram = shaderProgram;
         this.texture = texture;
@@ -132,11 +132,11 @@ public class Sprite {
             this.scrollable = false;
         }
 
-        this.transition = transition;
+        this.textureTransition = textureTransition;
 
-        if(this.transition != null) {
-            this.transition.setTexturePosition(GLES20.glGetUniformLocation(shaderProgram, "tex2"));
-            this.transition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
+        if(this.textureTransition != null) {
+            this.textureTransition.setTexturePosition(GLES20.glGetUniformLocation(shaderProgram, "tex2"));
+            this.textureTransition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
             this.transitional = true;
         }
         else {

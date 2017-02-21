@@ -11,6 +11,7 @@ public class Input {
     private float jumpPower;
     private Vector2 spellTarget;
     private boolean grounded;
+    private boolean megaSpell;
 
     private float screenWidth;
     private float screenHeight;
@@ -64,4 +65,11 @@ public class Input {
         return -((y / screenHeight) * 2 - 1);
     }
 
+    public boolean isMegaSpell() {
+        return megaSpell;
+    }
+
+    public void setMegaSpell(boolean megaSpell) {
+        this.megaSpell = megaSpell;
+    }
 }
