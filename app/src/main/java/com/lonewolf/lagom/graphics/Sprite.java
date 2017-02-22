@@ -28,13 +28,12 @@ public class Sprite {
     private final int uniformMVPMatrixPosition;
 
     private final Scroll scroll;
-    private final boolean scrollable;
 
     private final Animation animation;
-    private final boolean animated;
 
     private final TextureTransition textureTransition;
-    private final boolean transitional;
+
+    private final ColorTransition colorTransition;
 
     public static short[] getDrawOrder() {
         return drawOrder;
@@ -76,43 +75,39 @@ public class Sprite {
         return scroll;
     }
 
-    public boolean isScrollable() {
-        return scrollable;
-    }
-
     public Animation getAnimation() {
         return animation;
-    }
-
-    public boolean isAnimated() {
-        return animated;
     }
 
     public TextureTransition getTextureTransition() {
         return textureTransition;
     }
 
-    public boolean isTransitional() {
-        return transitional;
-    }
-
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null);
+    public ColorTransition getColorTransition() {
+        return colorTransition;
     }
 
     public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, TextureTransition textureTransition) {
-        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, textureTransition);
+        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, textureTransition, null);
+    }
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Animation animation, ColorTransition colorTransition) {
+        this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null, colorTransition);
+    }
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates) {
+        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null);
     }
 
     public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll) {
-        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, null);
+        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, null, null);
     }
 
     public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Animation animation) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null);
+        this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null, null);
     }
 
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, Animation animation, TextureTransition textureTransition) {
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, Animation animation, TextureTransition textureTransition, ColorTransition colorTransition) {
 
         this.shaderProgram = shaderProgram;
         this.texture = texture;
@@ -127,20 +122,19 @@ public class Sprite {
 
         if (this.scroll != null) {
             this.scroll.setScrollPosition(GLES20.glGetUniformLocation(shaderProgram, "scroll"));
-            this.scrollable = true;
-        } else {
-            this.scrollable = false;
         }
 
         this.textureTransition = textureTransition;
 
-        if(this.textureTransition != null) {
+        if (this.textureTransition != null) {
             this.textureTransition.setTexturePosition(GLES20.glGetUniformLocation(shaderProgram, "tex2"));
             this.textureTransition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
-            this.transitional = true;
         }
-        else {
-            this.transitional = false;
+
+        this.colorTransition = colorTransition;
+
+        if (colorTransition != null) {
+            this.colorTransition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
         }
 
         ByteBuffer bb = ByteBuffer.allocateDirect(geometry.length * 4);
@@ -165,9 +159,6 @@ public class Sprite {
 
         if (this.animation != null) {
             this.animation.setTextureBuffer(textureBuffer);
-            this.animated = true;
-        } else {
-            this.animated = false;
         }
     }
 

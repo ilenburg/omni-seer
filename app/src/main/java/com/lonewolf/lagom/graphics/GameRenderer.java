@@ -132,8 +132,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, sprite.getTexture());
 
-        if (sprite.isTransitional()) {
-            TextureTransition textureTransition = sprite.getTextureTransition();
+        TextureTransition textureTransition = sprite.getTextureTransition();
+
+        if (textureTransition != null) {
             textureTransition.setTime(gameEngine.getTotalTime());
             GLES20.glUniform1f(textureTransition.getTimePosition(), textureTransition.getTime());
             GLES20.glUniform1i(textureTransition.getTexturePosition(), 1);
@@ -141,13 +142,23 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureTransition.getTexture());
         }
 
-        if (sprite.isScrollable()) {
-            Scroll scroll = sprite.getScroll();
+        ColorTransition colorTransition = sprite.getColorTransition();
+
+        if(colorTransition != null) {
+            colorTransition.setTime(gameEngine.getTotalTime() * 500);
+            GLES20.glUniform1f(colorTransition.getTimePosition(), colorTransition.getTime());
+        }
+
+        Scroll scroll = sprite.getScroll();
+
+        if (scroll != null) {
             scroll.setDisplacement(gameEngine.getCameraPositon(), sprite.getTexture() == 2);
             GLES20.glUniform1f(scroll.getScrollPosition(), scroll.getDisplacement());
         }
 
-        if (sprite.isAnimated()) {
+        Animation animation = sprite.getAnimation();
+
+        if (animation != null) {
             sprite.getAnimation().update(gameEngine.getDeltaTime());
         }
 

@@ -1,7 +1,5 @@
 package com.lonewolf.lagom.physics;
 
-import android.util.Log;
-
 /**
  * Created by Ian on 12/02/2017.
  */
@@ -32,7 +30,6 @@ public class Input {
     public void setSpellTarget(float x, float y) {
         this.spellTarget.setX(getNormalizedX(x));
         this.spellTarget.setY(getNormalizedY(y));
-        Log.v("SpellTarget", Float.toString(spellTarget.getX()) + "||" + Float.toString(spellTarget.getY()));
     }
 
     public void setScreenSize(float screenWidth, float screenHeight, float ratio) {

@@ -86,12 +86,15 @@ public class ResourceManager {
         String fragmentShader = null;
         String fragmentScrollShader = null;
         String doubleTexFragmentScrollShader = null;
+        String colorChangeFragmentShader = null;
 
         try {
             vertexShader = getShaderCode(R.raw.base_vert);
             fragmentShader = getShaderCode(R.raw.base_frag);
             fragmentScrollShader = getShaderCode(R.raw.scroll_frag);
             doubleTexFragmentScrollShader = getShaderCode(R.raw.double_tex_scroll_frag);
+            colorChangeFragmentShader = getShaderCode(R.raw.color_change_base_frag);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,6 +102,7 @@ public class ResourceManager {
         shaderPrograms[0] = generateShaderProgram(vertexShader, fragmentShader);
         shaderPrograms[1] = generateShaderProgram(vertexShader, fragmentScrollShader);
         shaderPrograms[2] = generateShaderProgram(vertexShader, doubleTexFragmentScrollShader);
+        shaderPrograms[3] = generateShaderProgram(vertexShader, colorChangeFragmentShader);
     }
 
     private void initTextures() {
@@ -119,7 +123,7 @@ public class ResourceManager {
         this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.75f);
         this.player = new Player(shaderPrograms[0], textures[0]);
         this.foreground = new Panorama(shaderPrograms[1], textures[4], 1.0f);
-        this.megaSpell = new MegaSpell(shaderPrograms[0],textures[6]);
+        this.megaSpell = new MegaSpell(shaderPrograms[3],textures[6]);
 
         int size = activeSpells.length;
         for (int i = 0; i < size; ++i) {
