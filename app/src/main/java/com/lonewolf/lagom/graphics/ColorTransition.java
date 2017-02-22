@@ -1,5 +1,7 @@
 package com.lonewolf.lagom.graphics;
 
+import java.util.Random;
+
 /**
  * Created by Ian on 11/02/2017.
  */
@@ -7,6 +9,7 @@ package com.lonewolf.lagom.graphics;
 public class ColorTransition {
 
     private float time;
+    private float base;
     private int timePosition;
 
     public float getTime() {
@@ -14,7 +17,7 @@ public class ColorTransition {
     }
 
     public void setTime(float time) {
-        this.time = (float) Math.abs(Math.sin(time / 100));
+        this.time = (float) Math.abs(Math.sin((time / 100) + base));
     }
 
     public int getTimePosition() {
@@ -26,6 +29,7 @@ public class ColorTransition {
     }
 
     public ColorTransition() {
+        this.base = new Random().nextFloat() * 10.0f;
         this.time = 0.0f;
     }
 

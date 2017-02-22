@@ -127,7 +127,7 @@ public class ResourceManager {
 
         int size = activeSpells.length;
         for (int i = 0; i < size; ++i) {
-            activeSpells[i] = new Spell(shaderPrograms[0], textures[6]);
+            activeSpells[i] = new Spell(shaderPrograms[3], textures[6]);
         }
 
     }
