@@ -105,20 +105,19 @@ public class GameEngine implements Runnable {
         for (Spell spell : resourceManager.getActiveSpells()) {
             if (spell.isActive()) {
                 spellRigidBody = spell.getRigidBody();
-                if (spellRigidBody.getPosition().getY() <= groundPosition - 0.06f) {
-                    spell.setActive(false);
-                    continue;
-                }
-                spellRigidBody.setVelocity(Calc.EulerMethod(spellRigidBody.getVelocity(), spellRigidBody.getAcceleration(), deltaTime));
 
-                Vector2 newPosition = Calc.EulerMethod(spellRigidBody.getPosition(), spellRigidBody.getVelocity(), deltaTime);
-
-                spellRigidBody.setPosition(newPosition.getX(), newPosition.getY());
-                if (!spellRigidBody.getPosition().isBounded()) {
+                if (spellRigidBody.getPosition().getY() <= groundPosition - 0.06f || !spellRigidBody.getPosition().isBounded()) {
                     spell.setActive(false);
+                } else {
+                    spellRigidBody.setVelocity(Calc.EulerMethod(spellRigidBody.getVelocity(), spellRigidBody.getAcceleration(), deltaTime));
+
+                    Vector2 newPosition = Calc.EulerMethod(spellRigidBody.getPosition(), spellRigidBody.getVelocity(), deltaTime);
+
+                    spellRigidBody.setPosition(newPosition.getX(), newPosition.getY());
                 }
             }
         }
+
     }
 
     private void updatePlayer() {

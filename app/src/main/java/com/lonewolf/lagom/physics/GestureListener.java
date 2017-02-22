@@ -1,6 +1,5 @@
 package com.lonewolf.lagom.physics;
 
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -54,7 +53,7 @@ public class GestureListener implements GestureDetector.OnGestureListener {
 
         if (distanceY > 200 && distanceY > distanceX) {
             if (playerInput.isGrounded()) {
-                Log.v("DistanceY", Float.toString(distanceY));
+                //Log.v("DistanceY", Float.toString(distanceY));
                 if(distanceY > 600.0f) {
                     distanceY = 600.0f;
                 }
