@@ -1,8 +1,10 @@
 package com.lonewolf.lagom.physics;
 
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
+import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.resources.ResourceManager;
 
 /**
@@ -46,22 +48,29 @@ public class GestureListener implements GestureDetector.OnGestureListener {
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-        float distanceY = (e1.getY() - e2.getY());
+        float distanceY = e1.getY() - e2.getY();
         float distanceX = e2.getX() - e1.getX();
 
         Input playerInput = resourceManager.getPlayer().getInput();
 
-        if (distanceY > 200 && distanceY > distanceX) {
-            if (playerInput.isGrounded()) {
-                //Log.v("DistanceY", Float.toString(distanceY));
-                if(distanceY > 600.0f) {
-                    distanceY = 600.0f;
+        if (Math.abs(distanceY) > Math.abs(distanceX)) {
+            if (distanceY > 200) {
+                if (playerInput.isGrounded()) {
+                    if (distanceY > 600.0f) {
+                        distanceY = 600.0f;
+                    }
+                    playerInput.setJumpPower(distanceY / 200000.0f);
+                    playerInput.setGrounded(false);
                 }
-                playerInput.setJumpPower(distanceY / 200000.0f);
-                playerInput.setGrounded(false);
             }
-        } else if (distanceX > 200) {
-            playerInput.setMegaSpell(true);
+        } else if (Math.abs(distanceX) > 200) {
+            if(distanceX > 0) {
+                playerInput.setMegaSpell(true);
+            }
+            else {
+                Log.v("Fine", "fine");
+                resourceManager.getPlayer().getSprite().getColorTransition().reset();
+            }
         } else {
             return onSingleTapUp(e2);
         }

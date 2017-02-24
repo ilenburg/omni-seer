@@ -1,4 +1,4 @@
-package com.lonewolf.lagom.graphics;
+package com.lonewolf.lagom.modules.effects;
 
 /**
  * Created by Ian on 10/02/2017.
@@ -10,7 +10,6 @@ public class Scroll {
 
     private final float ratio;
     private float displacement;
-    //private static final float max = 1000.0f;
 
     public Scroll(float ratio) {
         this.ratio = ratio;
@@ -21,17 +20,9 @@ public class Scroll {
         return displacement;
     }
 
-    public void setDisplacement(float displacement, boolean log) {
-        //this.displacement = (Math.round(displacement * this.ratio * max) / max);
-
+    public void setDisplacement(float displacement) {
         displacement *= ratio;
-
         this.displacement = displacement - (long) displacement;
-
-        if (log) {
-            //Log.v("", Long.toString(Math.round(displacement)));
-            //Log.v("Displacement", Float.toString(this.displacement));
-        }
 
     }
 

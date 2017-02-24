@@ -1,4 +1,4 @@
-package com.lonewolf.lagom.graphics;
+package com.lonewolf.lagom.modules.effects;
 
 /**
  * Created by Ian on 11/02/2017.

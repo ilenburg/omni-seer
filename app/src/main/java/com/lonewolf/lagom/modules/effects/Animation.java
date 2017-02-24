@@ -1,4 +1,4 @@
-package com.lonewolf.lagom.graphics;
+package com.lonewolf.lagom.modules.effects;
 
 import com.lonewolf.lagom.physics.RigidBody;
 

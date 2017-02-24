@@ -6,7 +6,13 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.lonewolf.lagom.entities.MegaSpell;
+import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.Spell;
+import com.lonewolf.lagom.modules.effects.Animation;
+import com.lonewolf.lagom.modules.effects.ColorTransition;
+import com.lonewolf.lagom.modules.effects.Scroll;
+import com.lonewolf.lagom.modules.Sprite;
+import com.lonewolf.lagom.modules.effects.TextureTransition;
 import com.lonewolf.lagom.physics.GameEngine;
 import com.lonewolf.lagom.resources.ResourceManager;
 
@@ -26,10 +32,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     private boolean initialized;
 
-    private float[] mMVPMatrix = new float[16];
-    private float[] mProjectionMatrix = new float[16];
-    private float[] mViewMatrix = new float[16];
-    private float[] mVPMatrix = new float[16];
+    private final float[] mMVPMatrix = new float[16];
+    private final float[] mProjectionMatrix = new float[16];
+    private final float[] mViewMatrix = new float[16];
+    private final float[] mVPMatrix = new float[16];
+    private final float[] mIdentityMatrix = new float[16];
 
     public GameRenderer(ResourceManager resourceManager, GameEngine gameEngine) {
         this.resourceManager = resourceManager;
@@ -47,6 +54,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         }
 
         GLES20.glClearColor(0.0f, 0.5f, 0.75f, 1f);
+
+        Matrix.setIdentityM(mIdentityMatrix, 0);
 
         Matrix.setIdentityM(mViewMatrix, 0);
 
@@ -81,14 +90,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         draw(resourceManager.getPanorama().getSprite());
 
-        /*float[] moveMatrix = new float[16];
-
-        Matrix.setIdentityM(moveMatrix, 0);
-
-        Matrix.translateM(moveMatrix, 0, -1.0f, -0.53f, 0);
-
-        Matrix.multiplyMM(moveMatrix, 0, mMVPMatrix, 0, moveMatrix, 0);*/
-
         for (Spell spell : resourceManager.getActiveSpells()) {
             if (spell.isActive()) {
                 draw(spell.getSprite(), spell.getRigidBody().getModelMatrix());
@@ -101,7 +102,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             draw(megaSpell.getSprite(), megaSpell.getRigidBody().getModelMatrix());
         }
 
-        draw(resourceManager.getPlayer().getSprite(), resourceManager.getPlayer().getRigidBody().getModelMatrix());
+        Player player = resourceManager.getPlayer();
+
+        draw(player.getSprite(), player.getRigidBody().getModelMatrix());
 
         draw(resourceManager.getForeground().getSprite());
 
@@ -110,9 +113,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     }
 
     private void draw(Sprite sprite) {
-        float[] mModelMatrix = new float[16];
-        Matrix.setIdentityM(mModelMatrix, 0);
-        draw(sprite, mModelMatrix);
+        draw(sprite, mIdentityMatrix);
     }
 
     private void draw(Sprite sprite, float[] mModelMatrix) {
@@ -144,7 +145,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         ColorTransition colorTransition = sprite.getColorTransition();
 
-        if(colorTransition != null) {
+        if (colorTransition != null) {
             colorTransition.setTime(gameEngine.getTotalTime() * 500);
             GLES20.glUniform1f(colorTransition.getTimePosition(), colorTransition.getTime());
         }
@@ -152,7 +153,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         Scroll scroll = sprite.getScroll();
 
         if (scroll != null) {
-            scroll.setDisplacement(gameEngine.getCameraPositon(), sprite.getTexture() == 2);
+            scroll.setDisplacement(gameEngine.getCameraPositon());
             GLES20.glUniform1f(scroll.getScrollPosition(), scroll.getDisplacement());
         }
 

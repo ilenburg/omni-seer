@@ -1,8 +1,8 @@
 package com.lonewolf.lagom.entities;
 
-import com.lonewolf.lagom.graphics.Scroll;
-import com.lonewolf.lagom.graphics.Sprite;
-import com.lonewolf.lagom.graphics.TextureTransition;
+import com.lonewolf.lagom.modules.effects.Scroll;
+import com.lonewolf.lagom.modules.Sprite;
+import com.lonewolf.lagom.modules.effects.TextureTransition;
 
 /**
  * Created by Ian on 11/02/2017.

@@ -1,6 +1,11 @@
-package com.lonewolf.lagom.graphics;
+package com.lonewolf.lagom.modules;
 
 import android.opengl.GLES20;
+
+import com.lonewolf.lagom.modules.effects.Animation;
+import com.lonewolf.lagom.modules.effects.ColorTransition;
+import com.lonewolf.lagom.modules.effects.Scroll;
+import com.lonewolf.lagom.modules.effects.TextureTransition;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

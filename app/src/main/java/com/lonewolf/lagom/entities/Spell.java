@@ -1,8 +1,8 @@
 package com.lonewolf.lagom.entities;
 
-import com.lonewolf.lagom.graphics.Animation;
-import com.lonewolf.lagom.graphics.ColorTransition;
-import com.lonewolf.lagom.graphics.Sprite;
+import com.lonewolf.lagom.modules.effects.Animation;
+import com.lonewolf.lagom.modules.effects.ColorTransition;
+import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.physics.RigidBody;
 import com.lonewolf.lagom.physics.Vector2;
 
@@ -54,10 +54,12 @@ public class Spell {
                 1.0f, 0.0f
         }};
 
-        ColorTransition colorTransition = new ColorTransition();
-
         this.rigidBody = new RigidBody(0.5f, new Vector2(-1.0f, -0.535f), new Vector2(0.0f, 0.0f));
+
         Animation animation = new Animation(animationCoordinates, 0.4f, rigidBody);
+
+        ColorTransition colorTransition = new ColorTransition(0.01f);
+
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates, animation, colorTransition);
         this.active = false;
     }

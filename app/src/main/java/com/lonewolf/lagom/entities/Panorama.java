@@ -1,7 +1,7 @@
 package com.lonewolf.lagom.entities;
 
-import com.lonewolf.lagom.graphics.Scroll;
-import com.lonewolf.lagom.graphics.Sprite;
+import com.lonewolf.lagom.modules.effects.Scroll;
+import com.lonewolf.lagom.modules.Sprite;
 
 /**
  * Created by Ian on 10/02/2017.

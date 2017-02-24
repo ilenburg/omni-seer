@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Spell;
+import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.states.GameState;
 
@@ -17,6 +18,8 @@ public class GameEngine implements Runnable {
 
     private static final float GRAVITY_ACCELERATION = -0.0000098f * 0.8f;
     private static final float ZERO = 0.0f;
+    private static final Vector2 VECTOR_UP = new Vector2(1,0);
+    private static final Vector2 SPELL_BASE_VELOCITY = new Vector2(0.002f, ZERO);
 
     private GameState gameState;
 
@@ -32,6 +35,10 @@ public class GameEngine implements Runnable {
 
     public GameState getGameState() {
         return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
     }
 
     public float getCameraPositon() {
@@ -129,7 +136,7 @@ public class GameEngine implements Runnable {
             MegaSpell megaSpell = resourceManager.getMegaSpell();
             Vector2 startingPosition = playerRigidBody.getPosition();
             megaSpell.getRigidBody().setPosition(startingPosition.getX() + 0.1f, startingPosition.getY());
-            megaSpell.getRigidBody().setVelocity(new Vector2(0.002f, ZERO));
+            megaSpell.getRigidBody().setVelocity(SPELL_BASE_VELOCITY);
             megaSpell.setActive(true);
             playerInput.setMegaSpell(false);
         }
@@ -140,7 +147,7 @@ public class GameEngine implements Runnable {
                 if (!spell.isActive()) {
                     spell.getRigidBody().setPosition(playerRigidBody.getPosition().copy());
                     spell.getRigidBody().setVelocity(startingVelocity.divide(600.0f));
-                    float angle = Calc.Angle(startingVelocity, new Vector2(1, 0));
+                    float angle = Calc.Angle(startingVelocity, VECTOR_UP);
                     if (startingVelocity.getY() < ZERO) {
                         angle *= -1;
                     }
