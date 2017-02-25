@@ -17,7 +17,7 @@ public class TextureTransition {
     }
 
     public void setTime(float time) {
-        this.time = (float) Math.abs(Math.sin(time / 100) * 3);
+        this.time = time;
     }
 
     public int getTexturePosition() {

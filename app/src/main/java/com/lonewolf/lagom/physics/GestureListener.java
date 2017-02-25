@@ -53,6 +53,8 @@ public class GestureListener implements GestureDetector.OnGestureListener {
 
         Input playerInput = resourceManager.getPlayer().getInput();
 
+        boolean validFling = false;
+
         if (Math.abs(distanceY) > Math.abs(distanceX)) {
             if (distanceY > 200) {
                 if (playerInput.isGrounded()) {
@@ -61,19 +63,25 @@ public class GestureListener implements GestureDetector.OnGestureListener {
                     }
                     playerInput.setJumpPower(distanceY / 200000.0f);
                     playerInput.setGrounded(false);
+                    validFling = true;
                 }
             }
         } else if (Math.abs(distanceX) > 200) {
-            if(distanceX > 0) {
+            if (distanceX > 0) {
                 playerInput.setMegaSpell(true);
-            }
-            else {
+                validFling = true;
+            } else {
                 Log.v("Fine", "fine");
                 resourceManager.getPlayer().getSprite().getColorTransition().reset();
+                validFling = true;
             }
+        }
+
+        if (validFling) {
+            return true;
         } else {
             return onSingleTapUp(e2);
         }
-        return true;
+
     }
 }

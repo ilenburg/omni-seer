@@ -1,7 +1,5 @@
 package com.lonewolf.lagom.modules.effects;
 
-import android.util.Log;
-
 import java.util.Random;
 
 /**
@@ -46,15 +44,7 @@ public class ColorTransition {
     }
 
     public void setTime(float time) {
-        if(initialized) {
-            this.elapsedTime += (time - baseTime) * ratio;
-        }
-        else {
-            this.baseTime = time;
-            initialized = true;
-        }
-        Log.v("ElapsedTime", Float.toString(elapsedTime));
-        this.time =  interploateTime(time);
+        this.time = (time + base) * ratio;
     }
 
     public int getTimePosition() {
@@ -67,10 +57,6 @@ public class ColorTransition {
 
     public void reset() {
         this.elapsedTime = 0.0f;
-    }
-
-    private float interploateTime(float time) {
-        return (float) Math.abs(Math.sin((time + base) * ratio));
     }
 
 }
