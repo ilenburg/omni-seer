@@ -25,7 +25,6 @@ public class GameEngine implements Runnable {
 
     private long lastTime;
     private float deltaTime;
-    private float totalTime;
 
     private float cameraPositon;
 
@@ -45,10 +44,6 @@ public class GameEngine implements Runnable {
         return cameraPositon;
     }
 
-    public float getTotalTime() {
-        return totalTime;
-    }
-
     public float getDeltaTime() {
         return deltaTime;
     }
@@ -60,7 +55,6 @@ public class GameEngine implements Runnable {
         this.lastTime = System.currentTimeMillis();
         this.deltaTime = 0L;
 
-        this.totalTime = 0.0f;
         this.cameraPositon = 0.0f;
         this.groundPosition = -0.535f;
     }
@@ -69,8 +63,7 @@ public class GameEngine implements Runnable {
     public void run() {
         while (gameState == GameState.RUNNING) {
 
-            deltaTime = System.currentTimeMillis() - lastTime;
-            totalTime += deltaTime / 1000;
+            deltaTime = (System.currentTimeMillis() - lastTime);
             lastTime = System.currentTimeMillis();
 
             //Log.v("DeltaTime", Float.toString(deltaTime));

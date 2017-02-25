@@ -136,7 +136,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         TextureTransition textureTransition = sprite.getTextureTransition();
 
         if (textureTransition != null) {
-            textureTransition.setTime(gameEngine.getTotalTime());
+            textureTransition.addTime(gameEngine.getDeltaTime());
             GLES20.glUniform1f(textureTransition.getTimePosition(), textureTransition.getTime());
             GLES20.glUniform1i(textureTransition.getTexturePosition(), 1);
             GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
@@ -146,7 +146,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         ColorTransition colorTransition = sprite.getColorTransition();
 
         if (colorTransition != null) {
-            colorTransition.setTime(gameEngine.getTotalTime() * 500);
+            colorTransition.addTime(gameEngine.getDeltaTime() * 500);
             GLES20.glUniform1f(colorTransition.getTimePosition(), colorTransition.getTime());
         }
 
