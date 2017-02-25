@@ -120,11 +120,11 @@ public class ResourceManager {
 
     private void initEntities() {
 
-        this.background = new Background(shaderPrograms[2], textures[1], textures[5], 0.25f);
-        this.panoramaFar = new Panorama(shaderPrograms[1], textures[3], 0.5f);
-        this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.75f);
+        this.background = new Background(shaderPrograms[2], textures[1], textures[5], 0.00025f);
+        this.panoramaFar = new Panorama(shaderPrograms[1], textures[3], 0.0005f);
+        this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.00075f);
         this.player = new Player(shaderPrograms[4], textures[0]);
-        this.foreground = new Panorama(shaderPrograms[1], textures[4], 1.0f);
+        this.foreground = new Panorama(shaderPrograms[1], textures[4], 0.001f);
         this.megaSpell = new MegaSpell(shaderPrograms[3], textures[6]);
 
         int size = activeSpells.length;

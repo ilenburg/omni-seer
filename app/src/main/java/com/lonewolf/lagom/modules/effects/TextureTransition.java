@@ -17,7 +17,7 @@ public class TextureTransition {
     }
 
     public void addTime(float deltaTime) {
-        this.time += deltaTime / 1000;
+        this.time += deltaTime;
     }
 
     public int getTexturePosition() {

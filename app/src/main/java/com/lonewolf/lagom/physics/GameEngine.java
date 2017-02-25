@@ -16,10 +16,10 @@ import static android.content.ContentValues.TAG;
 
 public class GameEngine implements Runnable {
 
-    private static final float GRAVITY_ACCELERATION = -0.0000098f * 0.8f;
+    private static final float GRAVITY_ACCELERATION = -9.8f * 0.8f;
     private static final float ZERO = 0.0f;
     private static final Vector2 VECTOR_UP = new Vector2(1,0);
-    private static final Vector2 SPELL_BASE_VELOCITY = new Vector2(0.002f, ZERO);
+    private static final Vector2 SPELL_BASE_VELOCITY = new Vector2(2.0f, ZERO);
 
     private GameState gameState;
 
@@ -53,7 +53,7 @@ public class GameEngine implements Runnable {
 
         this.gameState = GameState.RUNNING;
         this.lastTime = System.currentTimeMillis();
-        this.deltaTime = 0L;
+        this.deltaTime = 0.0f;
 
         this.cameraPositon = 0.0f;
         this.groundPosition = -0.535f;
@@ -63,7 +63,7 @@ public class GameEngine implements Runnable {
     public void run() {
         while (gameState == GameState.RUNNING) {
 
-            deltaTime = (System.currentTimeMillis() - lastTime);
+            deltaTime = (System.currentTimeMillis() - lastTime) / 1000.0f;
             lastTime = System.currentTimeMillis();
 
             //Log.v("DeltaTime", Float.toString(deltaTime));
@@ -139,7 +139,7 @@ public class GameEngine implements Runnable {
             for (Spell spell : resourceManager.getActiveSpells()) {
                 if (!spell.isActive()) {
                     spell.getRigidBody().setPosition(playerRigidBody.getPosition().copy());
-                    spell.getRigidBody().setVelocity(startingVelocity.divide(600.0f));
+                    spell.getRigidBody().setVelocity(startingVelocity.multiply(2.0f));
                     float angle = Calc.Angle(startingVelocity, VECTOR_UP);
                     if (startingVelocity.getY() < ZERO) {
                         angle *= -1;
@@ -159,7 +159,7 @@ public class GameEngine implements Runnable {
             playerInput.setJumpPower(ZERO);
         }
 
-        cameraPositon += playerRigidBody.getVelocity().getX() * 10;
+        cameraPositon += playerRigidBody.getVelocity().getX();
 
         playerRigidBody.setVelocity(Calc.EulerMethod(playerRigidBody.getVelocity(), playerRigidBody.getAcceleration(), deltaTime));
 

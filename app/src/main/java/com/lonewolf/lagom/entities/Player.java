@@ -56,9 +56,9 @@ public class Player {
         }};
 
         this.input = new Input();
-        this.rigidBody = new RigidBody(1, new Vector2(-1.0f, -0.535f), new Vector2(0.0002f, 0.0f));
+        this.rigidBody = new RigidBody(1, new Vector2(-1.0f, -0.535f), new Vector2(2.0f, 0.0f));
 
-        Animation animation = new Animation(animationCoordinates, 0.2f, rigidBody);
+        Animation animation = new Animation(animationCoordinates, 2.0f, rigidBody);
 
         ColorTransition colorTransition = new ColorTransition(0.01f, false);
 

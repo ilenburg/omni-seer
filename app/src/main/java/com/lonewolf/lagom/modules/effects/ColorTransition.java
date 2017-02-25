@@ -50,7 +50,7 @@ public class ColorTransition {
 
         }
         else {
-            this.time += deltaTime / 1000;
+            this.time += deltaTime;
         }
 
         /*if (!continuous) {

@@ -146,7 +146,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         ColorTransition colorTransition = sprite.getColorTransition();
 
         if (colorTransition != null) {
-            colorTransition.addTime(gameEngine.getDeltaTime() * 500);
+            colorTransition.addTime(gameEngine.getDeltaTime());
             GLES20.glUniform1f(colorTransition.getTimePosition(), colorTransition.getTime());
         }
 
