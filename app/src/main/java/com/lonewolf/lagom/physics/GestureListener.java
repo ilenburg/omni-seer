@@ -70,7 +70,7 @@ public class GestureListener implements GestureDetector.OnGestureListener {
                 playerInput.setMegaSpell(true);
                 validFling = true;
             } else {
-                resourceManager.getPlayer().getState().setInvulnerable(true);
+                playerInput.setInvulnerable(true);
                 validFling = true;
             }
         }

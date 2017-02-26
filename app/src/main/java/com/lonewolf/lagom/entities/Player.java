@@ -1,6 +1,5 @@
 package com.lonewolf.lagom.entities;
 
-import com.lonewolf.lagom.modules.State;
 import com.lonewolf.lagom.modules.effects.Animation;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Input;
@@ -19,7 +18,6 @@ public class Player {
     private final Sprite sprite;
     private final RigidBody rigidBody;
     private final Input input;
-    private final State state;
 
     public Player(int shaderProgram, int texture) {
 
@@ -62,18 +60,12 @@ public class Player {
         this.input = new Input();
         this.rigidBody = new RigidBody(1, new Vector2(-1.0f, -0.535f), new Vector2(2.0f, 0.0f));
 
-        this.state = new State();
+        Animation animation = new Animation(animationCoordinates, 1.75f, rigidBody);
 
-        Animation animation = new Animation(animationCoordinates, 2.0f, rigidBody);
-
-        ColorTransition colorTransition = new ColorTransition(MAX_RADIANS, this.state);
+        ColorTransition colorTransition = new ColorTransition(MAX_RADIANS, this.input);
 
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates, animation, colorTransition);
 
-    }
-
-    public State getState() {
-        return state;
     }
 
     public Sprite getSprite() {

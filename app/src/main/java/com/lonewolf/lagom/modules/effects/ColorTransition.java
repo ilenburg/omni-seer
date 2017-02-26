@@ -2,7 +2,7 @@ package com.lonewolf.lagom.modules.effects;
 
 import android.util.Log;
 
-import com.lonewolf.lagom.modules.State;
+import com.lonewolf.lagom.modules.Input;
 
 import java.util.Random;
 
@@ -15,7 +15,7 @@ public class ColorTransition {
     private static final float MAX_RADIANS = 3.14159265f;
 
     private final float MAX_CYCLE;
-    private final State state;
+    private final Input state;
 
     private float time;
     private float baseTime;
@@ -28,7 +28,7 @@ public class ColorTransition {
         this(ratio, null);
     }
 
-    public ColorTransition(float ratio, State state) {
+    public ColorTransition(float ratio, Input state) {
         if (state != null) {
             this.baseTime = 0.0f;
         } else {

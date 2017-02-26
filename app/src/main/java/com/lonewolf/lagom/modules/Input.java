@@ -17,12 +17,18 @@ public class Input {
     private float screenHeight;
     private float ratio;
 
+    private boolean invulnerable;
+    private float time;
+
     public Input() {
         this.jumpPower = 0.0f;
         this.grounded = true;
         this.spellTarget = new Vector2(0.0f, 0.0f);
         this.screenHeight = 0.0f;
         this.screenWidth = 0.0f;
+
+        this.invulnerable = false;
+        this.time = 0.0f;
     }
 
     public Vector2 getSpellTarget() {
@@ -70,5 +76,25 @@ public class Input {
 
     public void setMegaSpell(boolean megaSpell) {
         this.megaSpell = megaSpell;
+    }
+
+    public boolean isInvulnerable() {
+        return invulnerable;
+    }
+
+    public void setInvulnerable(boolean invulnerable) {
+        this.invulnerable = invulnerable;
+        this.time = 0.0f;
+    }
+
+    public void update(float deltaTime) {
+
+        if (this.time > 1.0f) {
+            this.invulnerable = false;
+            this.time = 0.0f;
+        } else {
+            this.time += deltaTime;
+        }
+
     }
 }

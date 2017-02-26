@@ -5,7 +5,6 @@ import android.util.Log;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.modules.Input;
-import com.lonewolf.lagom.modules.State;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.states.GameState;
 
@@ -130,11 +129,10 @@ public class GameEngine implements Runnable {
 
     private void updatePlayer() {
 
-        State playerState = resourceManager.getPlayer().getState();
         RigidBody playerRigidBody = resourceManager.getPlayer().getRigidBody();
         Input playerInput = resourceManager.getPlayer().getInput();
 
-        playerState.update(deltaTime);
+        playerInput.update(deltaTime);
 
         if (playerInput.isMegaSpell()) {
             for (MegaSpell megaSpell : resourceManager.getMegaSpells()) {
@@ -183,7 +181,7 @@ public class GameEngine implements Runnable {
         playerRigidBody.setPositionY(newPosition.getY());
 
         if (playerRigidBody.getPosition().getY() > groundPosition) {
-            playerRigidBody.setAccelerationY(playerState.isInvulnerable() && playerRigidBody.getVelocity().getY() < 0.0f ? GRAVITY_ACCELERATION / 6.0f : GRAVITY_ACCELERATION);
+            playerRigidBody.setAccelerationY(playerInput.isInvulnerable() && playerRigidBody.getVelocity().getY() < 0.0f ? GRAVITY_ACCELERATION / 6.0f : GRAVITY_ACCELERATION);
         } else {
             playerRigidBody.setAccelerationY(ZERO);
             playerRigidBody.setVelocityY(ZERO);
