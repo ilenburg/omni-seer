@@ -1,7 +1,5 @@
 package com.lonewolf.lagom.modules.effects;
 
-import android.util.Log;
-
 import com.lonewolf.lagom.modules.Input;
 
 import java.util.Random;
@@ -49,7 +47,6 @@ public class ColorTransition {
         if (this.state != null) {
             if (this.state.isInvulnerable()) {
                 this.time += deltaTime;
-                Log.v("ColorTime", Float.toString(this.time));
             } else {
                 this.time = 0.0f;
             }

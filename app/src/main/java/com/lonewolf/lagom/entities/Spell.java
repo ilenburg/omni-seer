@@ -56,7 +56,7 @@ public class Spell {
 
         this.rigidBody = new RigidBody(0.5f, new Vector2(-1.0f, -0.535f), new Vector2(0.0f, 0.0f));
 
-        Animation animation = new Animation(animationCoordinates, 4.0f, rigidBody);
+        Animation animation = new Animation(animationCoordinates, 1.0f);
 
         ColorTransition colorTransition = new ColorTransition(5.0f);
 
