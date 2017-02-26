@@ -1,6 +1,5 @@
 package com.lonewolf.lagom.physics;
 
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -48,8 +47,8 @@ public class GestureListener implements GestureDetector.OnGestureListener {
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-        float distanceY = e1.getY() - e2.getY();
         float distanceX = e2.getX() - e1.getX();
+        float distanceY = e1.getY() - e2.getY();
 
         Input playerInput = resourceManager.getPlayer().getInput();
 
@@ -71,8 +70,7 @@ public class GestureListener implements GestureDetector.OnGestureListener {
                 playerInput.setMegaSpell(true);
                 validFling = true;
             } else {
-                Log.v("Fine", "fine");
-                resourceManager.getPlayer().getSprite().getColorTransition().reset();
+                resourceManager.getPlayer().getState().setInvulnerable(true);
                 validFling = true;
             }
         }

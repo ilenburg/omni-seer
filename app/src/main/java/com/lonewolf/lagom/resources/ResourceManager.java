@@ -35,7 +35,8 @@ public class ResourceManager {
 
     private Spell[] activeSpells = new Spell[30];
 
-    private MegaSpell megaSpell;
+    private MegaSpell[] megaSpells = new MegaSpell[6];
+
     private Player player;
     private Background background;
     private Panorama foreground;
@@ -46,8 +47,8 @@ public class ResourceManager {
         this.context = context;
     }
 
-    public MegaSpell getMegaSpell() {
-        return megaSpell;
+    public MegaSpell[] getMegaSpells() {
+        return megaSpells;
     }
 
     public Player getPlayer() {
@@ -125,11 +126,15 @@ public class ResourceManager {
         this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.00075f);
         this.player = new Player(shaderPrograms[4], textures[0]);
         this.foreground = new Panorama(shaderPrograms[1], textures[4], 0.001f);
-        this.megaSpell = new MegaSpell(shaderPrograms[3], textures[6]);
 
         int size = activeSpells.length;
         for (int i = 0; i < size; ++i) {
             activeSpells[i] = new Spell(shaderPrograms[3], textures[6]);
+        }
+
+        size = megaSpells.length;
+        for (int i = 0; i < size; ++i) {
+            megaSpells[i] = new MegaSpell(shaderPrograms[3], textures[6]);
         }
 
     }

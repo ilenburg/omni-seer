@@ -96,10 +96,10 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         }
 
-        MegaSpell megaSpell = resourceManager.getMegaSpell();
-
-        if (megaSpell.isActive()) {
-            draw(megaSpell.getSprite(), megaSpell.getRigidBody().getModelMatrix());
+        for (MegaSpell megaSpell1 : resourceManager.getMegaSpells()) {
+            if (megaSpell1.isActive()) {
+                draw(megaSpell1.getSprite(), megaSpell1.getRigidBody().getModelMatrix());
+            }
         }
 
         Player player = resourceManager.getPlayer();
@@ -107,6 +107,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         draw(player.getSprite(), player.getRigidBody().getModelMatrix());
 
         draw(resourceManager.getForeground().getSprite());
+
+        gameEngine.setAnimationDeltaTime(0.0f);
 
         //checkGlError("Draw");
 
@@ -136,7 +138,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         TextureTransition textureTransition = sprite.getTextureTransition();
 
         if (textureTransition != null) {
-            textureTransition.addTime(gameEngine.getDeltaTime());
+            textureTransition.addTime(gameEngine.getAnimationDeltaTime());
             GLES20.glUniform1f(textureTransition.getTimePosition(), textureTransition.getTime());
             GLES20.glUniform1i(textureTransition.getTexturePosition(), 1);
             GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
@@ -146,7 +148,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         ColorTransition colorTransition = sprite.getColorTransition();
 
         if (colorTransition != null) {
-            colorTransition.addTime(gameEngine.getDeltaTime());
+            colorTransition.addTime(gameEngine.getAnimationDeltaTime());
             GLES20.glUniform1f(colorTransition.getTimePosition(), colorTransition.getTime());
         }
 
@@ -160,7 +162,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         Animation animation = sprite.getAnimation();
 
         if (animation != null) {
-            sprite.getAnimation().update(gameEngine.getDeltaTime());
+            sprite.getAnimation().update(gameEngine.getAnimationDeltaTime());
         }
 
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, sprite.getDrawOrder().length, GLES20.GL_UNSIGNED_SHORT, sprite.getOrderBuffer());

@@ -1,5 +1,9 @@
 package com.lonewolf.lagom.modules.effects;
 
+import android.util.Log;
+
+import com.lonewolf.lagom.modules.State;
+
 import java.util.Random;
 
 /**
@@ -11,33 +15,29 @@ public class ColorTransition {
     private static final float MAX_RADIANS = 3.14159265f;
 
     private final float MAX_CYCLE;
+    private final State state;
 
     private float time;
     private float baseTime;
-    private float elapsedTime;
-    private float startTime;
 
     private int timePosition;
 
     private final float ratio;
-    private final boolean continuous;
 
     public ColorTransition(float ratio) {
-        this(ratio, true);
+        this(ratio, null);
     }
 
-    public ColorTransition(float ratio, boolean continuous) {
-        if (continuous) {
-            this.baseTime = new Random().nextFloat() * 10000.0f;
-        } else {
+    public ColorTransition(float ratio, State state) {
+        if (state != null) {
             this.baseTime = 0.0f;
+        } else {
+            this.baseTime = new Random().nextFloat() * 10000.0f;
         }
         this.time = 0.0f;
-        this.elapsedTime = 0.0f;
         this.ratio = ratio;
-        this.continuous = continuous;
-        this.startTime = 0.0f;
-        MAX_CYCLE = (MAX_RADIANS + baseTime) * ratio * 100;
+        this.state = state;
+        MAX_CYCLE = (MAX_RADIANS + baseTime) / ratio;
     }
 
     public float getTime() {
@@ -46,26 +46,16 @@ public class ColorTransition {
 
     public void addTime(float deltaTime) {
 
-        if(!continuous) {
-
-        }
-        else {
-            this.time += deltaTime;
-        }
-
-        /*if (!continuous) {
-            if (this.time != 0.0f) {
-                this.elapsedTime += time - this.time;
-            }
-            Log.v("Elapsed", Float.toString(elapsedTime));
-            if ((elapsedTime + baseTime) * ratio > MAX_CYCLE) {
-                this.time = 0.0f;
+        if (this.state != null) {
+            if (this.state.isInvulnerable()) {
+                this.time += deltaTime;
+                Log.v("ColorTime", Float.toString(this.time));
             } else {
-                this.time = time;
+                this.time = 0.0f;
             }
         } else {
-            this.time = time;
-        }*/
+            this.time += deltaTime;
+        }
     }
 
     public int getTimePosition() {
@@ -74,10 +64,6 @@ public class ColorTransition {
 
     public void setTimePosition(int timePosition) {
         this.timePosition = timePosition;
-    }
-
-    public void reset() {
-        this.elapsedTime = 0.0f;
     }
 
 }

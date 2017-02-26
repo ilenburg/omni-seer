@@ -69,7 +69,7 @@ public class Vector2 {
         this.y = 0.0f;
     }
 
-    public Vector2 copy () {
+    public Vector2 copy() {
         return new Vector2(this.x, this.y);
     }
 

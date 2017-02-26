@@ -47,8 +47,8 @@ public class Animation {
         this.textureBuffer = textureBuffer;
     }
 
-    public void update(float delta) {
-        this.cicleStep += movementBased ? Math.abs(rigidBody.getVelocity().getLength()) * delta : delta;
+    public void update(float deltaTime) {
+        this.cicleStep += movementBased ? Math.abs(rigidBody.getVelocity().getLength()) * deltaTime : deltaTime;
 
         if (cicleStep >= cicleDuration) {
             cicleStep = cicleStep - cicleDuration;

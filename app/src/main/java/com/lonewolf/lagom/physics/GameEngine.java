@@ -5,6 +5,7 @@ import android.util.Log;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.modules.Input;
+import com.lonewolf.lagom.modules.State;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.states.GameState;
 
@@ -18,13 +19,14 @@ public class GameEngine implements Runnable {
 
     private static final float GRAVITY_ACCELERATION = -9.8f * 0.8f;
     private static final float ZERO = 0.0f;
-    private static final Vector2 VECTOR_UP = new Vector2(1,0);
+    private static final Vector2 VECTOR_FORWARD = new Vector2(1, 0);
     private static final Vector2 SPELL_BASE_VELOCITY = new Vector2(2.0f, ZERO);
 
     private GameState gameState;
 
     private long lastTime;
     private float deltaTime;
+    private float animationDeltaTime;
 
     private float cameraPositon;
 
@@ -44,8 +46,12 @@ public class GameEngine implements Runnable {
         return cameraPositon;
     }
 
-    public float getDeltaTime() {
-        return deltaTime;
+    public float getAnimationDeltaTime() {
+        return animationDeltaTime;
+    }
+
+    public void setAnimationDeltaTime(float animationDeltaTime) {
+        this.animationDeltaTime = animationDeltaTime;
     }
 
     public GameEngine(ResourceManager resourceManager) {
@@ -54,6 +60,7 @@ public class GameEngine implements Runnable {
         this.gameState = GameState.RUNNING;
         this.lastTime = System.currentTimeMillis();
         this.deltaTime = 0.0f;
+        this.animationDeltaTime = 0.0f;
 
         this.cameraPositon = 0.0f;
         this.groundPosition = -0.535f;
@@ -64,6 +71,7 @@ public class GameEngine implements Runnable {
         while (gameState == GameState.RUNNING) {
 
             deltaTime = (System.currentTimeMillis() - lastTime) / 1000.0f;
+            animationDeltaTime += deltaTime;
             lastTime = System.currentTimeMillis();
 
             //Log.v("DeltaTime", Float.toString(deltaTime));
@@ -84,21 +92,21 @@ public class GameEngine implements Runnable {
 
         RigidBody spellRigidBody;
 
-        MegaSpell megaSpell = resourceManager.getMegaSpell();
+        for (MegaSpell megaSpell : resourceManager.getMegaSpells()) {
+            if (megaSpell.isActive()) {
+                spellRigidBody = megaSpell.getRigidBody();
+                if (spellRigidBody.getPosition().getY() <= groundPosition - 0.06f) {
+                    megaSpell.setActive(false);
+                }
 
-        if (megaSpell.isActive()) {
-            spellRigidBody = megaSpell.getRigidBody();
-            if (spellRigidBody.getPosition().getY() <= groundPosition - 0.06f) {
-                megaSpell.setActive(false);
-            }
+                spellRigidBody.setVelocity(Calc.EulerMethod(spellRigidBody.getVelocity(), spellRigidBody.getAcceleration(), deltaTime));
 
-            spellRigidBody.setVelocity(Calc.EulerMethod(spellRigidBody.getVelocity(), spellRigidBody.getAcceleration(), deltaTime));
+                Vector2 newPosition = Calc.EulerMethod(spellRigidBody.getPosition(), spellRigidBody.getVelocity(), deltaTime);
 
-            Vector2 newPosition = Calc.EulerMethod(spellRigidBody.getPosition(), spellRigidBody.getVelocity(), deltaTime);
-
-            spellRigidBody.setPosition(newPosition.getX(), newPosition.getY());
-            if (!spellRigidBody.getPosition().isBounded()) {
-                megaSpell.setActive(false);
+                spellRigidBody.setPosition(newPosition.getX(), newPosition.getY());
+                if (!spellRigidBody.getPosition().isBounded()) {
+                    megaSpell.setActive(false);
+                }
             }
         }
 
@@ -122,16 +130,23 @@ public class GameEngine implements Runnable {
 
     private void updatePlayer() {
 
+        State playerState = resourceManager.getPlayer().getState();
         RigidBody playerRigidBody = resourceManager.getPlayer().getRigidBody();
         Input playerInput = resourceManager.getPlayer().getInput();
 
+        playerState.update(deltaTime);
+
         if (playerInput.isMegaSpell()) {
-            MegaSpell megaSpell = resourceManager.getMegaSpell();
-            Vector2 startingPosition = playerRigidBody.getPosition();
-            megaSpell.getRigidBody().setPosition(startingPosition.getX() + 0.1f, startingPosition.getY());
-            megaSpell.getRigidBody().setVelocity(SPELL_BASE_VELOCITY);
-            megaSpell.setActive(true);
-            playerInput.setMegaSpell(false);
+            for (MegaSpell megaSpell : resourceManager.getMegaSpells()) {
+                if (!megaSpell.isActive()) {
+                    Vector2 startingPosition = playerRigidBody.getPosition();
+                    megaSpell.getRigidBody().setPosition(startingPosition.getX() + 0.1f, startingPosition.getY());
+                    megaSpell.getRigidBody().setVelocity(SPELL_BASE_VELOCITY);
+                    megaSpell.setActive(true);
+                    playerInput.setMegaSpell(false);
+                    break;
+                }
+            }
         }
 
         if (!playerInput.getSpellTarget().isZero()) {
@@ -140,7 +155,7 @@ public class GameEngine implements Runnable {
                 if (!spell.isActive()) {
                     spell.getRigidBody().setPosition(playerRigidBody.getPosition().copy());
                     spell.getRigidBody().setVelocity(startingVelocity.multiply(2.0f));
-                    float angle = Calc.Angle(startingVelocity, VECTOR_UP);
+                    float angle = Calc.Angle(startingVelocity, VECTOR_FORWARD);
                     if (startingVelocity.getY() < ZERO) {
                         angle *= -1;
                     }
@@ -168,7 +183,7 @@ public class GameEngine implements Runnable {
         playerRigidBody.setPositionY(newPosition.getY());
 
         if (playerRigidBody.getPosition().getY() > groundPosition) {
-            playerRigidBody.setAccelerationY(GRAVITY_ACCELERATION);
+            playerRigidBody.setAccelerationY(playerState.isInvulnerable() && playerRigidBody.getVelocity().getY() < 0.0f ? GRAVITY_ACCELERATION / 6.0f : GRAVITY_ACCELERATION);
         } else {
             playerRigidBody.setAccelerationY(ZERO);
             playerRigidBody.setVelocityY(ZERO);
