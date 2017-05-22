@@ -1,14 +1,10 @@
 package com.lonewolf.lagom.physics;
 
-import android.util.Log;
-
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.states.GameState;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Ian on 28/01/2017.
@@ -57,7 +53,6 @@ public class GameEngine implements Runnable {
         this.resourceManager = resourceManager;
 
         this.gameState = GameState.RUNNING;
-        this.lastTime = System.currentTimeMillis();
         this.deltaTime = 0.0f;
         this.animationDeltaTime = 0.0f;
 
@@ -67,47 +62,52 @@ public class GameEngine implements Runnable {
 
     @Override
     public void run() {
-        while (gameState == GameState.RUNNING) {
 
-            deltaTime = (System.currentTimeMillis() - lastTime) / 1000.0f;
-            animationDeltaTime += deltaTime;
-            lastTime = System.currentTimeMillis();
+        this.lastTime = System.currentTimeMillis();
 
-            //Log.v("DeltaTime", Float.toString(deltaTime));
+        while (!Thread.currentThread().isInterrupted()) {
+            if (gameState == GameState.RUNNING) {
+                deltaTime = (System.currentTimeMillis() - lastTime) / 1000.0f;
+                animationDeltaTime += deltaTime;
+                lastTime = System.currentTimeMillis();
 
-            updatePlayer();
+                //Log.v("DeltaTime", Float.toString(deltaTime));
 
-            updateSpells();
+                updatePlayer();
 
-            updateShadowLord();
+                updateSpells();
 
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                Log.e(TAG, e.getMessage());
+                updateShadowLord();
+
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
     }
 
     private void updateShadowLord() {
 
-        RigidBody shadowLordRigidBody = resourceManager.getShadowLord().getRigidBody();
+        if (resourceManager.getShadowLord().isActive()) {
+            RigidBody shadowLordRigidBody = resourceManager.getShadowLord().getRigidBody();
 
-        float shadowLordPositionY = shadowLordRigidBody.getPosition().getY();
+            float shadowLordPositionY = shadowLordRigidBody.getPosition().getY();
 
-        if(shadowLordPositionY > 0.2f) {
-            shadowLordRigidBody.setAccelerationY(-0.1f);
+            if (shadowLordPositionY > 0.2f) {
+                shadowLordRigidBody.setAccelerationY(-0.1f);
+            } else if (shadowLordPositionY < 0.2f) {
+                shadowLordRigidBody.setAccelerationY(0.1f);
+            }
+
+            Vector2 shadowToPlayer = shadowLordRigidBody.getPosition().sub(resourceManager.getPlayer().getRigidBody().getPosition());
+
+            float angle = Calc.Angle(shadowToPlayer, VECTOR_FORWARD);
+            shadowLordRigidBody.setAngle(angle);
+
+            updateRigidBody(shadowLordRigidBody);
         }
-        else if(shadowLordPositionY < 0.2f) {
-            shadowLordRigidBody.setAccelerationY(0.1f);
-        }
-
-        Vector2 shadowToPlayer = shadowLordRigidBody.getPosition().sub(resourceManager.getPlayer().getRigidBody().getPosition());
-
-        float angle = Calc.Angle(shadowToPlayer, VECTOR_FORWARD);
-        shadowLordRigidBody.setAngle(angle);
-
-        updateEntity(shadowLordRigidBody);
     }
 
     private void updateSpells() {
@@ -121,7 +121,7 @@ public class GameEngine implements Runnable {
                     megaSpell.setActive(false);
                 }
 
-                updateEntity(spellRigidBody);
+                updateRigidBody(spellRigidBody);
 
                 if (!spellRigidBody.getPosition().isBounded()) {
                     megaSpell.setActive(false);
@@ -136,7 +136,7 @@ public class GameEngine implements Runnable {
                 if (spellRigidBody.getPosition().getY() <= groundPosition - 0.06f || !spellRigidBody.getPosition().isBounded()) {
                     spell.setActive(false);
                 } else {
-                    updateEntity(spellRigidBody);
+                    updateRigidBody(spellRigidBody);
                 }
             }
         }
@@ -207,7 +207,7 @@ public class GameEngine implements Runnable {
 
     }
 
-    private void updateEntity(RigidBody rigidBody) {
+    private void updateRigidBody(RigidBody rigidBody) {
 
         rigidBody.setVelocity(Calc.EulerMethod(rigidBody.getVelocity(), rigidBody.getAcceleration(), deltaTime));
 

@@ -60,7 +60,7 @@ public class Player {
         this.input = new Input();
         this.rigidBody = new RigidBody(1, new Vector2(-1.0f, -0.535f), new Vector2(2.0f, 0.0f));
 
-        Animation animation = new Animation(animationCoordinates, 1.75f, rigidBody);
+        Animation animation = new Animation(animationCoordinates, 1.5f, rigidBody);
 
         ColorTransition colorTransition = new ColorTransition(MAX_RADIANS, this.input);
 

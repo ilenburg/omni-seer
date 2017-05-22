@@ -87,6 +87,27 @@ public class ResourceManager {
         initEntities();
     }
 
+    private void initEntities() {
+
+        this.background = new Background(shaderPrograms[2], textures[1], textures[5], 0.00025f);
+        this.panoramaFar = new Panorama(shaderPrograms[1], textures[3], 0.0005f);
+        this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.00075f);
+        this.player = new Player(shaderPrograms[4], textures[0]);
+        this.shadowLord = new ShadowLord(shaderPrograms[0], textures[7]);
+        this.foreground = new Panorama(shaderPrograms[1], textures[4], 0.001f);
+
+        int size = activeSpells.length;
+        for (int i = 0; i < size; ++i) {
+            activeSpells[i] = new Spell(shaderPrograms[3], textures[6]);
+        }
+
+        size = megaSpells.length;
+        for (int i = 0; i < size; ++i) {
+            megaSpells[i] = new MegaSpell(shaderPrograms[3], textures[6]);
+        }
+
+    }
+
     private void initShaders() {
 
         String vertexShader = null;
@@ -124,27 +145,6 @@ public class ResourceManager {
         loadTexture(R.drawable.night, 5, true);
         loadTexture(R.drawable.fire_sprite, 6, false);
         loadTexture(R.drawable.shadown_lord, 7, false);
-    }
-
-    private void initEntities() {
-
-        this.background = new Background(shaderPrograms[2], textures[1], textures[5], 0.00025f);
-        this.panoramaFar = new Panorama(shaderPrograms[1], textures[3], 0.0005f);
-        this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.00075f);
-        this.player = new Player(shaderPrograms[4], textures[0]);
-        this.shadowLord = new ShadowLord(shaderPrograms[0], textures[7]);
-        this.foreground = new Panorama(shaderPrograms[1], textures[4], 0.001f);
-
-        int size = activeSpells.length;
-        for (int i = 0; i < size; ++i) {
-            activeSpells[i] = new Spell(shaderPrograms[3], textures[6]);
-        }
-
-        size = megaSpells.length;
-        for (int i = 0; i < size; ++i) {
-            megaSpells[i] = new MegaSpell(shaderPrograms[3], textures[6]);
-        }
-
     }
 
     private String getShaderCode(int resourceId) throws IOException {

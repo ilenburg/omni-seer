@@ -31,7 +31,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private final ResourceManager resourceManager;
     private final GameEngine gameEngine;
 
-    private boolean initialized;
+    private Thread physicsThread;
 
     private final float[] mMVPMatrix = new float[16];
     private final float[] mProjectionMatrix = new float[16];
@@ -42,7 +42,18 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     public GameRenderer(ResourceManager resourceManager, GameEngine gameEngine) {
         this.resourceManager = resourceManager;
         this.gameEngine = gameEngine;
-        this.initialized = false;
+    }
+
+    public void pause() {
+        if(physicsThread != null) {
+            physicsThread.interrupt();
+        }
+    }
+
+    public void resume() {
+        if (physicsThread != null) {
+            physicsThread.start();
+        }
     }
 
     @Override
@@ -50,9 +61,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         resourceManager.loadResources();
 
-        if (!initialized) {
-            new Thread(gameEngine).start();
-        }
+        physicsThread = new Thread(gameEngine);
+
+        physicsThread.start();
 
         GLES20.glClearColor(0.0f, 0.5f, 0.75f, 1f);
 
@@ -64,7 +75,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-        this.initialized = true;
     }
 
     @Override
