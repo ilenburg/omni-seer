@@ -7,11 +7,12 @@ import android.util.Log;
 
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Player;
+import com.lonewolf.lagom.entities.ShadowLord;
 import com.lonewolf.lagom.entities.Spell;
+import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.effects.Animation;
 import com.lonewolf.lagom.modules.effects.ColorTransition;
 import com.lonewolf.lagom.modules.effects.Scroll;
-import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.effects.TextureTransition;
 import com.lonewolf.lagom.physics.GameEngine;
 import com.lonewolf.lagom.resources.ResourceManager;
@@ -105,6 +106,10 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         Player player = resourceManager.getPlayer();
 
         draw(player.getSprite(), player.getRigidBody().getModelMatrix());
+
+        ShadowLord shadowLord = resourceManager.getShadowLord();
+
+        draw(shadowLord.getSprite(), shadowLord.getRigidBody().getModelMatrix());
 
         draw(resourceManager.getForeground().getSprite());
 

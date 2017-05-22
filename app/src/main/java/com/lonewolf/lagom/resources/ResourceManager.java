@@ -12,6 +12,7 @@ import com.lonewolf.lagom.entities.Background;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Panorama;
 import com.lonewolf.lagom.entities.Player;
+import com.lonewolf.lagom.entities.ShadowLord;
 import com.lonewolf.lagom.entities.Spell;
 
 import org.apache.commons.io.IOUtils;
@@ -31,13 +32,14 @@ public class ResourceManager {
     private final Context context;
 
     private int[] shaderPrograms = new int[8];
-    private int[] textures = new int[8];
+    private int[] textures = new int[16];
 
     private Spell[] activeSpells = new Spell[30];
 
     private MegaSpell[] megaSpells = new MegaSpell[6];
 
     private Player player;
+    private ShadowLord shadowLord;
     private Background background;
     private Panorama foreground;
     private Panorama panorama;
@@ -53,6 +55,10 @@ public class ResourceManager {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public ShadowLord getShadowLord() {
+        return shadowLord;
     }
 
     public Background getBackground() {
@@ -117,6 +123,7 @@ public class ResourceManager {
         loadTexture(R.drawable.foreground, 4, true);
         loadTexture(R.drawable.night, 5, true);
         loadTexture(R.drawable.fire_sprite, 6, false);
+        loadTexture(R.drawable.shadown_lord, 7, false);
     }
 
     private void initEntities() {
@@ -125,6 +132,7 @@ public class ResourceManager {
         this.panoramaFar = new Panorama(shaderPrograms[1], textures[3], 0.0005f);
         this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.00075f);
         this.player = new Player(shaderPrograms[4], textures[0]);
+        this.shadowLord = new ShadowLord(shaderPrograms[0], textures[7]);
         this.foreground = new Panorama(shaderPrograms[1], textures[4], 0.001f);
 
         int size = activeSpells.length;
