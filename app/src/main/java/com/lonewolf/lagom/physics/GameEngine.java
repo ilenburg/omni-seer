@@ -79,12 +79,35 @@ public class GameEngine implements Runnable {
 
             updateSpells();
 
+            updateShadowLord();
+
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
                 Log.e(TAG, e.getMessage());
             }
         }
+    }
+
+    private void updateShadowLord() {
+
+        RigidBody shadowLordRigidBody = resourceManager.getShadowLord().getRigidBody();
+
+        float shadowLordPositionY = shadowLordRigidBody.getPosition().getY();
+
+        if(shadowLordPositionY > 0.2f) {
+            shadowLordRigidBody.setAccelerationY(-0.1f);
+        }
+        else if(shadowLordPositionY < 0.2f) {
+            shadowLordRigidBody.setAccelerationY(0.1f);
+        }
+
+        Vector2 shadowToPlayer = shadowLordRigidBody.getPosition().sub(resourceManager.getPlayer().getRigidBody().getPosition());
+
+        float angle = Calc.Angle(shadowToPlayer, VECTOR_FORWARD);
+        shadowLordRigidBody.setAngle(angle);
+
+        updateEntity(shadowLordRigidBody);
     }
 
     private void updateSpells() {
@@ -98,11 +121,8 @@ public class GameEngine implements Runnable {
                     megaSpell.setActive(false);
                 }
 
-                spellRigidBody.setVelocity(Calc.EulerMethod(spellRigidBody.getVelocity(), spellRigidBody.getAcceleration(), deltaTime));
+                updateEntity(spellRigidBody);
 
-                Vector2 newPosition = Calc.EulerMethod(spellRigidBody.getPosition(), spellRigidBody.getVelocity(), deltaTime);
-
-                spellRigidBody.setPosition(newPosition.getX(), newPosition.getY());
                 if (!spellRigidBody.getPosition().isBounded()) {
                     megaSpell.setActive(false);
                 }
@@ -116,11 +136,7 @@ public class GameEngine implements Runnable {
                 if (spellRigidBody.getPosition().getY() <= groundPosition - 0.06f || !spellRigidBody.getPosition().isBounded()) {
                     spell.setActive(false);
                 } else {
-                    spellRigidBody.setVelocity(Calc.EulerMethod(spellRigidBody.getVelocity(), spellRigidBody.getAcceleration(), deltaTime));
-
-                    Vector2 newPosition = Calc.EulerMethod(spellRigidBody.getPosition(), spellRigidBody.getVelocity(), deltaTime);
-
-                    spellRigidBody.setPosition(newPosition.getX(), newPosition.getY());
+                    updateEntity(spellRigidBody);
                 }
             }
         }
@@ -188,6 +204,16 @@ public class GameEngine implements Runnable {
             playerRigidBody.setPositionY(groundPosition);
             playerInput.setGrounded(true);
         }
+
+    }
+
+    private void updateEntity(RigidBody rigidBody) {
+
+        rigidBody.setVelocity(Calc.EulerMethod(rigidBody.getVelocity(), rigidBody.getAcceleration(), deltaTime));
+
+        Vector2 newPosition = Calc.EulerMethod(rigidBody.getPosition(), rigidBody.getVelocity(), deltaTime);
+
+        rigidBody.setPosition(newPosition.getX(), newPosition.getY());
 
     }
 
