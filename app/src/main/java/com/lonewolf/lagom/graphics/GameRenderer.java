@@ -40,6 +40,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private final float[] mVPMatrix = new float[16];
     private final float[] mIdentityMatrix = new float[16];
 
+    private float deltaTime = 0.0f;
+
     public GameRenderer(ResourceManager resourceManager, GameEngine gameEngine) {
         this.resourceManager = resourceManager;
         this.gameEngine = gameEngine;
@@ -94,6 +96,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl) {
 
+        deltaTime = gameEngine.getAnimationDeltaTime();
+        gameEngine.setAnimationDeltaTime(0.0f);
+
+        //Log.v("AnimationDeltaTime", Float.toString(deltaTime));
+
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
         draw(resourceManager.getBackground().getSprite());
@@ -130,8 +137,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         draw(resourceManager.getForeground().getSprite());
 
-        gameEngine.setAnimationDeltaTime(0.0f);
-
         //checkGlError("Draw");
 
     }
@@ -160,7 +165,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         TextureTransition textureTransition = sprite.getTextureTransition();
 
         if (textureTransition != null) {
-            textureTransition.addTime(gameEngine.getAnimationDeltaTime());
+            textureTransition.addTime(deltaTime);
             GLES20.glUniform1f(textureTransition.getTimePosition(), textureTransition.getTime());
             GLES20.glUniform1i(textureTransition.getTexturePosition(), 1);
             GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
@@ -170,7 +175,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         ColorTransition colorTransition = sprite.getColorTransition();
 
         if (colorTransition != null) {
-            colorTransition.addTime(gameEngine.getAnimationDeltaTime());
+            colorTransition.addTime(deltaTime);
             GLES20.glUniform1f(colorTransition.getTimePosition(), colorTransition.getTime());
         }
 
@@ -184,7 +189,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         Animation animation = sprite.getAnimation();
 
         if (animation != null) {
-            sprite.getAnimation().update(gameEngine.getAnimationDeltaTime());
+            sprite.getAnimation().update(deltaTime);
         }
 
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, sprite.getDrawOrder().length, GLES20.GL_UNSIGNED_SHORT, sprite.getOrderBuffer());

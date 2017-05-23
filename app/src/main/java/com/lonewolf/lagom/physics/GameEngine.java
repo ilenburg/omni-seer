@@ -1,7 +1,5 @@
 package com.lonewolf.lagom.physics;
 
-import android.util.Log;
-
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Spell;
@@ -74,7 +72,7 @@ public class GameEngine implements Runnable {
                 animationDeltaTime += deltaTime;
                 lastTime = System.currentTimeMillis();
 
-                Log.v("DeltaTime", Float.toString(deltaTime));
+                //Log.v("DeltaTime", Float.toString(deltaTime));
 
                 updatePlayer();
 
