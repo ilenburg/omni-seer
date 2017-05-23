@@ -5,6 +5,8 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.lonewolf.lagom.entities.AirBomb;
+import com.lonewolf.lagom.entities.Bomb;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Player;
@@ -22,6 +24,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import static android.content.ContentValues.TAG;
+import static com.lonewolf.lagom.R.drawable.bomb;
 
 /**
  * Created by Ian on 22/01/2017.
@@ -121,9 +124,17 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         }
 
-        Player player = resourceManager.getPlayer();
+        for(Bomb bomb : resourceManager.getBombs()) {
+            if(bomb.isActive()) {
+                draw(bomb.getSprite(), bomb.getRigidBody().getModelMatrix());
+            }
+        }
 
-        draw(player.getSprite(), player.getRigidBody().getModelMatrix());
+        for(AirBomb airBomb : resourceManager.getAirBombs()) {
+            if(airBomb.isActive()) {
+                draw(airBomb.getSprite(), airBomb.getRigidBody().getModelMatrix());
+            }
+        }
 
         for(Minion minion : resourceManager.getMinions()) {
             if(minion.isActive()) {
@@ -134,6 +145,10 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         ShadowLord shadowLord = resourceManager.getShadowLord();
 
         draw(shadowLord.getSprite(), shadowLord.getRigidBody().getModelMatrix());
+
+        Player player = resourceManager.getPlayer();
+
+        draw(player.getSprite(), player.getRigidBody().getModelMatrix());
 
         draw(resourceManager.getForeground().getSprite());
 

@@ -7,38 +7,43 @@ import com.lonewolf.lagom.physics.Vector2;
 import java.util.Random;
 
 /**
- * Created by Ian on 21/05/2017.
+ * Created by Ian on 23/01/2017.
  */
 
-public class Minion {
+public class AirBomb {
 
     private static final Random random = new Random();
 
     private final Sprite sprite;
     private final RigidBody rigidBody;
+
     private boolean active;
 
-    public Minion(int shaderProgram, int texture) {
+    public AirBomb(int shaderProgram, int texture) {
 
         float[] geometry = new float[]{
-                -0.06f, 0.06f,
-                -0.06f, -0.06f,
-                0.06f, -0.06f,
-                0.06f, 0.06f
+                -0.15f, 0.15f,
+                -0.15f, -0.15f,
+                0.15f, -0.15f,
+                0.15f, 0.15f
         };
 
         float[] textureCoordinates = new float[]{
-                0.0f, 0.0f,
-                0.0f, 1.0f,
+                0.5f, 0.5f,
+                0.5f, 1.0f,
                 1.0f, 1.0f,
-                1.0f, 0.0f
+                1.0f, 0.5f
         };
 
-        this.rigidBody = new RigidBody(1, new Vector2((random.nextFloat() * 2) + 1, random.nextFloat() - 0.5f), new Vector2(-0.2f, 0.0f));
+        this.rigidBody = new RigidBody(1, new Vector2(2.0f + (random.nextFloat() * 2), -0.51f), new Vector2(-0.5f, 0.0f));
 
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates);
 
         active = true;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     public Sprite getSprite() {
@@ -47,13 +52,5 @@ public class Minion {
 
     public RigidBody getRigidBody() {
         return rigidBody;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 }

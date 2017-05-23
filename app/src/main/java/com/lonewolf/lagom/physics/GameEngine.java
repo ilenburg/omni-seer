@@ -1,11 +1,15 @@
 package com.lonewolf.lagom.physics;
 
+import com.lonewolf.lagom.entities.AirBomb;
+import com.lonewolf.lagom.entities.Bomb;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.states.GameState;
+
+import java.util.Random;
 
 /**
  * Created by Ian on 28/01/2017.
@@ -20,6 +24,8 @@ public class GameEngine implements Runnable {
     private static final Vector2 VECTOR_FORWARD = new Vector2(1.0f, 0.0f);
     private static final Vector2 SPELL_BASE_VELOCITY = new Vector2(2.0f, ZERO);
     private static final Vector2 SPELL_DISPLACEMENT = new Vector2(0.03f, -0.03f);
+
+    private static final Random random = new Random();
 
     private GameState gameState;
 
@@ -82,6 +88,10 @@ public class GameEngine implements Runnable {
 
                 updateMinions();
 
+                updateBombs();
+
+                updateAirBombs();
+
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException e) {
@@ -91,33 +101,68 @@ public class GameEngine implements Runnable {
         }
     }
 
+    private void updateAirBombs() {
+        for (AirBomb airBomb : resourceManager.getAirBombs()) {
+            if (airBomb.isActive()) {
+                RigidBody airBombRigidBody = airBomb.getRigidBody();
+
+                airBombRigidBody.addAngle(Math.abs(airBombRigidBody.getVelocity().getX()) * deltaTime * 500);
+
+                if (airBombRigidBody.getPosition().getX() < -2.0f) {
+                    airBombRigidBody.setPositionX(2.0f + random.nextFloat());
+                }
+
+                if (airBombRigidBody.getPosition().getY() <= GROUND_POSITION - 0.03f) {
+                    airBombRigidBody.setVelocityY(1.5f + random.nextFloat());
+                }
+
+                airBombRigidBody.setAccelerationY(GRAVITY_ACCELERATION / 3);
+
+                updateRigidBody(airBomb.getRigidBody());
+            }
+        }
+    }
+
+    private void updateBombs() {
+        for (Bomb bomb : resourceManager.getBombs()) {
+            if (bomb.isActive()) {
+                RigidBody bombRigidBody = bomb.getRigidBody();
+                if (bombRigidBody.getPosition().getX() < -2.0f) {
+                    bombRigidBody.setPositionX(2.0f + random.nextFloat());
+                }
+                updateRigidBody(bomb.getRigidBody());
+            }
+        }
+    }
+
     private void updateMinions() {
         for (Minion minion : resourceManager.getMinions()) {
 
-            RigidBody minionRigidBody = minion.getRigidBody();
+            if (minion.isActive()) {
+                RigidBody minionRigidBody = minion.getRigidBody();
 
-            Vector2 vectorFromPlayer = getVectorFromPlayer(minionRigidBody);
+                Vector2 vectorFromPlayer = getVectorFromPlayer(minionRigidBody);
 
-            lookAtPlayer(minionRigidBody, vectorFromPlayer);
+                lookAtPlayer(minionRigidBody, vectorFromPlayer);
 
-            if(vectorFromPlayer.getLength() < 1.5f) {
+                if (vectorFromPlayer.getLength() < 1.5f) {
+                    minionRigidBody.setAcceleration(vectorFromPlayer.multiply(-1.0f).normalize().divide(2.0f));
+                }
 
-                minionRigidBody.setAcceleration(vectorFromPlayer.multiply(-1.0f).normalize().divide(2.0f));
+                if (minionRigidBody.getPosition().getY() <= GROUND_POSITION - 0.03f) {
+                    minionRigidBody.setVelocityY(0.5f);
+                }
+
+                if (minionRigidBody.getPosition().getX() < -1.0f) {
+                    minionRigidBody.applyForce(new Vector2(1.0f, ZERO));
+                }
+
+                if (minionRigidBody.getPosition().getY() > 1.0f) {
+                    minionRigidBody.applyForce(new Vector2(ZERO, -1.0f));
+                }
+
+                updateRigidBody(minionRigidBody);
             }
-
-            if (minionRigidBody.getPosition().getY() <= GROUND_POSITION - 0.02f) {
-                minionRigidBody.setVelocityY(0.5f);
-            }
-
-            if(minionRigidBody.getPosition().getX() < -1.0f) {
-                minionRigidBody.applyForce(new Vector2(1.0f, ZERO));
-            }
-
-            if(minionRigidBody.getPosition().getY() > 1.0f) {
-                minionRigidBody.applyForce(new Vector2(ZERO, -1.0f));
-            }
-
-            updateRigidBody(minionRigidBody);
         }
     }
 

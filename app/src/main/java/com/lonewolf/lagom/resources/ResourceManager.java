@@ -8,7 +8,9 @@ import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.lonewolf.lagom.R;
+import com.lonewolf.lagom.entities.AirBomb;
 import com.lonewolf.lagom.entities.Background;
+import com.lonewolf.lagom.entities.Bomb;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Panorama;
@@ -39,7 +41,11 @@ public class ResourceManager {
 
     private MegaSpell[] megaSpells = new MegaSpell[6];
 
-    private Minion[] minions = new Minion[100];
+    private Minion[] minions = new Minion[10];
+
+    private Bomb[] bombs = new Bomb[10];
+
+    private AirBomb[] airBombs = new AirBomb[3];
 
     private Player player;
     private ShadowLord shadowLord;
@@ -88,6 +94,14 @@ public class ResourceManager {
         return minions;
     }
 
+    public Bomb[] getBombs() {
+        return bombs;
+    }
+
+    public AirBomb[] getAirBombs() {
+        return airBombs;
+    }
+
     public void loadResources() {
         initShaders();
         initTextures();
@@ -97,11 +111,11 @@ public class ResourceManager {
     private void initEntities() {
 
         this.background = new Background(shaderPrograms[2], textures[1], textures[5], 0.00025f);
-        this.panoramaFar = new Panorama(shaderPrograms[1], textures[3], 0.0005f);
+        this.panoramaFar = new Panorama(shaderPrograms[1], textures[3], 0.00050f);
         this.panorama = new Panorama(shaderPrograms[1], textures[2], 0.00075f);
+        this.foreground = new Panorama(shaderPrograms[1], textures[4], 0.00100f);
         this.player = new Player(shaderPrograms[4], textures[0]);
         this.shadowLord = new ShadowLord(shaderPrograms[0], textures[7]);
-        this.foreground = new Panorama(shaderPrograms[1], textures[4], 0.001f);
 
         int i;
 
@@ -118,6 +132,16 @@ public class ResourceManager {
         size = minions.length;
         for (i = 0; i < size; ++i) {
             minions[i] = new Minion(shaderPrograms[0], textures[8]);
+        }
+
+        size = bombs.length;
+        for (i = 0; i < size; ++i) {
+            bombs[i] = new Bomb(shaderPrograms[0], textures[9]);
+        }
+
+        size = airBombs.length;
+        for (i = 0; i < size; ++i) {
+            airBombs[i] = new AirBomb(shaderPrograms[0], textures[9]);
         }
     }
 
@@ -159,6 +183,7 @@ public class ResourceManager {
         loadTexture(R.drawable.fire_sprite, 6, false);
         loadTexture(R.drawable.shadown_lord, 7, false);
         loadTexture(R.drawable.minion, 8, false);
+        loadTexture(R.drawable.bomb, 9, false);
     }
 
     private String getShaderCode(int resourceId) throws IOException {

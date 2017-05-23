@@ -50,6 +50,10 @@ public class RigidBody {
         this.position.setY(y);
     }
 
+    public void setPositionX(float x) {
+        setPosition(x, this.position.getY());
+    }
+
     public Vector2 getVelocity() {
         return velocity;
     }
@@ -88,6 +92,10 @@ public class RigidBody {
 
     public void setAngle(float angle) {
         this.angle = angle;
+    }
+
+    public void addAngle(float angle) {
+        this.angle += angle;
     }
 
     public float[] getModelMatrix() {

@@ -3,12 +3,15 @@ package com.lonewolf.lagom.modules.effects;
 import com.lonewolf.lagom.physics.RigidBody;
 
 import java.nio.FloatBuffer;
+import java.util.Random;
 
 /**
  * Created by Ian on 10/02/2017.
  */
 
 public class Animation {
+
+    private static Random random = new Random();
 
     private final float[][] textureFramesCoordinates;
 
@@ -33,7 +36,7 @@ public class Animation {
         this.textureFramesCoordinates = textureFramesCoordinates;
         this.cicleDuration = cicleDuration;
         this.cicleStepDuration = cicleDuration / textureFramesCoordinates.length;
-        this.cicleStep = 0.0f;
+        this.cicleStep = random.nextFloat() * 3;
         this.rigidBody = rigidBody;
 
         if (this.rigidBody != null) {
