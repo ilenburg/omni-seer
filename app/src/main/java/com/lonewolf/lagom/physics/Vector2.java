@@ -35,8 +35,9 @@ public class Vector2 {
         this.y = y;
     }
 
-    public float dotProduct(Vector2 vector2) {
-        return (this.x * vector2.x + this.y * vector2.y);
+    public void setZero() {
+        this.x = 0.0f;
+        this.y = 0.0f;
     }
 
     public Vector2 add(Vector2 vector2) {
@@ -60,17 +61,16 @@ public class Vector2 {
         return new Vector2(this.x / length, this.y / length);
     }
 
-    public float getLength() {
-        return (float) Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
-    }
-
-    public void setZero() {
-        this.x = 0.0f;
-        this.y = 0.0f;
-    }
-
     public Vector2 copy() {
         return new Vector2(this.x, this.y);
+    }
+
+    public float dotProduct(Vector2 vector2) {
+        return (this.x * vector2.x + this.y * vector2.y);
+    }
+
+    public float getLength() {
+        return (float) Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     }
 
     public boolean isBounded() {

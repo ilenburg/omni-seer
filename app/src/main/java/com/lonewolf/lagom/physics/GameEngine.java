@@ -14,8 +14,9 @@ public class GameEngine implements Runnable {
 
     private static final float GRAVITY_ACCELERATION = -9.8f * 0.8f;
     private static final float ZERO = 0.0f;
-    private static final Vector2 VECTOR_FORWARD = new Vector2(1, 0);
+    private static final Vector2 VECTOR_FORWARD = new Vector2(1.0f, 0.0f);
     private static final Vector2 SPELL_BASE_VELOCITY = new Vector2(2.0f, ZERO);
+    private static final Vector2 SPELL_DISPLACEMENT = new Vector2(0.03f, -0.03f);
 
     private GameState gameState;
 
@@ -167,7 +168,7 @@ public class GameEngine implements Runnable {
             Vector2 startingVelocity = playerInput.getSpellTarget().sub(playerRigidBody.getPosition()).normalize();
             for (Spell spell : resourceManager.getActiveSpells()) {
                 if (!spell.isActive()) {
-                    spell.getRigidBody().setPosition(playerRigidBody.getPosition().copy());
+                    spell.getRigidBody().setPosition(playerRigidBody.getPosition().add(SPELL_DISPLACEMENT));
                     spell.getRigidBody().setVelocity(startingVelocity.multiply(2.0f));
                     float angle = Calc.Angle(startingVelocity, VECTOR_FORWARD);
                     if (startingVelocity.getY() < ZERO) {
