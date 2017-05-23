@@ -10,6 +10,7 @@ import android.util.Log;
 import com.lonewolf.lagom.R;
 import com.lonewolf.lagom.entities.Background;
 import com.lonewolf.lagom.entities.MegaSpell;
+import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Panorama;
 import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.ShadowLord;
@@ -37,6 +38,8 @@ public class ResourceManager {
     private Spell[] activeSpells = new Spell[30];
 
     private MegaSpell[] megaSpells = new MegaSpell[6];
+
+    private Minion[] minions = new Minion[100];
 
     private Player player;
     private ShadowLord shadowLord;
@@ -81,6 +84,10 @@ public class ResourceManager {
         return activeSpells;
     }
 
+    public Minion[] getMinions() {
+        return minions;
+    }
+
     public void loadResources() {
         initShaders();
         initTextures();
@@ -96,16 +103,22 @@ public class ResourceManager {
         this.shadowLord = new ShadowLord(shaderPrograms[0], textures[7]);
         this.foreground = new Panorama(shaderPrograms[1], textures[4], 0.001f);
 
+        int i;
+
         int size = activeSpells.length;
-        for (int i = 0; i < size; ++i) {
+        for (i = 0; i < size; ++i) {
             activeSpells[i] = new Spell(shaderPrograms[3], textures[6]);
         }
 
         size = megaSpells.length;
-        for (int i = 0; i < size; ++i) {
+        for (i = 0; i < size; ++i) {
             megaSpells[i] = new MegaSpell(shaderPrograms[3], textures[6]);
         }
 
+        size = minions.length;
+        for (i = 0; i < size; ++i) {
+            minions[i] = new Minion(shaderPrograms[0], textures[8]);
+        }
     }
 
     private void initShaders() {
@@ -145,6 +158,7 @@ public class ResourceManager {
         loadTexture(R.drawable.night, 5, true);
         loadTexture(R.drawable.fire_sprite, 6, false);
         loadTexture(R.drawable.shadown_lord, 7, false);
+        loadTexture(R.drawable.minion, 8, false);
     }
 
     private String getShaderCode(int resourceId) throws IOException {

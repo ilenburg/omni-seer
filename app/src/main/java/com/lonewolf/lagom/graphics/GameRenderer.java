@@ -6,6 +6,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.lonewolf.lagom.entities.MegaSpell;
+import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.ShadowLord;
 import com.lonewolf.lagom.entities.Spell;
@@ -116,6 +117,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         Player player = resourceManager.getPlayer();
 
         draw(player.getSprite(), player.getRigidBody().getModelMatrix());
+
+        for(Minion minion : resourceManager.getMinions()) {
+            if(minion.isActive()) {
+                draw(minion.getSprite(), minion.getRigidBody().getModelMatrix());
+            }
+        }
 
         ShadowLord shadowLord = resourceManager.getShadowLord();
 

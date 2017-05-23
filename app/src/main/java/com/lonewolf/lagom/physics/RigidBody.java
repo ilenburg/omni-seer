@@ -70,6 +70,10 @@ public class RigidBody {
         this.acceleration.setY(accelerationY);
     }
 
+    public void setVelocityX(float velocityX) {
+        this.velocity.setX(velocityX);
+    }
+
     public void setVelocityY(float velocityY) {
         this.velocity.setY(velocityY);
     }

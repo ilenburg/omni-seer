@@ -1,6 +1,7 @@
 package com.lonewolf.lagom.physics;
 
 import com.lonewolf.lagom.entities.MegaSpell;
+import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.resources.ResourceManager;
@@ -14,6 +15,8 @@ public class GameEngine implements Runnable {
 
     private static final float GRAVITY_ACCELERATION = -9.8f * 0.8f;
     private static final float ZERO = 0.0f;
+    private static final float GROUND_POSITION = -0.535f;
+
     private static final Vector2 VECTOR_FORWARD = new Vector2(1.0f, 0.0f);
     private static final Vector2 SPELL_BASE_VELOCITY = new Vector2(2.0f, ZERO);
     private static final Vector2 SPELL_DISPLACEMENT = new Vector2(0.03f, -0.03f);
@@ -25,8 +28,6 @@ public class GameEngine implements Runnable {
     private float animationDeltaTime;
 
     private float cameraPositon;
-
-    private final float groundPosition;
 
     private ResourceManager resourceManager;
 
@@ -58,7 +59,6 @@ public class GameEngine implements Runnable {
         this.animationDeltaTime = 0.0f;
 
         this.cameraPositon = 0.0f;
-        this.groundPosition = -0.535f;
     }
 
     @Override
@@ -80,12 +80,44 @@ public class GameEngine implements Runnable {
 
                 updateShadowLord();
 
+                updateMinions();
+
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }
+        }
+    }
+
+    private void updateMinions() {
+        for (Minion minion : resourceManager.getMinions()) {
+
+            RigidBody minionRigidBody = minion.getRigidBody();
+
+            Vector2 vectorFromPlayer = getVectorFromPlayer(minionRigidBody);
+
+            lookAtPlayer(minionRigidBody, vectorFromPlayer);
+
+            if(vectorFromPlayer.getLength() < 1.5f) {
+
+                minionRigidBody.setAcceleration(vectorFromPlayer.multiply(-1.0f).normalize().divide(2.0f));
+            }
+
+            if (minionRigidBody.getPosition().getY() <= GROUND_POSITION - 0.02f) {
+                minionRigidBody.setVelocityY(0.5f);
+            }
+
+            if(minionRigidBody.getPosition().getX() < -1.0f) {
+                minionRigidBody.applyForce(new Vector2(1.0f, ZERO));
+            }
+
+            if(minionRigidBody.getPosition().getY() > 1.0f) {
+                minionRigidBody.applyForce(new Vector2(ZERO, -1.0f));
+            }
+
+            updateRigidBody(minionRigidBody);
         }
     }
 
@@ -96,16 +128,11 @@ public class GameEngine implements Runnable {
 
             float shadowLordPositionY = shadowLordRigidBody.getPosition().getY();
 
-            if (shadowLordPositionY > 0.2f) {
-                shadowLordRigidBody.setAccelerationY(-0.1f);
-            } else if (shadowLordPositionY < 0.2f) {
-                shadowLordRigidBody.setAccelerationY(0.1f);
-            }
+            floatEffect(shadowLordRigidBody, shadowLordPositionY);
 
-            Vector2 shadowToPlayer = shadowLordRigidBody.getPosition().sub(resourceManager.getPlayer().getRigidBody().getPosition());
+            Vector2 vectorFromPlayer = getVectorFromPlayer(shadowLordRigidBody);
 
-            float angle = Calc.Angle(shadowToPlayer, VECTOR_FORWARD);
-            shadowLordRigidBody.setAngle(angle);
+            lookAtPlayer(shadowLordRigidBody, vectorFromPlayer);
 
             updateRigidBody(shadowLordRigidBody);
         }
@@ -118,7 +145,7 @@ public class GameEngine implements Runnable {
         for (MegaSpell megaSpell : resourceManager.getMegaSpells()) {
             if (megaSpell.isActive()) {
                 spellRigidBody = megaSpell.getRigidBody();
-                if (spellRigidBody.getPosition().getY() <= groundPosition - 0.06f) {
+                if (spellRigidBody.getPosition().getY() <= GROUND_POSITION - 0.06f) {
                     megaSpell.setActive(false);
                 }
 
@@ -134,7 +161,7 @@ public class GameEngine implements Runnable {
             if (spell.isActive()) {
                 spellRigidBody = spell.getRigidBody();
 
-                if (spellRigidBody.getPosition().getY() <= groundPosition - 0.06f || !spellRigidBody.getPosition().isBounded()) {
+                if (spellRigidBody.getPosition().getY() <= GROUND_POSITION - 0.06f || !spellRigidBody.getPosition().isBounded()) {
                     spell.setActive(false);
                 } else {
                     updateRigidBody(spellRigidBody);
@@ -171,9 +198,6 @@ public class GameEngine implements Runnable {
                     spell.getRigidBody().setPosition(playerRigidBody.getPosition().add(SPELL_DISPLACEMENT));
                     spell.getRigidBody().setVelocity(startingVelocity.multiply(2.0f));
                     float angle = Calc.Angle(startingVelocity, VECTOR_FORWARD);
-                    if (startingVelocity.getY() < ZERO) {
-                        angle *= -1;
-                    }
                     spell.getRigidBody().setAngle(angle);
                     spell.setActive(true);
                     break;
@@ -197,12 +221,12 @@ public class GameEngine implements Runnable {
 
         playerRigidBody.setPositionY(newPosition.getY());
 
-        if (playerRigidBody.getPosition().getY() > groundPosition) {
+        if (playerRigidBody.getPosition().getY() > GROUND_POSITION) {
             playerRigidBody.setAccelerationY(playerInput.isInvulnerable() && playerRigidBody.getVelocity().getY() < 0.0f ? GRAVITY_ACCELERATION / 6.0f : GRAVITY_ACCELERATION);
         } else {
             playerRigidBody.setAccelerationY(ZERO);
             playerRigidBody.setVelocityY(ZERO);
-            playerRigidBody.setPositionY(groundPosition);
+            playerRigidBody.setPositionY(GROUND_POSITION);
             playerInput.setGrounded(true);
         }
 
@@ -216,6 +240,23 @@ public class GameEngine implements Runnable {
 
         rigidBody.setPosition(newPosition.getX(), newPosition.getY());
 
+    }
+
+    private Vector2 getVectorFromPlayer(RigidBody rigidBody) {
+        return rigidBody.getPosition().sub(resourceManager.getPlayer().getRigidBody().getPosition());
+    }
+
+    private void lookAtPlayer(RigidBody rigidBody, Vector2 vectorToPlayer) {
+        float angle = Calc.Angle(vectorToPlayer, VECTOR_FORWARD);
+        rigidBody.setAngle(angle);
+    }
+
+    private void floatEffect(RigidBody rigidBody, float positionY) {
+        if (positionY > 0.2f) {
+            rigidBody.setAccelerationY(-0.1f);
+        } else {
+            rigidBody.setAccelerationY(0.1f);
+        }
     }
 
 }

@@ -13,8 +13,9 @@ public final class Calc {
     }
 
     public static float Angle(Vector2 v1, Vector2 v2) {
+        int swap = v1.getY() < 0.0f ? -1 : 1;
         float theta = v1.dotProduct(v2) / (v1.getLength() * v2.getLength());
-        return (float) (Math.acos(theta) * RADIAN_ANGLE);
+        return ((float) (Math.acos(theta) * RADIAN_ANGLE)) * swap;
     }
 
     private Calc() {
