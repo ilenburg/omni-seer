@@ -45,7 +45,7 @@ public class ResourceManager {
 
     private Bomb[] bombs = new Bomb[10];
 
-    private AirBomb[] airBombs = new AirBomb[3];
+    private AirBomb[] airBombs = new AirBomb[0];
 
     private Player player;
     private ShadowLord shadowLord;
@@ -158,7 +158,7 @@ public class ResourceManager {
             vertexShader = getShaderCode(R.raw.base_vert);
             fragmentShader = getShaderCode(R.raw.base_frag);
             fragmentScrollShader = getShaderCode(R.raw.scroll_frag);
-            doubleTexFragmentScrollShader = getShaderCode(R.raw.tex_transition_scroll);
+            doubleTexFragmentScrollShader = getShaderCode(R.raw.tex_transition_scroll_frag);
             colorTransitionFragmentShader = getShaderCode(R.raw.color_transition_base_frag);
             colorSwapFragmentShader = getShaderCode(R.raw.color_swap_base_frag);
         } catch (IOException e) {

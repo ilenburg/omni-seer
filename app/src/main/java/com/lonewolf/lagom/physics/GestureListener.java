@@ -62,8 +62,8 @@ public class GestureListener implements GestureDetector.OnGestureListener {
                     }
                     playerInput.setJumpPower(distanceY / 200.0f);
                     playerInput.setGrounded(false);
-                    validFling = true;
                 }
+                validFling = true;
             }
         } else if (Math.abs(distanceX) > 200) {
             if (distanceX > 0) {

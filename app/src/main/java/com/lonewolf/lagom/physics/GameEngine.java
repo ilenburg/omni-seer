@@ -146,6 +146,10 @@ public class GameEngine implements Runnable {
                 lookAtPlayer(minionRigidBody, vectorFromPlayer);
 
                 if (vectorFromPlayer.getLength() < 1.5f) {
+                    minion.setAggressive(true);
+                }
+
+                if(minion.isAggressive()) {
                     minionRigidBody.setAcceleration(vectorFromPlayer.multiply(-1.0f).normalize().divide(2.0f));
                 }
 

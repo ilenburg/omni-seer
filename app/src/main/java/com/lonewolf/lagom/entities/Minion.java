@@ -17,6 +17,7 @@ public class Minion {
     private final Sprite sprite;
     private final RigidBody rigidBody;
     private boolean active;
+    private boolean aggressive;
 
     public Minion(int shaderProgram, int texture) {
 
@@ -39,6 +40,7 @@ public class Minion {
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates);
 
         active = true;
+        aggressive = false;
     }
 
     public Sprite getSprite() {
@@ -55,5 +57,13 @@ public class Minion {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public boolean isAggressive() {
+        return aggressive;
+    }
+
+    public void setAggressive(boolean aggresive) {
+        this.aggressive = aggresive;
     }
 }
