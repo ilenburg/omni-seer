@@ -45,7 +45,7 @@ public class ResourceManager {
 
     private Bomb[] bombs = new Bomb[10];
 
-    private AirBomb[] airBombs = new AirBomb[0];
+    private AirBomb[] airBombs = new AirBomb[10];
 
     private Player player;
     private ShadowLord shadowLord;
@@ -141,7 +141,7 @@ public class ResourceManager {
 
         size = airBombs.length;
         for (i = 0; i < size; ++i) {
-            airBombs[i] = new AirBomb(shaderPrograms[0], textures[9]);
+            airBombs[i] = new AirBomb(shaderPrograms[5], textures[10]);
         }
     }
 
@@ -152,6 +152,7 @@ public class ResourceManager {
         String fragmentScrollShader = null;
         String doubleTexFragmentScrollShader = null;
         String colorTransitionFragmentShader = null;
+        String hueTransitionFragmentShader = null;
         String colorSwapFragmentShader = null;
 
         try {
@@ -160,6 +161,7 @@ public class ResourceManager {
             fragmentScrollShader = getShaderCode(R.raw.scroll_frag);
             doubleTexFragmentScrollShader = getShaderCode(R.raw.tex_transition_scroll_frag);
             colorTransitionFragmentShader = getShaderCode(R.raw.color_transition_base_frag);
+            hueTransitionFragmentShader = getShaderCode(R.raw.hue_transition_base_frag);
             colorSwapFragmentShader = getShaderCode(R.raw.color_swap_base_frag);
         } catch (IOException e) {
             e.printStackTrace();
@@ -170,6 +172,7 @@ public class ResourceManager {
         shaderPrograms[2] = generateShaderProgram(vertexShader, doubleTexFragmentScrollShader);
         shaderPrograms[3] = generateShaderProgram(vertexShader, colorTransitionFragmentShader);
         shaderPrograms[4] = generateShaderProgram(vertexShader, colorSwapFragmentShader);
+        shaderPrograms[5] = generateShaderProgram(vertexShader, hueTransitionFragmentShader);
     }
 
     private void initTextures() {
@@ -184,6 +187,7 @@ public class ResourceManager {
         loadTexture(R.drawable.shadown_lord, 7, false);
         loadTexture(R.drawable.minion, 8, false);
         loadTexture(R.drawable.bomb, 9, false);
+        loadTexture(R.drawable.goo, 10, false);
     }
 
     private String getShaderCode(int resourceId) throws IOException {

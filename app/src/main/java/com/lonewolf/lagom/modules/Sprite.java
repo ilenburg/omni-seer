@@ -104,6 +104,10 @@ public class Sprite {
         this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null);
     }
 
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, ColorTransition colorTransition) {
+        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, colorTransition);
+    }
+
     public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll) {
         this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, null, null);
     }

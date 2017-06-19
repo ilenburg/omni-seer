@@ -39,7 +39,7 @@ public class Minion {
 
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates);
 
-        active = true;
+        active = false;
         aggressive = false;
     }
 

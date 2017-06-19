@@ -24,7 +24,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import static android.content.ContentValues.TAG;
-import static com.lonewolf.lagom.R.drawable.bomb;
 
 /**
  * Created by Ian on 22/01/2017.
@@ -51,7 +50,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     }
 
     public void pause() {
-        if(physicsThread != null) {
+        if (physicsThread != null) {
             physicsThread.interrupt();
         }
     }
@@ -124,27 +123,29 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         }
 
-        for(Bomb bomb : resourceManager.getBombs()) {
-            if(bomb.isActive()) {
+        for (Bomb bomb : resourceManager.getBombs()) {
+            if (bomb.isActive()) {
                 draw(bomb.getSprite(), bomb.getRigidBody().getModelMatrix());
             }
         }
 
-        for(AirBomb airBomb : resourceManager.getAirBombs()) {
-            if(airBomb.isActive()) {
+        for (AirBomb airBomb : resourceManager.getAirBombs()) {
+            if (airBomb.isActive()) {
                 draw(airBomb.getSprite(), airBomb.getRigidBody().getModelMatrix());
             }
         }
 
-        for(Minion minion : resourceManager.getMinions()) {
-            if(minion.isActive()) {
+        for (Minion minion : resourceManager.getMinions()) {
+            if (minion.isActive()) {
                 draw(minion.getSprite(), minion.getRigidBody().getModelMatrix());
             }
         }
 
         ShadowLord shadowLord = resourceManager.getShadowLord();
 
-        draw(shadowLord.getSprite(), shadowLord.getRigidBody().getModelMatrix());
+        if (shadowLord.isActive()) {
+            draw(shadowLord.getSprite(), shadowLord.getRigidBody().getModelMatrix());
+        }
 
         Player player = resourceManager.getPlayer();
 
