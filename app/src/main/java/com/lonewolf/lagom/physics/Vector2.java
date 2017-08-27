@@ -40,37 +40,13 @@ public class Vector2 {
         this.y = 0.0f;
     }
 
-    public Vector2 add(Vector2 vector2) {
-        return new Vector2(this.x + vector2.x, this.y + vector2.y);
+    public void setCoordinates(Vector2 vector) {
+        this.x = vector.x;
+        this.y = vector.y;
     }
 
-    public Vector2 sub(Vector2 vector2) {
-        return new Vector2(this.x - vector2.x, this.y - vector2.y);
-    }
-
-    public Vector2 multiply(float scalar) {
-        return new Vector2(this.x * scalar, this.y * scalar);
-    }
-
-    public Vector2 divide(float scalar) {
-        return new Vector2(this.x / scalar, this.y / scalar);
-    }
-
-    public Vector2 normalize() {
-        float length = getLength();
-        return new Vector2(this.x / length, this.y / length);
-    }
-
-    public Vector2 copy() {
-        return new Vector2(this.x, this.y);
-    }
-
-    public float dotProduct(Vector2 vector2) {
-        return (this.x * vector2.x + this.y * vector2.y);
-    }
-
-    public float getLength() {
-        return (float) Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+    public boolean isZero() {
+        return (this.x == 0.0f && this.y == 0.0f);
     }
 
     public boolean isBounded() {
@@ -79,8 +55,42 @@ public class Vector2 {
         return true;
     }
 
-    public boolean isZero() {
-        return (this.x == 0.0f && this.y == 0.0f);
+    public float getLength() {
+        return (float) Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+    }
+
+    public Vector2 copy() {
+        return new Vector2(this.x, this.y);
+    }
+
+    public static void add(Vector2 vR, Vector2 v1, Vector2 v2) {
+        vR.x = v1.x + v2.x;
+        vR.y = v1.y + v2.y;
+    }
+
+    public static void sub(Vector2 vR, Vector2 v1, Vector2 v2) {
+        vR.x = v1.x - v2.x;
+        vR.y = v1.y - v2.y;
+    }
+
+    public static void multiply(Vector2 vR, Vector2 vT, float scalar) {
+        vR.x = vT.x * scalar;
+        vR.y = vT.y * scalar;
+    }
+
+    public static void divide(Vector2 vR, Vector2 vT, float scalar) {
+        vR.x = vT.x / scalar;
+        vR.y = vT.y / scalar;
+    }
+
+    public static void normalize(Vector2 vR, Vector2 vT) {
+        float vTLength = vT.getLength();
+        vR.x = vT.x / vTLength;
+        vR.y = vT.y / vTLength;
+    }
+
+    public static float dotProduct(Vector2 v1, Vector2 v2) {
+        return (v1.x * v2.x + v1.y * v2.y);
     }
 
     @Override

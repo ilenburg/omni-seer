@@ -41,7 +41,7 @@ public class ResourceManager {
 
     private MegaSpell[] megaSpells = new MegaSpell[6];
 
-    private Minion[] minions = new Minion[10];
+    private Minion[] minions = new Minion[100];
 
     private Bomb[] bombs = new Bomb[10];
 

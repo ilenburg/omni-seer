@@ -34,7 +34,7 @@ public class ShadowLord {
 
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates);
 
-        active = false;
+        active = true;
     }
 
     public Sprite getSprite() {

@@ -9,6 +9,7 @@ import android.opengl.Matrix;
 public class RigidBody {
 
     private static final float POSITION_RATIO = 1000.0f;
+    private static final Vector2 RESULT_AUX = new Vector2();
 
     private final float mass;
 
@@ -87,7 +88,8 @@ public class RigidBody {
     }
 
     public void applyForce(Vector2 force) {
-        this.acceleration = force.divide(this.mass).add(this.acceleration);
+        Vector2.divide(RESULT_AUX, force, this.mass);
+        Vector2.add(this.acceleration, RESULT_AUX, this.acceleration);
     }
 
     public void setAngle(float angle) {
