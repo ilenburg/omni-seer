@@ -21,11 +21,13 @@ public class Player {
 
     public Player(int shaderProgram, int texture) {
 
+        float radius = 0.12f;
+
         float[] geometry = new float[]{
-                -0.12f, 0.12f,
-                -0.12f, -0.12f,
-                0.12f, -0.12f,
-                0.12f, 0.12f
+                -radius, radius,
+                -radius, -radius,
+                radius, -radius,
+                radius, radius
         };
 
         float[] textureCoordinates = new float[]{
@@ -33,6 +35,13 @@ public class Player {
                 0.0f, 0.5f,
                 0.5f, 0.5f,
                 0.5f, 0.0f
+        };
+
+        float[] jumpCoordinates = new float[]{
+                0.5f, 0.5f,
+                0.5f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.5f
         };
 
         float[][] animationCoordinates = new float[][]{{
@@ -60,7 +69,7 @@ public class Player {
         this.input = new Input();
         this.rigidBody = new RigidBody(1, new Vector2(-1.0f, -0.535f), new Vector2(2.0f, 0.0f));
 
-        Animation animation = new Animation(animationCoordinates, 1.5f, rigidBody);
+        Animation animation = new Animation(animationCoordinates, 1.5f, this.rigidBody, jumpCoordinates, this.input);
 
         ColorTransition colorTransition = new ColorTransition(MAX_RADIANS, this.input);
 
