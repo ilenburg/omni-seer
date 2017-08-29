@@ -6,7 +6,7 @@ uniform float time;
 
 void main() {
 
-    vec2 texPos = vec2(texCoord.x + scroll, texCoord.y);
+    vec2 texPos = vec2(texCoord.x + fract(scroll), texCoord.y);
 
     float variation = abs(sin(time / 100.0f) * 3.0f);
 

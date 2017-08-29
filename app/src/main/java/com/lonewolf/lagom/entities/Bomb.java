@@ -63,7 +63,7 @@ public class Bomb {
 
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates, animation);
 
-        active = true;
+        active = false;
     }
 
     public boolean isActive() {

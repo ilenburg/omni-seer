@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.lonewolf.lagom.entities.AirBomb;
 import com.lonewolf.lagom.entities.Bomb;
+import com.lonewolf.lagom.entities.Egg;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Player;
@@ -43,6 +44,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private final float[] mIdentityMatrix = new float[16];
 
     private float deltaTime = 0.0f;
+    private float cameraPosition;
 
     public GameRenderer(ResourceManager resourceManager, GameEngine gameEngine) {
         this.resourceManager = resourceManager;
@@ -99,6 +101,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 gl) {
 
         deltaTime = gameEngine.getAnimationDeltaTime();
+        cameraPosition = gameEngine.getCameraPosition();
         gameEngine.setAnimationDeltaTime(0.0f);
 
         //Log.v("AnimationDeltaTime", Float.toString(deltaTime));
@@ -132,6 +135,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         for (AirBomb airBomb : resourceManager.getAirBombs()) {
             if (airBomb.isActive()) {
                 draw(airBomb.getSprite(), airBomb.getRigidBody().getModelMatrix());
+            }
+        }
+
+        for (Egg egg : resourceManager.getEggs()) {
+            if (egg.isActive()) {
+                draw(egg.getSprite(), egg.getRigidBody().getModelMatrix());
             }
         }
 
@@ -198,7 +207,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         Scroll scroll = sprite.getScroll();
 
         if (scroll != null) {
-            scroll.setDisplacement(gameEngine.getCameraPositon());
+            scroll.setDisplacement(cameraPosition);
             GLES20.glUniform1f(scroll.getScrollPosition(), scroll.getDisplacement());
         }
 

@@ -2,6 +2,7 @@ package com.lonewolf.lagom.physics;
 
 import com.lonewolf.lagom.entities.AirBomb;
 import com.lonewolf.lagom.entities.Bomb;
+import com.lonewolf.lagom.entities.Egg;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Spell;
@@ -37,7 +38,7 @@ public class GameEngine implements Runnable {
     private float deltaTime;
     private float animationDeltaTime;
 
-    private float cameraPositon;
+    private float cameraPosition;
 
     private ResourceManager resourceManager;
 
@@ -49,8 +50,8 @@ public class GameEngine implements Runnable {
         this.gameState = gameState;
     }
 
-    public float getCameraPositon() {
-        return cameraPositon;
+    public float getCameraPosition() {
+        return cameraPosition;
     }
 
     public float getAnimationDeltaTime() {
@@ -68,7 +69,7 @@ public class GameEngine implements Runnable {
         this.deltaTime = 0.0f;
         this.animationDeltaTime = 0.0f;
 
-        this.cameraPositon = 0.0f;
+        this.cameraPosition = 0.0f;
     }
 
     @Override
@@ -93,6 +94,8 @@ public class GameEngine implements Runnable {
                 updateBombs();
 
                 updateAirBombs();
+
+                updateEggs();
 
                 try {
                     Thread.sleep(20);
@@ -121,6 +124,18 @@ public class GameEngine implements Runnable {
                 airBombRigidBody.setAccelerationY(GRAVITY_ACCELERATION / 3);
 
                 updateRigidBody(airBomb.getRigidBody());
+            }
+        }
+    }
+
+    private void updateEggs() {
+        for (Egg egg : resourceManager.getEggs()) {
+            if (egg.isActive()) {
+                RigidBody bombRigidBody = egg.getRigidBody();
+                if (bombRigidBody.getPosition().getX() < -2.0f) {
+                    bombRigidBody.setPositionX(2.0f + random.nextFloat());
+                }
+                updateRigidBody(egg.getRigidBody());
             }
         }
     }
@@ -272,16 +287,18 @@ public class GameEngine implements Runnable {
             playerInput.setJumpPower(ZERO);
         }
 
-        cameraPositon += playerRigidBody.getVelocity().getX();
-
         Calc.EulerMethod(playerRigidBody.getVelocity(), playerRigidBody.getVelocity(), playerRigidBody.getAcceleration(), deltaTime);
 
         Calc.EulerMethod(RESULT_AUX, playerRigidBody.getPosition(), playerRigidBody.getVelocity(), deltaTime);
 
+        cameraPosition += playerRigidBody.getVelocity().getX() * deltaTime;
+
+        cameraPosition = cameraPosition % 1000;
+
         playerRigidBody.setPositionY(RESULT_AUX.getY());
 
         if (playerRigidBody.getPosition().getY() > GROUND_POSITION) {
-            playerRigidBody.setAccelerationY(playerInput.isInvulnerable() && playerRigidBody.getVelocity().getY() < 0.0f ? GRAVITY_ACCELERATION / 6.0f : GRAVITY_ACCELERATION);
+            playerRigidBody.setAccelerationY(playerInput.isInvulnerable()  ? GRAVITY_ACCELERATION / 2.0f : GRAVITY_ACCELERATION);
         } else {
             playerRigidBody.setAccelerationY(ZERO);
             playerRigidBody.setVelocityY(ZERO);

@@ -142,7 +142,7 @@ public class Sprite {
 
         this.colorTransition = colorTransition;
 
-        if (colorTransition != null) {
+        if (this.colorTransition != null) {
             this.colorTransition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
         }
 

@@ -21,10 +21,7 @@ public class Scroll {
     }
 
     public void setDisplacement(float displacement) {
-        displacement *= ratio;
-        this.displacement = displacement - (long) displacement;
-        //TODO verify cast to long (long)
-
+        this.displacement = displacement * ratio;
     }
 
     public void setScrollPosition(int scrollPosition) {

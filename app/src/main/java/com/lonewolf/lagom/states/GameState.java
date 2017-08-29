@@ -5,5 +5,6 @@ package com.lonewolf.lagom.states;
  */
 
 public enum GameState {
-    RUNNING
+    RUNNING,
+    PAUSED
 }
