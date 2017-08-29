@@ -42,7 +42,7 @@ public class AirBomb {
 
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates, colorTransition);
 
-        active = false;
+        active = true;
     }
 
     public boolean isActive() {

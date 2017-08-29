@@ -21,7 +21,7 @@ public class Egg {
 
     public Egg(int shaderProgram, int texture) {
 
-        float radius = 0.3f;
+        float radius = 0.15f;
 
         float[] geometry = new float[]{
                 -radius, radius,
@@ -37,11 +37,13 @@ public class Egg {
                 1.0f, 0.0f
         };
 
-        this.rigidBody = new RigidBody(1, new Vector2(2.0f + (random.nextFloat() * 2), -0.38f), new Vector2(-0.19f, 0.0f));
+        this.rigidBody = new RigidBody(1, new Vector2(2.0f + (random.nextFloat() * 2), -0.53f), new Vector2(-2.00f, 0.0f));
+
+        this.rigidBody.addAngle(90);
 
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates);
 
-        active = false;
+        active = true;
     }
 
     public boolean isActive() {

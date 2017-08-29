@@ -150,7 +150,7 @@ public class ResourceManager {
 
         size = airBombs.length;
         for (i = 0; i < size; ++i) {
-            airBombs[i] = new AirBomb(shaderPrograms[5], textures[10]);
+            airBombs[i] = new AirBomb(shaderPrograms[0], textures[10]);
         }
 
         size = eggs.length;
