@@ -10,8 +10,6 @@ import android.util.Log;
 import com.lonewolf.lagom.R;
 import com.lonewolf.lagom.entities.AirBomb;
 import com.lonewolf.lagom.entities.Background;
-import com.lonewolf.lagom.entities.Bomb;
-import com.lonewolf.lagom.entities.Egg;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Panorama;
@@ -45,11 +43,7 @@ public class ResourceManager {
 
     private Minion[] minions = new Minion[6];
 
-    private Bomb[] bombs = new Bomb[10];
-
     private AirBomb[] airBombs = new AirBomb[3];
-
-    private Egg[] eggs = new Egg[3];
 
     private Roller[] rollers = new Roller[3];
 
@@ -100,16 +94,8 @@ public class ResourceManager {
         return minions;
     }
 
-    public Bomb[] getBombs() {
-        return bombs;
-    }
-
     public AirBomb[] getAirBombs() {
         return airBombs;
-    }
-
-    public Egg[] getEggs() {
-        return eggs;
     }
 
     public Roller[] getRollers() {
@@ -150,19 +136,9 @@ public class ResourceManager {
             minions[i] = new Minion(shaderPrograms[0], textures[8]);
         }
 
-        size = bombs.length;
-        for (i = 0; i < size; ++i) {
-            bombs[i] = new Bomb(shaderPrograms[0], textures[9]);
-        }
-
         size = airBombs.length;
         for (i = 0; i < size; ++i) {
             airBombs[i] = new AirBomb(shaderPrograms[0], textures[10]);
-        }
-
-        size = eggs.length;
-        for (i = 0; i < size; ++i) {
-            eggs[i] = new Egg(shaderPrograms[0], textures[11]);
         }
 
         size = rollers.length;

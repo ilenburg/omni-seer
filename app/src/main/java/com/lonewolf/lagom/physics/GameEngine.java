@@ -1,8 +1,6 @@
 package com.lonewolf.lagom.physics;
 
 import com.lonewolf.lagom.entities.AirBomb;
-import com.lonewolf.lagom.entities.Bomb;
-import com.lonewolf.lagom.entities.Egg;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Roller;
@@ -92,13 +90,9 @@ public class GameEngine implements Runnable {
 
                 updateMinions();
 
-                updateBombs();
-
                 updateAirBombs();
 
                 updateRollers();
-
-                updateEggs();
 
                 try {
                     Thread.sleep(20);
@@ -142,30 +136,6 @@ public class GameEngine implements Runnable {
                     rollerRigidBody.setPositionX(2.0f + random.nextFloat());
                 }
                 updateRigidBody(roller.getRigidBody());
-            }
-        }
-    }
-
-    private void updateEggs() {
-        for (Egg egg : resourceManager.getEggs()) {
-            if (egg.isActive()) {
-                RigidBody eggRigidBody = egg.getRigidBody();
-                if (eggRigidBody.getPosition().getX() < -2.0f) {
-                    eggRigidBody.setPositionX(2.0f + random.nextFloat());
-                }
-                updateRigidBody(egg.getRigidBody());
-            }
-        }
-    }
-
-    private void updateBombs() {
-        for (Bomb bomb : resourceManager.getBombs()) {
-            if (bomb.isActive()) {
-                RigidBody bombRigidBody = bomb.getRigidBody();
-                if (bombRigidBody.getPosition().getX() < -2.0f) {
-                    bombRigidBody.setPositionX(2.0f + random.nextFloat());
-                }
-                updateRigidBody(bomb.getRigidBody());
             }
         }
     }
