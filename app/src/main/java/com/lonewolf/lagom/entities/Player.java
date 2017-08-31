@@ -21,15 +21,6 @@ public class Player {
 
     public Player(int shaderProgram, int texture) {
 
-        float radius = 0.12f;
-
-        float[] geometry = new float[]{
-                -radius, radius,
-                -radius, -radius,
-                radius, -radius,
-                radius, radius
-        };
-
         float[] textureCoordinates = new float[]{
                 0.0f, 0.0f,
                 0.0f, 0.5f,
@@ -73,7 +64,7 @@ public class Player {
 
         ColorTransition colorTransition = new ColorTransition(MAX_RADIANS, this.input);
 
-        this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates, animation, colorTransition);
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.getSymetricGeometry(0.12f), textureCoordinates, animation, colorTransition);
 
     }
 

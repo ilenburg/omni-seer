@@ -5,6 +5,7 @@ import com.lonewolf.lagom.entities.Bomb;
 import com.lonewolf.lagom.entities.Egg;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
+import com.lonewolf.lagom.entities.Roller;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.resources.ResourceManager;
@@ -95,6 +96,8 @@ public class GameEngine implements Runnable {
 
                 updateAirBombs();
 
+                updateRollers();
+
                 updateEggs();
 
                 try {
@@ -128,12 +131,27 @@ public class GameEngine implements Runnable {
         }
     }
 
+    private void updateRollers() {
+        for (Roller roller : resourceManager.getRollers()) {
+            if (roller.isActive()) {
+                RigidBody rollerRigidBody = roller.getRigidBody();
+
+                rollerRigidBody.addAngle(Math.abs(rollerRigidBody.getVelocity().getX()) * deltaTime * 500);
+
+                if (rollerRigidBody.getPosition().getX() < -2.0f) {
+                    rollerRigidBody.setPositionX(2.0f + random.nextFloat());
+                }
+                updateRigidBody(roller.getRigidBody());
+            }
+        }
+    }
+
     private void updateEggs() {
         for (Egg egg : resourceManager.getEggs()) {
             if (egg.isActive()) {
-                RigidBody bombRigidBody = egg.getRigidBody();
-                if (bombRigidBody.getPosition().getX() < -2.0f) {
-                    bombRigidBody.setPositionX(2.0f + random.nextFloat());
+                RigidBody eggRigidBody = egg.getRigidBody();
+                if (eggRigidBody.getPosition().getX() < -2.0f) {
+                    eggRigidBody.setPositionX(2.0f + random.nextFloat());
                 }
                 updateRigidBody(egg.getRigidBody());
             }
@@ -271,7 +289,7 @@ public class GameEngine implements Runnable {
                     spell.getRigidBody().setPosition(spellPosition);
                     Vector2.multiply(startingVelocity, startingVelocity, 2.0f);
                     spell.getRigidBody().setVelocity(startingVelocity);
-                    float angle = Calc.Angle(startingVelocity, VECTOR_FORWARD);
+                    float angle = CalcUtils.Angle(startingVelocity, VECTOR_FORWARD);
                     spell.getRigidBody().setAngle(angle);
                     spell.setActive(true);
                     break;
@@ -287,9 +305,9 @@ public class GameEngine implements Runnable {
             playerInput.setJumpPower(ZERO);
         }
 
-        Calc.EulerMethod(playerRigidBody.getVelocity(), playerRigidBody.getVelocity(), playerRigidBody.getAcceleration(), deltaTime);
+        CalcUtils.EulerMethod(playerRigidBody.getVelocity(), playerRigidBody.getVelocity(), playerRigidBody.getAcceleration(), deltaTime);
 
-        Calc.EulerMethod(RESULT_AUX, playerRigidBody.getPosition(), playerRigidBody.getVelocity(), deltaTime);
+        CalcUtils.EulerMethod(RESULT_AUX, playerRigidBody.getPosition(), playerRigidBody.getVelocity(), deltaTime);
 
         cameraPosition += playerRigidBody.getVelocity().getX() * deltaTime;
 
@@ -309,8 +327,8 @@ public class GameEngine implements Runnable {
     }
 
     private void updateRigidBody(RigidBody rigidBody) {
-        Calc.EulerMethod(rigidBody.getVelocity(), rigidBody.getVelocity(), rigidBody.getAcceleration(), deltaTime);
-        Calc.EulerMethod(rigidBody.getPosition(), rigidBody.getPosition(), rigidBody.getVelocity(), deltaTime);
+        CalcUtils.EulerMethod(rigidBody.getVelocity(), rigidBody.getVelocity(), rigidBody.getAcceleration(), deltaTime);
+        CalcUtils.EulerMethod(rigidBody.getPosition(), rigidBody.getPosition(), rigidBody.getVelocity(), deltaTime);
     }
 
     private Vector2 getVectorFromPlayer(RigidBody rigidBody) {
@@ -320,7 +338,7 @@ public class GameEngine implements Runnable {
     }
 
     private void lookAtPlayer(RigidBody rigidBody, Vector2 vectorToPlayer) {
-        float angle = Calc.Angle(vectorToPlayer, VECTOR_FORWARD);
+        float angle = CalcUtils.Angle(vectorToPlayer, VECTOR_FORWARD);
         rigidBody.setAngle(angle);
     }
 

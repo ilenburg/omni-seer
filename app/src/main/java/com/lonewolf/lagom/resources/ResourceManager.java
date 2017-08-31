@@ -16,6 +16,7 @@ import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Panorama;
 import com.lonewolf.lagom.entities.Player;
+import com.lonewolf.lagom.entities.Roller;
 import com.lonewolf.lagom.entities.ShadowLord;
 import com.lonewolf.lagom.entities.Spell;
 
@@ -42,13 +43,15 @@ public class ResourceManager {
 
     private MegaSpell[] megaSpells = new MegaSpell[6];
 
-    private Minion[] minions = new Minion[10];
+    private Minion[] minions = new Minion[6];
 
     private Bomb[] bombs = new Bomb[10];
 
-    private AirBomb[] airBombs = new AirBomb[10];
+    private AirBomb[] airBombs = new AirBomb[3];
 
     private Egg[] eggs = new Egg[3];
+
+    private Roller[] rollers = new Roller[3];
 
     private Player player;
     private ShadowLord shadowLord;
@@ -109,6 +112,10 @@ public class ResourceManager {
         return eggs;
     }
 
+    public Roller[] getRollers() {
+        return rollers;
+    }
+
     public void loadResources() {
         initShaders();
         initTextures();
@@ -156,6 +163,11 @@ public class ResourceManager {
         size = eggs.length;
         for (i = 0; i < size; ++i) {
             eggs[i] = new Egg(shaderPrograms[0], textures[11]);
+        }
+
+        size = rollers.length;
+        for (i = 0; i < size; ++i) {
+            rollers[i] = new Roller(shaderPrograms[0], textures[10]);
         }
     }
 

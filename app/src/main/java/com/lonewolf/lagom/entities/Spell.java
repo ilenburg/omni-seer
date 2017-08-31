@@ -18,13 +18,6 @@ public class Spell {
 
     public Spell(int shaderProgram, int texture) {
 
-        float[] geometry = new float[]{
-                -0.08f, 0.08f,
-                -0.08f, -0.08f,
-                0.08f, -0.08f,
-                0.08f, 0.08f
-        };
-
         float[] textureCoordinates = new float[]{
                 0.0f, 0.0f,
                 0.0f, 0.5f,
@@ -60,7 +53,7 @@ public class Spell {
 
         ColorTransition colorTransition = new ColorTransition(5.0f);
 
-        this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates, animation, colorTransition);
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.getSymetricGeometry(0.08f), textureCoordinates, animation, colorTransition);
         this.active = false;
     }
 

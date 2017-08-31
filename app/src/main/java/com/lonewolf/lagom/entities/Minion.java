@@ -21,13 +21,6 @@ public class Minion {
 
     public Minion(int shaderProgram, int texture) {
 
-        float[] geometry = new float[]{
-                -0.06f, 0.06f,
-                -0.06f, -0.06f,
-                0.06f, -0.06f,
-                0.06f, 0.06f
-        };
-
         float[] textureCoordinates = new float[]{
                 0.0f, 0.0f,
                 0.0f, 1.0f,
@@ -37,7 +30,7 @@ public class Minion {
 
         this.rigidBody = new RigidBody(1, new Vector2((random.nextFloat() * 2) + 1, random.nextFloat() - 0.5f), new Vector2(-0.2f, 0.0f));
 
-        this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates);
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.getSymetricGeometry(0.06f), textureCoordinates);
 
         active = true;
         aggressive = false;

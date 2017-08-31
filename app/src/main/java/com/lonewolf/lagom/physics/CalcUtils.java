@@ -4,12 +4,12 @@ package com.lonewolf.lagom.physics;
  * Created by Ian on 12/02/2017.
  */
 
-public final class Calc {
+public final class CalcUtils {
 
     private static final float RADIAN_ANGLE = 57.2958f;
     private static final Vector2 RESULT_AUX = new Vector2();
 
-    private Calc() {
+    private CalcUtils() {
 
     }
 

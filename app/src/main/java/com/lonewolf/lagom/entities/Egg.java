@@ -43,7 +43,7 @@ public class Egg {
 
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates);
 
-        active = true;
+        active = false;
     }
 
     public boolean isActive() {

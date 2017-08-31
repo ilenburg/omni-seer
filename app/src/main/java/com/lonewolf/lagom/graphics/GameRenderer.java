@@ -11,6 +11,7 @@ import com.lonewolf.lagom.entities.Egg;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Player;
+import com.lonewolf.lagom.entities.Roller;
 import com.lonewolf.lagom.entities.ShadowLord;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.modules.Sprite;
@@ -147,6 +148,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         for (Minion minion : resourceManager.getMinions()) {
             if (minion.isActive()) {
                 draw(minion.getSprite(), minion.getRigidBody().getModelMatrix());
+            }
+        }
+
+        for(Roller roller : resourceManager.getRollers()) {
+            if(roller.isActive()) {
+                draw(roller.getSprite(), roller.getRigidBody().getModelMatrix());
             }
         }
 

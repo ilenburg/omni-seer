@@ -18,13 +18,6 @@ public class MegaSpell {
 
     public MegaSpell(int shaderProgram, int texture) {
 
-        float[] geometry = new float[]{
-                -0.2f, 0.2f,
-                -0.2f, -0.2f,
-                0.2f, -0.2f,
-                0.2f, 0.2f
-        };
-
         float[] textureCoordinates = new float[]{
                 0.0f, 0.0f,
                 0.0f, 0.5f,
@@ -60,7 +53,7 @@ public class MegaSpell {
 
         ColorTransition colorTransition = new ColorTransition(5.0f);
 
-        this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates, animation, colorTransition);
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.getSymetricGeometry(0.2f), textureCoordinates, animation, colorTransition);
         this.active = false;
     }
 
