@@ -16,9 +16,11 @@ public class ShadowLord {
 
     public ShadowLord(int shaderProgram, int texture) {
 
-        this.rigidBody = new RigidBody(10, new Vector2(1.57f, 0.2f), new Vector2(0.0f, 0.1f));
+        float radius = 1.0f;
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.getSymetricGeometry(1.0f), EntityUtils.getFullTexture());
+        this.rigidBody = new RigidBody(10, radius, new Vector2(1.57f, 0.2f), new Vector2(0.0f, 0.1f));
+
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), EntityUtils.GenerateFullTexture());
 
         active = true;
     }

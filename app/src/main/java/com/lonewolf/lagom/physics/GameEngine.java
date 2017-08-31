@@ -218,6 +218,12 @@ public class GameEngine implements Runnable {
             if (spell.isActive()) {
                 spellRigidBody = spell.getRigidBody();
 
+                for (Minion minion : resourceManager.getMinions()) {
+                    if (PhysicsUtils.Collide(spellRigidBody, minion.getRigidBody())) {
+                        spell.setActive(false);
+                    }
+                }
+
                 if (spellRigidBody.getPosition().getY() <= GROUND_POSITION - 0.06f || !spellRigidBody.getPosition().isBounded()) {
                     spell.setActive(false);
                 } else {
@@ -259,7 +265,7 @@ public class GameEngine implements Runnable {
                     spell.getRigidBody().setPosition(spellPosition);
                     Vector2.multiply(startingVelocity, startingVelocity, 2.0f);
                     spell.getRigidBody().setVelocity(startingVelocity);
-                    float angle = CalcUtils.Angle(startingVelocity, VECTOR_FORWARD);
+                    float angle = PhysicsUtils.CalcAngle(startingVelocity, VECTOR_FORWARD);
                     spell.getRigidBody().setAngle(angle);
                     spell.setActive(true);
                     break;
@@ -275,9 +281,9 @@ public class GameEngine implements Runnable {
             playerInput.setJumpPower(ZERO);
         }
 
-        CalcUtils.EulerMethod(playerRigidBody.getVelocity(), playerRigidBody.getVelocity(), playerRigidBody.getAcceleration(), deltaTime);
+        PhysicsUtils.EulerMethod(playerRigidBody.getVelocity(), playerRigidBody.getVelocity(), playerRigidBody.getAcceleration(), deltaTime);
 
-        CalcUtils.EulerMethod(RESULT_AUX, playerRigidBody.getPosition(), playerRigidBody.getVelocity(), deltaTime);
+        PhysicsUtils.EulerMethod(RESULT_AUX, playerRigidBody.getPosition(), playerRigidBody.getVelocity(), deltaTime);
 
         cameraPosition += playerRigidBody.getVelocity().getX() * deltaTime;
 
@@ -286,7 +292,7 @@ public class GameEngine implements Runnable {
         playerRigidBody.setPositionY(RESULT_AUX.getY());
 
         if (playerRigidBody.getPosition().getY() > GROUND_POSITION) {
-            playerRigidBody.setAccelerationY(playerInput.isInvulnerable()  ? GRAVITY_ACCELERATION / 2.0f : GRAVITY_ACCELERATION);
+            playerRigidBody.setAccelerationY(playerInput.isInvulnerable() ? GRAVITY_ACCELERATION / 2.0f : GRAVITY_ACCELERATION);
         } else {
             playerRigidBody.setAccelerationY(ZERO);
             playerRigidBody.setVelocityY(ZERO);
@@ -297,8 +303,8 @@ public class GameEngine implements Runnable {
     }
 
     private void updateRigidBody(RigidBody rigidBody) {
-        CalcUtils.EulerMethod(rigidBody.getVelocity(), rigidBody.getVelocity(), rigidBody.getAcceleration(), deltaTime);
-        CalcUtils.EulerMethod(rigidBody.getPosition(), rigidBody.getPosition(), rigidBody.getVelocity(), deltaTime);
+        PhysicsUtils.EulerMethod(rigidBody.getVelocity(), rigidBody.getVelocity(), rigidBody.getAcceleration(), deltaTime);
+        PhysicsUtils.EulerMethod(rigidBody.getPosition(), rigidBody.getPosition(), rigidBody.getVelocity(), deltaTime);
     }
 
     private Vector2 getVectorFromPlayer(RigidBody rigidBody) {
@@ -308,7 +314,7 @@ public class GameEngine implements Runnable {
     }
 
     private void lookAtPlayer(RigidBody rigidBody, Vector2 vectorToPlayer) {
-        float angle = CalcUtils.Angle(vectorToPlayer, VECTOR_FORWARD);
+        float angle = PhysicsUtils.CalcAngle(vectorToPlayer, VECTOR_FORWARD);
         rigidBody.setAngle(angle);
     }
 

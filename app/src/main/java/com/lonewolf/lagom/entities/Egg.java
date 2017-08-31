@@ -23,13 +23,6 @@ public class Egg {
 
         float radius = 0.15f;
 
-        float[] geometry = new float[]{
-                -radius, radius,
-                -radius, -radius,
-                radius, -radius,
-                radius, radius
-        };
-
         float[] textureCoordinates = new float[]{
                 0.0f, 0.0f,
                 0.0f, 1.0f,
@@ -37,11 +30,11 @@ public class Egg {
                 1.0f, 0.0f
         };
 
-        this.rigidBody = new RigidBody(1, new Vector2(2.0f + (random.nextFloat() * 2), -0.53f), new Vector2(-2.00f, 0.0f));
+        this.rigidBody = new RigidBody(1, radius, new Vector2(2.0f + (random.nextFloat() * 2), -0.53f), new Vector2(-2.00f, 0.0f));
 
         this.rigidBody.addAngle(90);
 
-        this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates);
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), textureCoordinates);
 
         active = false;
     }

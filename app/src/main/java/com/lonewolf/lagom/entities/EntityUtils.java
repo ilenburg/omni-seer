@@ -10,7 +10,7 @@ public final class EntityUtils {
 
     }
 
-    public static float[] getSymetricGeometry(float radius) {
+    public static float[] GenerateSymetricGeometry(float radius) {
         return new float[]{
                 -radius, radius,
                 -radius, -radius,
@@ -19,7 +19,7 @@ public final class EntityUtils {
         };
     }
 
-    public static float[] getFullTexture() {
+    public static float[] GenerateFullTexture() {
         return new float[]{
                 0.0f, 0.0f,
                 0.0f, 1.0f,

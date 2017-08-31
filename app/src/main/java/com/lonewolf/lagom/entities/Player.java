@@ -57,14 +57,16 @@ public class Player {
                 0.5f, 0.5f
         }};
 
+        float radius = 0.12f;
+
         this.input = new Input();
-        this.rigidBody = new RigidBody(1, new Vector2(-1.0f, -0.535f), new Vector2(2.0f, 0.0f));
+        this.rigidBody = new RigidBody(1, radius, new Vector2(-1.0f, -0.535f), new Vector2(2.0f, 0.0f));
 
         Animation animation = new Animation(animationCoordinates, 1.5f, this.rigidBody, jumpCoordinates, this.input);
 
         ColorTransition colorTransition = new ColorTransition(MAX_RADIANS, this.input);
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.getSymetricGeometry(0.12f), textureCoordinates, animation, colorTransition);
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), textureCoordinates, animation, colorTransition);
 
     }
 

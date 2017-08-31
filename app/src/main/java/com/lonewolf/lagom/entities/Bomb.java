@@ -57,9 +57,12 @@ public class Bomb {
                 0.5f, 1.0f,
                 0.5f, 0.5f
         }};
-        this.rigidBody = new RigidBody(1, new Vector2(2.0f + (random.nextFloat() * 2), -0.51f), new Vector2(-0.5f, 0.0f));
 
-        Animation animation = new Animation(animationCoordinates, 0.25f, rigidBody);
+        float radius = 0.25f;
+
+        this.rigidBody = new RigidBody(1, radius, new Vector2(2.0f + (random.nextFloat() * 2), -0.51f), new Vector2(-0.5f, 0.0f));
+
+        Animation animation = new Animation(animationCoordinates, radius, rigidBody);
 
         this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates, animation);
 

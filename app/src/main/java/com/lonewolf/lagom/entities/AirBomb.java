@@ -22,11 +22,13 @@ public class AirBomb {
 
     public AirBomb(int shaderProgram, int texture) {
 
-        this.rigidBody = new RigidBody(1, new Vector2(2.0f + (random.nextFloat() * 2), -0.51f), new Vector2(-0.5f, 0.0f));
+        float radius = 0.1f;
+
+        this.rigidBody = new RigidBody(1, radius, new Vector2(2.0f + (random.nextFloat() * 2), -0.51f), new Vector2(-0.5f, 0.0f));
 
         ColorTransition colorTransition = new ColorTransition(10.0f);
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.getSymetricGeometry(0.1f), EntityUtils.getFullTexture(), colorTransition);
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), EntityUtils.GenerateFullTexture(), colorTransition);
 
         active = true;
     }

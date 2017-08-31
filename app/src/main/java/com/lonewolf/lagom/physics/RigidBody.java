@@ -8,10 +8,10 @@ import android.opengl.Matrix;
 
 public class RigidBody {
 
-    private static final float POSITION_RATIO = 1000.0f;
     private static final Vector2 RESULT_AUX = new Vector2();
 
     private final float mass;
+    private final float radius;
 
     private float angle;
 
@@ -21,21 +21,26 @@ public class RigidBody {
 
     private final float[] mModelMatrix;
 
-    public RigidBody(float mass) {
-        this(mass, new Vector2());
+    public RigidBody(float mass, float radius) {
+        this(mass, radius, new Vector2());
     }
 
-    public RigidBody(float mass, Vector2 position) {
-        this(mass, position, new Vector2());
+    public RigidBody(float mass, float radius, Vector2 position) {
+        this(mass, radius, position, new Vector2());
     }
 
-    public RigidBody(float mass, Vector2 position, Vector2 velocity) {
+    public RigidBody(float mass, float radius, Vector2 position, Vector2 velocity) {
         this.mass = mass;
+        this.radius = radius;
         this.angle = 0.0f;
         this.position = position;
         this.velocity = velocity;
         this.acceleration = new Vector2();
         this.mModelMatrix = new float[16];
+    }
+
+    public float getRadius() {
+        return radius;
     }
 
     public Vector2 getPosition() {

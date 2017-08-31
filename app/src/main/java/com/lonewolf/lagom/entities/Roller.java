@@ -21,9 +21,11 @@ public class Roller {
 
     public Roller(int shaderProgram, int texture) {
 
-        this.rigidBody = new RigidBody(1, new Vector2(2.0f + (random.nextFloat() * 2), -0.49f), new Vector2(-1.5f, 0.0f));
+        float radius = 0.15f;
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.getSymetricGeometry(0.15f), EntityUtils.getFullTexture());
+        this.rigidBody = new RigidBody(1, radius, new Vector2(2.0f + (random.nextFloat() * 2), -0.49f), new Vector2(-1.5f, 0.0f));
+
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), EntityUtils.GenerateFullTexture());
 
         active = true;
     }

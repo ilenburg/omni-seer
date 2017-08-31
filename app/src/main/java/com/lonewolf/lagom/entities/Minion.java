@@ -28,9 +28,11 @@ public class Minion {
                 1.0f, 0.0f
         };
 
-        this.rigidBody = new RigidBody(1, new Vector2((random.nextFloat() * 2) + 1, random.nextFloat() - 0.5f), new Vector2(-0.2f, 0.0f));
+        float radius = 0.06f;
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.getSymetricGeometry(0.06f), textureCoordinates);
+        this.rigidBody = new RigidBody(1, radius, new Vector2((random.nextFloat() * 2) + 1, random.nextFloat() - 0.5f), new Vector2(-0.2f, 0.0f));
+
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), textureCoordinates);
 
         active = true;
         aggressive = false;
