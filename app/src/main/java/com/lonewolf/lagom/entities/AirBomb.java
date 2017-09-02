@@ -30,7 +30,7 @@ public class AirBomb {
 
         this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), EntityUtils.GenerateFullTexture(), colorTransition);
 
-        active = true;
+        active = false;
     }
 
     public boolean isActive() {

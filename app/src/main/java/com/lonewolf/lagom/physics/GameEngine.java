@@ -11,6 +11,8 @@ import com.lonewolf.lagom.states.GameState;
 
 import java.util.Random;
 
+import static com.lonewolf.lagom.physics.PhysicsUtils.CollisionResponse;
+
 /**
  * Created by Ian on 28/01/2017.
  */
@@ -22,7 +24,8 @@ public class GameEngine implements Runnable {
     private static final float GROUND_POSITION = -0.535f;
 
     private static final Vector2 VECTOR_FORWARD = new Vector2(1.0f, ZERO);
-    private static final Vector2 VECTOR_UP = new Vector2(ZERO, -1.0f);
+    private static final Vector2 VECTOR_BACK = new Vector2(-1.0f, ZERO);
+    private static final Vector2 VECTOR_DOWN = new Vector2(ZERO, -1.0f);
     private static final Vector2 SPELL_BASE_VELOCITY = new Vector2(2.0f, ZERO);
     private static final Vector2 SPELL_DISPLACEMENT = new Vector2(0.03f, -0.03f);
 
@@ -161,16 +164,13 @@ public class GameEngine implements Runnable {
                     minionRigidBody.setAcceleration(vectorFromPlayer);
                 }
 
-                if (minionRigidBody.getPosition().getY() <= GROUND_POSITION - 0.03f) {
+                if (minionRigidBody.getPosition().getY() < GROUND_POSITION - minionRigidBody.getRadius()) {
+                    minionRigidBody.setPositionY(GROUND_POSITION - minionRigidBody.getRadius());
                     minionRigidBody.setVelocityY(0.5f);
                 }
 
                 if (minionRigidBody.getPosition().getX() < -1.0f) {
                     minionRigidBody.applyForce(VECTOR_FORWARD);
-                }
-
-                if (minionRigidBody.getPosition().getY() > 1.0f) {
-                    minionRigidBody.applyForce(VECTOR_UP);
                 }
 
                 updateRigidBody(minionRigidBody);
@@ -220,7 +220,21 @@ public class GameEngine implements Runnable {
 
                 for (Minion minion : resourceManager.getMinions()) {
                     if (PhysicsUtils.Collide(spellRigidBody, minion.getRigidBody())) {
+                        CollisionResponse(spellRigidBody, minion.getRigidBody());
                         spell.setActive(false);
+                        minion.setAggressive(true);
+                    }
+                }
+
+                for (Roller roller : resourceManager.getRollers()) {
+                    if (PhysicsUtils.Collide(spellRigidBody, roller.getRigidBody())) {
+
+                    }
+                }
+
+                for (AirBomb airBomb : resourceManager.getAirBombs()) {
+                    if (PhysicsUtils.Collide(spellRigidBody, airBomb.getRigidBody())) {
+
                     }
                 }
 

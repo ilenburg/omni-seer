@@ -56,6 +56,10 @@ public class RigidBody {
         this.position.setY(y);
     }
 
+    public float getMass() {
+        return mass;
+    }
+
     public void setPositionX(float x) {
         setPosition(x, this.position.getY());
     }
@@ -86,6 +90,11 @@ public class RigidBody {
 
     public void setVelocityY(float velocityY) {
         this.velocity.setY(velocityY);
+    }
+
+    public void setVelocityValue(Vector2 velocity) {
+        this.velocity.setX(velocity.getX());
+        this.velocity.setY(velocity.getY());
     }
 
     public void setPositionY(float positionY) {

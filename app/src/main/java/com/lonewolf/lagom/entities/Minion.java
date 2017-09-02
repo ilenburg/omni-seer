@@ -30,7 +30,7 @@ public class Minion {
 
         float radius = 0.06f;
 
-        this.rigidBody = new RigidBody(1, radius, new Vector2((random.nextFloat() * 2) + 1, random.nextFloat() - 0.5f), new Vector2(-0.2f, 0.0f));
+        this.rigidBody = new RigidBody(0.5f, radius / 2, new Vector2((random.nextFloat() * 2) + 1, random.nextFloat() - 0.5f), new Vector2(-0.2f, 0.0f));
 
         this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), textureCoordinates);
 

@@ -49,7 +49,7 @@ public class Spell {
 
         float radius = 0.08f;
 
-        this.rigidBody = new RigidBody(0.5f, radius, new Vector2(-1.0f, -0.535f), new Vector2(0.0f, 0.0f));
+        this.rigidBody = new RigidBody(0.1f, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2(0.0f, 0.0f));
 
         Animation animation = new Animation(animationCoordinates, 1.0f);
 
