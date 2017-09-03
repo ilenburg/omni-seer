@@ -1,7 +1,7 @@
 package com.lonewolf.lagom.modules.effects;
 
 import com.lonewolf.lagom.modules.Input;
-import com.lonewolf.lagom.physics.RigidBody;
+import com.lonewolf.lagom.modules.RigidBody;
 
 import java.nio.FloatBuffer;
 import java.util.Random;

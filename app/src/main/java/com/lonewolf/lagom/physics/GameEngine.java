@@ -6,6 +6,7 @@ import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Roller;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.modules.Input;
+import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.states.GameState;
 
@@ -223,6 +224,7 @@ public class GameEngine implements Runnable {
                         CollisionResponse(spellRigidBody, minion.getRigidBody());
                         spell.setActive(false);
                         minion.setAggressive(true);
+                        minion.getStats().dealDamage(1);
                     }
                 }
 

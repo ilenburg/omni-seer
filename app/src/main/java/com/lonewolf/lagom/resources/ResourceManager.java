@@ -133,7 +133,7 @@ public class ResourceManager {
 
         size = minions.length;
         for (i = 0; i < size; ++i) {
-            minions[i] = new Minion(shaderPrograms[0], textures[8]);
+            minions[i] = new Minion(shaderPrograms[6], textures[8]);
         }
 
         size = airBombs.length;
@@ -156,6 +156,7 @@ public class ResourceManager {
         String colorTransitionFragmentShader = null;
         String hueTransitionFragmentShader = null;
         String colorSwapFragmentShader = null;
+        String damageFragmentShader = null;
 
         try {
             vertexShader = getShaderCode(R.raw.base_vert);
@@ -165,6 +166,7 @@ public class ResourceManager {
             colorTransitionFragmentShader = getShaderCode(R.raw.color_transition_base_frag);
             hueTransitionFragmentShader = getShaderCode(R.raw.hue_transition_base_frag);
             colorSwapFragmentShader = getShaderCode(R.raw.color_swap_base_frag);
+            damageFragmentShader = getShaderCode(R.raw.damage_frag);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -175,6 +177,7 @@ public class ResourceManager {
         shaderPrograms[3] = generateShaderProgram(vertexShader, colorTransitionFragmentShader);
         shaderPrograms[4] = generateShaderProgram(vertexShader, colorSwapFragmentShader);
         shaderPrograms[5] = generateShaderProgram(vertexShader, hueTransitionFragmentShader);
+        shaderPrograms[6] = generateShaderProgram(vertexShader, damageFragmentShader);
     }
 
     private void initTextures() {

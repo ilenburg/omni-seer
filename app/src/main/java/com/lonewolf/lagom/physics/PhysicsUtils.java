@@ -1,5 +1,7 @@
 package com.lonewolf.lagom.physics;
 
+import com.lonewolf.lagom.modules.RigidBody;
+
 import static com.lonewolf.lagom.physics.Vector2.dotProduct;
 
 /**

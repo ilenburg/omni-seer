@@ -1,7 +1,7 @@
 package com.lonewolf.lagom.entities;
 
 import com.lonewolf.lagom.modules.Sprite;
-import com.lonewolf.lagom.physics.RigidBody;
+import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.physics.Vector2;
 
 import java.util.Random;

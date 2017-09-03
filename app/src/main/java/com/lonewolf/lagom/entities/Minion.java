@@ -1,7 +1,8 @@
 package com.lonewolf.lagom.entities;
 
 import com.lonewolf.lagom.modules.Sprite;
-import com.lonewolf.lagom.physics.RigidBody;
+import com.lonewolf.lagom.modules.RigidBody;
+import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.physics.Vector2;
 
 import java.util.Random;
@@ -16,6 +17,7 @@ public class Minion {
 
     private final Sprite sprite;
     private final RigidBody rigidBody;
+    private final Stats stats;
     private boolean active;
     private boolean aggressive;
 
@@ -32,10 +34,16 @@ public class Minion {
 
         this.rigidBody = new RigidBody(0.5f, radius / 2, new Vector2((random.nextFloat() * 2) + 1, random.nextFloat() - 0.5f), new Vector2(-0.2f, 0.0f));
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), textureCoordinates);
+        this.stats = new Stats(5);
+
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), textureCoordinates, stats);
 
         active = true;
         aggressive = false;
+    }
+
+    public Stats getStats() {
+        return stats;
     }
 
     public Sprite getSprite() {

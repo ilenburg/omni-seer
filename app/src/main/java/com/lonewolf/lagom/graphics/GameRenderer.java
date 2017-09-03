@@ -13,6 +13,7 @@ import com.lonewolf.lagom.entities.Roller;
 import com.lonewolf.lagom.entities.ShadowLord;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.modules.Sprite;
+import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.modules.effects.Animation;
 import com.lonewolf.lagom.modules.effects.ColorTransition;
 import com.lonewolf.lagom.modules.effects.Scroll;
@@ -103,8 +104,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         cameraPosition = gameEngine.getCameraPosition();
         gameEngine.setAnimationDeltaTime(0.0f);
 
-        //Log.v("AnimationDeltaTime", Float.toString(deltaTime));
-
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
         draw(resourceManager.getBackground().getSprite());
@@ -137,8 +136,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         }
 
-        for(Roller roller : resourceManager.getRollers()) {
-            if(roller.isActive()) {
+        for (Roller roller : resourceManager.getRollers()) {
+            if (roller.isActive()) {
                 draw(roller.getSprite(), roller.getRigidBody().getModelMatrix());
             }
         }
@@ -154,8 +153,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         draw(player.getSprite(), player.getRigidBody().getModelMatrix());
 
         draw(resourceManager.getForeground().getSprite());
-
-        //checkGlError("Draw");
 
     }
 
@@ -208,6 +205,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         if (animation != null) {
             sprite.getAnimation().update(deltaTime);
+        }
+
+        Stats stats = sprite.getStats();
+
+        if (stats != null) {
+            GLES20.glUniform1f(sprite.getDamagePosition(), stats.getDamageLevel() / 2);
         }
 
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, sprite.getDrawOrder().length, GLES20.GL_UNSIGNED_SHORT, sprite.getOrderBuffer());

@@ -31,6 +31,7 @@ public class Sprite {
     private final int vertexPosition;
     private final int texturePosition;
     private final int uniformMVPMatrixPosition;
+    private final int damagePosition;
 
     private final Scroll scroll;
 
@@ -39,6 +40,99 @@ public class Sprite {
     private final TextureTransition textureTransition;
 
     private final ColorTransition colorTransition;
+
+    private final Stats stats;
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, TextureTransition textureTransition) {
+        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, textureTransition, null, null);
+    }
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Animation animation, ColorTransition colorTransition) {
+        this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null, colorTransition, null);
+    }
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Stats stats) {
+        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null, stats);
+    }
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates) {
+        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null, null);
+    }
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, ColorTransition colorTransition) {
+        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, colorTransition, null);
+    }
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll) {
+        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, null, null, null);
+    }
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Animation animation) {
+        this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null, null, null);
+    }
+
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, Animation animation, TextureTransition textureTransition, ColorTransition colorTransition, Stats stats) {
+
+        this.shaderProgram = shaderProgram;
+        this.texture = texture;
+
+        this.uniformMVPMatrixPosition = GLES20.glGetUniformLocation(shaderProgram, "uMVPMatrix");
+
+        this.vertexPosition = GLES20.glGetAttribLocation(shaderProgram, "vPosition");
+
+        this.texturePosition = GLES20.glGetAttribLocation(shaderProgram, "texCoordIn");
+
+        this.scroll = scroll;
+
+        if (this.scroll != null) {
+            this.scroll.setScrollPosition(GLES20.glGetUniformLocation(shaderProgram, "scroll"));
+        }
+
+        this.textureTransition = textureTransition;
+
+        if (this.textureTransition != null) {
+            this.textureTransition.setTexturePosition(GLES20.glGetUniformLocation(shaderProgram, "tex2"));
+            this.textureTransition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
+        }
+
+        this.colorTransition = colorTransition;
+
+        if (this.colorTransition != null) {
+            this.colorTransition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
+        }
+
+        this.stats = stats;
+
+        if (this.stats != null) {
+            this.damagePosition = GLES20.glGetUniformLocation(shaderProgram, "damage");
+        } else {
+            this.damagePosition = 0;
+        }
+
+        ByteBuffer bb = ByteBuffer.allocateDirect(geometry.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        vertexBuffer = bb.asFloatBuffer();
+        vertexBuffer.put(geometry);
+        vertexBuffer.rewind();
+
+        bb = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        textureBuffer = bb.asFloatBuffer();
+        textureBuffer.put(textureCoordinates);
+        textureBuffer.rewind();
+
+        ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
+        dlb.order(ByteOrder.nativeOrder());
+        orderBuffer = dlb.asShortBuffer();
+        orderBuffer.put(drawOrder);
+        orderBuffer.rewind();
+
+        this.animation = animation;
+
+        if (this.animation != null) {
+            this.animation.setTextureBuffer(textureBuffer);
+        }
+    }
 
     public static short[] getDrawOrder() {
         return drawOrder;
@@ -92,83 +186,12 @@ public class Sprite {
         return colorTransition;
     }
 
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, TextureTransition textureTransition) {
-        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, textureTransition, null);
+    public Stats getStats() {
+        return stats;
     }
 
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Animation animation, ColorTransition colorTransition) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null, colorTransition);
-    }
-
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null);
-    }
-
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, ColorTransition colorTransition) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, colorTransition);
-    }
-
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll) {
-        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, null, null);
-    }
-
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Animation animation) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null, null);
-    }
-
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, Animation animation, TextureTransition textureTransition, ColorTransition colorTransition) {
-
-        this.shaderProgram = shaderProgram;
-        this.texture = texture;
-
-        this.uniformMVPMatrixPosition = GLES20.glGetUniformLocation(shaderProgram, "uMVPMatrix");
-
-        this.vertexPosition = GLES20.glGetAttribLocation(shaderProgram, "vPosition");
-
-        this.texturePosition = GLES20.glGetAttribLocation(shaderProgram, "texCoordIn");
-
-        this.scroll = scroll;
-
-        if (this.scroll != null) {
-            this.scroll.setScrollPosition(GLES20.glGetUniformLocation(shaderProgram, "scroll"));
-        }
-
-        this.textureTransition = textureTransition;
-
-        if (this.textureTransition != null) {
-            this.textureTransition.setTexturePosition(GLES20.glGetUniformLocation(shaderProgram, "tex2"));
-            this.textureTransition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
-        }
-
-        this.colorTransition = colorTransition;
-
-        if (this.colorTransition != null) {
-            this.colorTransition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
-        }
-
-        ByteBuffer bb = ByteBuffer.allocateDirect(geometry.length * 4);
-        bb.order(ByteOrder.nativeOrder());
-        vertexBuffer = bb.asFloatBuffer();
-        vertexBuffer.put(geometry);
-        vertexBuffer.rewind();
-
-        bb = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
-        bb.order(ByteOrder.nativeOrder());
-        textureBuffer = bb.asFloatBuffer();
-        textureBuffer.put(textureCoordinates);
-        textureBuffer.rewind();
-
-        ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
-        dlb.order(ByteOrder.nativeOrder());
-        orderBuffer = dlb.asShortBuffer();
-        orderBuffer.put(drawOrder);
-        orderBuffer.rewind();
-
-        this.animation = animation;
-
-        if (this.animation != null) {
-            this.animation.setTextureBuffer(textureBuffer);
-        }
+    public int getDamagePosition() {
+        return damagePosition;
     }
 
 }
