@@ -5,6 +5,7 @@ import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.Roller;
+import com.lonewolf.lagom.entities.ShadowLord;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.modules.RigidBody;
@@ -224,6 +225,14 @@ public class GameEngine implements Runnable {
             if (spell.isActive()) {
                 spellRigidBody = spell.getRigidBody();
 
+                ShadowLord shadowLord = resourceManager.getShadowLord();
+
+                if (shadowLord.isActive()) {
+                    if (PhysicsUtils.Collide(spellRigidBody, shadowLord.getRigidBody())) {
+                        spell.setActive(false);
+                    }
+                }
+
                 for (Minion minion : resourceManager.getMinions()) {
                     if (minion.isActive()) {
                         if (PhysicsUtils.Collide(spellRigidBody, minion.getRigidBody())) {
@@ -282,9 +291,9 @@ public class GameEngine implements Runnable {
 
             for (Roller roller : resourceManager.getRollers()) {
                 if (roller.isActive()) {
-                    if (PhysicsUtils.Collide(playerRigidBody, roller.getRigidBody())) {
+                    /*if (PhysicsUtils.Collide(playerRigidBody, roller.getRigidBody())) {
                         playerDead = true;
-                    }
+                    }*/
                 }
             }
 
@@ -295,6 +304,8 @@ public class GameEngine implements Runnable {
                     }
                 }
             }
+
+            playerDead = false;
 
             if (playerDead) {
                 player.setActive(false);

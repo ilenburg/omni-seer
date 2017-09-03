@@ -25,7 +25,7 @@ public class AirBomb {
 
         float radius = 0.1f;
 
-        this.rigidBody = new RigidBody(1, radius / 2, new Vector2(2.0f + (random.nextFloat() * 2), -0.51f), new Vector2(-0.5f, 0.0f));
+        this.rigidBody = new RigidBody(1, radius / 1.5f, new Vector2(2.0f + (random.nextFloat() * 2), -0.51f), new Vector2(-0.5f, 0.0f));
 
         this.stats = new Stats(12);
 

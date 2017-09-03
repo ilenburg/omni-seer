@@ -25,7 +25,7 @@ public class Roller {
 
         float radius = 0.15f;
 
-        this.rigidBody = new RigidBody(1, radius / 2, new Vector2(2.0f + (random.nextFloat() * 2), -0.49f), new Vector2(-1.5f, 0.0f));
+        this.rigidBody = new RigidBody(1, radius / 1.5f, new Vector2(2.0f + (random.nextFloat() * 2), -0.49f), new Vector2(-1.5f, 0.0f));
 
         this.stats = new Stats(20);
 
