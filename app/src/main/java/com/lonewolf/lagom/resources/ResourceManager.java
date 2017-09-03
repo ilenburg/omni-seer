@@ -43,9 +43,9 @@ public class ResourceManager {
 
     private Minion[] minions = new Minion[6];
 
-    private AirBomb[] airBombs = new AirBomb[3];
+    private AirBomb[] airBombs = new AirBomb[1];
 
-    private Roller[] rollers = new Roller[3];
+    private Roller[] rollers = new Roller[1];
 
     private Player player;
     private ShadowLord shadowLord;
@@ -138,12 +138,12 @@ public class ResourceManager {
 
         size = airBombs.length;
         for (i = 0; i < size; ++i) {
-            airBombs[i] = new AirBomb(shaderPrograms[0], textures[10]);
+            airBombs[i] = new AirBomb(shaderPrograms[6], textures[10]);
         }
 
         size = rollers.length;
         for (i = 0; i < size; ++i) {
-            rollers[i] = new Roller(shaderPrograms[0], textures[10]);
+            rollers[i] = new Roller(shaderPrograms[6], textures[10]);
         }
     }
 

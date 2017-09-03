@@ -19,6 +19,8 @@ public class Player {
     private final RigidBody rigidBody;
     private final Input input;
 
+    private boolean active;
+
     public Player(int shaderProgram, int texture) {
 
         float[] textureCoordinates = new float[]{
@@ -60,7 +62,7 @@ public class Player {
         float radius = 0.12f;
 
         this.input = new Input();
-        this.rigidBody = new RigidBody(1, radius, new Vector2(-1.0f, -0.535f), new Vector2(2.0f, 0.0f));
+        this.rigidBody = new RigidBody(1, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2(2.0f, 0.0f));
 
         Animation animation = new Animation(animationCoordinates, 1.5f, this.rigidBody, jumpCoordinates, this.input);
 
@@ -68,6 +70,7 @@ public class Player {
 
         this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), textureCoordinates, animation, colorTransition);
 
+        active = true;
     }
 
     public Sprite getSprite() {
@@ -80,5 +83,13 @@ public class Player {
 
     public Input getInput() {
         return input;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

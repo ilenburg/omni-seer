@@ -3,6 +3,7 @@ package com.lonewolf.lagom.physics;
 import com.lonewolf.lagom.entities.AirBomb;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
+import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.Roller;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.modules.Input;
@@ -26,12 +27,16 @@ public class GameEngine implements Runnable {
 
     private static final Vector2 VECTOR_FORWARD = new Vector2(1.0f, ZERO);
     private static final Vector2 VECTOR_BACK = new Vector2(-1.0f, ZERO);
+    private static final Vector2 VECTOR_UP = new Vector2(ZERO, 1.0f);
     private static final Vector2 VECTOR_DOWN = new Vector2(ZERO, -1.0f);
+    private static final Vector2 VECTOR_GHOST = new Vector2(ZERO, 0.3f);
     private static final Vector2 SPELL_BASE_VELOCITY = new Vector2(2.0f, ZERO);
     private static final Vector2 SPELL_DISPLACEMENT = new Vector2(0.03f, -0.03f);
 
     private static final Vector2 RESULT_AUX = new Vector2();
     private static final Vector2 VECTOR_FROM_PLAYER = new Vector2();
+
+    private static final int SPELL_DAMAGE = 1;
 
     private static final Random random = new Random();
 
@@ -220,23 +225,30 @@ public class GameEngine implements Runnable {
                 spellRigidBody = spell.getRigidBody();
 
                 for (Minion minion : resourceManager.getMinions()) {
-                    if (PhysicsUtils.Collide(spellRigidBody, minion.getRigidBody())) {
-                        CollisionResponse(spellRigidBody, minion.getRigidBody());
-                        spell.setActive(false);
-                        minion.setAggressive(true);
-                        minion.getStats().dealDamage(1);
+                    if (minion.isActive()) {
+                        if (PhysicsUtils.Collide(spellRigidBody, minion.getRigidBody())) {
+                            CollisionResponse(spellRigidBody, minion.getRigidBody());
+                            spell.setActive(false);
+                            minion.setAggressive(true);
+                            minion.getStats().dealDamage(SPELL_DAMAGE);
+                            if (minion.getStats().isDead()) {
+                                minion.setActive(false);
+                            }
+                        }
                     }
                 }
 
                 for (Roller roller : resourceManager.getRollers()) {
                     if (PhysicsUtils.Collide(spellRigidBody, roller.getRigidBody())) {
-
+                        roller.getStats().dealDamage(SPELL_DAMAGE);
+                        spell.setActive(false);
                     }
                 }
 
                 for (AirBomb airBomb : resourceManager.getAirBombs()) {
                     if (PhysicsUtils.Collide(spellRigidBody, airBomb.getRigidBody())) {
-
+                        airBomb.getStats().dealDamage(SPELL_DAMAGE);
+                        spell.setActive(false);
                     }
                 }
 
@@ -252,70 +264,111 @@ public class GameEngine implements Runnable {
 
     private void updatePlayer() {
 
-        RigidBody playerRigidBody = resourceManager.getPlayer().getRigidBody();
-        Input playerInput = resourceManager.getPlayer().getInput();
+        Player player = resourceManager.getPlayer();
+        RigidBody playerRigidBody = player.getRigidBody();
+        Input playerInput = player.getInput();
 
-        playerInput.update(deltaTime);
+        if (!playerInput.isInvulnerable()) {
 
-        if (playerInput.isMegaSpell()) {
-            for (MegaSpell megaSpell : resourceManager.getMegaSpells()) {
-                if (!megaSpell.isActive()) {
-                    Vector2 startingPosition = playerRigidBody.getPosition();
-                    megaSpell.getRigidBody().setPosition(startingPosition.getX() + 0.1f, startingPosition.getY());
-                    megaSpell.getRigidBody().setVelocity(SPELL_BASE_VELOCITY);
-                    megaSpell.setActive(true);
-                    playerInput.setMegaSpell(false);
-                    break;
+            boolean playerDead = false;
+
+            for (Minion minion : resourceManager.getMinions()) {
+                if (minion.isActive()) {
+                    if (PhysicsUtils.Collide(playerRigidBody, minion.getRigidBody())) {
+                        playerDead = true;
+                    }
                 }
             }
-        }
 
-        if (!playerInput.getSpellTarget().isZero()) {
-            Vector2 startingVelocity = playerInput.getSpellTarget().copy();
-            Vector2.sub(startingVelocity, startingVelocity, playerRigidBody.getPosition());
-            Vector2.normalize(startingVelocity, startingVelocity);
-            for (Spell spell : resourceManager.getActiveSpells()) {
-                if (!spell.isActive()) {
-                    Vector2 spellPosition = playerRigidBody.getPosition().copy();
-                    Vector2.add(spellPosition, spellPosition, SPELL_DISPLACEMENT);
-                    spell.getRigidBody().setPosition(spellPosition);
-                    Vector2.multiply(startingVelocity, startingVelocity, 2.0f);
-                    spell.getRigidBody().setVelocity(startingVelocity);
-                    float angle = PhysicsUtils.CalcAngle(startingVelocity, VECTOR_FORWARD);
-                    spell.getRigidBody().setAngle(angle);
-                    spell.setActive(true);
-                    break;
+            for (Roller roller : resourceManager.getRollers()) {
+                if (roller.isActive()) {
+                    if (PhysicsUtils.Collide(playerRigidBody, roller.getRigidBody())) {
+                        playerDead = true;
+                    }
                 }
             }
-            playerInput.getSpellTarget().setZero();
+
+            for (AirBomb airBomb : resourceManager.getAirBombs()) {
+                if (airBomb.isActive()) {
+                    if (PhysicsUtils.Collide(playerRigidBody, airBomb.getRigidBody())) {
+                        playerDead = true;
+                    }
+                }
+            }
+
+            if (playerDead) {
+                player.setActive(false);
+                //playerInput.setInvulnerable(true);
+                //playerRigidBody.setVelocityValue(VECTOR_GHOST);
+            }
+
         }
 
-        float playerJumpPower = playerInput.getJumpPower();
+        if (player.isActive()) {
 
-        if (playerJumpPower != ZERO) {
-            playerRigidBody.setVelocityY(playerJumpPower);
-            playerInput.setJumpPower(ZERO);
+            playerInput.update(deltaTime);
+
+            if (playerInput.isMegaSpell()) {
+                for (MegaSpell megaSpell : resourceManager.getMegaSpells()) {
+                    if (!megaSpell.isActive()) {
+                        Vector2 startingPosition = playerRigidBody.getPosition();
+                        megaSpell.getRigidBody().setPosition(startingPosition.getX() + 0.1f, startingPosition.getY());
+                        megaSpell.getRigidBody().setVelocity(SPELL_BASE_VELOCITY);
+                        megaSpell.setActive(true);
+                        playerInput.setMegaSpell(false);
+                        break;
+                    }
+                }
+            }
+
+            if (!playerInput.getSpellTarget().isZero()) {
+                Vector2 startingVelocity = playerInput.getSpellTarget().copy();
+                Vector2.sub(startingVelocity, startingVelocity, playerRigidBody.getPosition());
+                Vector2.normalize(startingVelocity, startingVelocity);
+                for (Spell spell : resourceManager.getActiveSpells()) {
+                    if (!spell.isActive()) {
+                        Vector2 spellPosition = playerRigidBody.getPosition().copy();
+                        Vector2.add(spellPosition, spellPosition, SPELL_DISPLACEMENT);
+                        spell.getRigidBody().setPosition(spellPosition);
+                        Vector2.multiply(startingVelocity, startingVelocity, 2.0f);
+                        spell.getRigidBody().setVelocity(startingVelocity);
+                        float angle = PhysicsUtils.CalcAngle(startingVelocity, VECTOR_FORWARD);
+                        spell.getRigidBody().setAngle(angle);
+                        spell.setActive(true);
+                        break;
+                    }
+                }
+                playerInput.getSpellTarget().setZero();
+            }
+
+            float playerJumpPower = playerInput.getJumpPower();
+
+            if (playerJumpPower != ZERO) {
+                playerRigidBody.setVelocityY(playerJumpPower);
+                playerInput.setJumpPower(ZERO);
+            }
+
+            updatePlayerPosition(playerRigidBody);
+
+            cameraPosition += playerRigidBody.getVelocity().getX() * deltaTime;
+
+            cameraPosition = cameraPosition % 1000;
+
+            if (playerRigidBody.getPosition().getY() > GROUND_POSITION) {
+                playerRigidBody.setAccelerationY(playerInput.isInvulnerable() ? GRAVITY_ACCELERATION / 2.0f : GRAVITY_ACCELERATION);
+            } else {
+                playerRigidBody.setAccelerationY(ZERO);
+                playerRigidBody.setVelocityY(ZERO);
+                playerRigidBody.setPositionY(GROUND_POSITION);
+                playerInput.setGrounded(true);
+            }
         }
+    }
 
+    private void updatePlayerPosition(RigidBody playerRigidBody) {
         PhysicsUtils.EulerMethod(playerRigidBody.getVelocity(), playerRigidBody.getVelocity(), playerRigidBody.getAcceleration(), deltaTime);
-
         PhysicsUtils.EulerMethod(RESULT_AUX, playerRigidBody.getPosition(), playerRigidBody.getVelocity(), deltaTime);
-
-        cameraPosition += playerRigidBody.getVelocity().getX() * deltaTime;
-
-        cameraPosition = cameraPosition % 1000;
-
         playerRigidBody.setPositionY(RESULT_AUX.getY());
-
-        if (playerRigidBody.getPosition().getY() > GROUND_POSITION) {
-            playerRigidBody.setAccelerationY(playerInput.isInvulnerable() ? GRAVITY_ACCELERATION / 2.0f : GRAVITY_ACCELERATION);
-        } else {
-            playerRigidBody.setAccelerationY(ZERO);
-            playerRigidBody.setVelocityY(ZERO);
-            playerRigidBody.setPositionY(GROUND_POSITION);
-            playerInput.setGrounded(true);
-        }
-
     }
 
     private void updateRigidBody(RigidBody rigidBody) {

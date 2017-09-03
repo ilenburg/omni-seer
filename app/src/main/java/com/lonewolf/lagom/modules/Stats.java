@@ -14,8 +14,8 @@ public class Stats {
         this.hp = maxHp;
     }
 
-    public int getHp() {
-        return hp;
+    public boolean isDead() {
+        return hp <= 0;
     }
 
     public float getDamageLevel() {

@@ -1,7 +1,8 @@
 package com.lonewolf.lagom.entities;
 
-import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.RigidBody;
+import com.lonewolf.lagom.modules.Sprite;
+import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.physics.Vector2;
 
 import java.util.Random;
@@ -16,6 +17,7 @@ public class Roller {
 
     private final Sprite sprite;
     private final RigidBody rigidBody;
+    private final Stats stats;
 
     private boolean active;
 
@@ -25,9 +27,11 @@ public class Roller {
 
         this.rigidBody = new RigidBody(1, radius / 2, new Vector2(2.0f + (random.nextFloat() * 2), -0.49f), new Vector2(-1.5f, 0.0f));
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), EntityUtils.GenerateFullTexture());
+        this.stats = new Stats(20);
 
-        active = false;
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), EntityUtils.GenerateFullTexture(), stats);
+
+        active = true;
     }
 
     public boolean isActive() {
@@ -40,5 +44,9 @@ public class Roller {
 
     public RigidBody getRigidBody() {
         return rigidBody;
+    }
+
+    public Stats getStats() {
+        return stats;
     }
 }

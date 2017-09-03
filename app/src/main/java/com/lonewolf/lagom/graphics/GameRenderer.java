@@ -210,7 +210,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         Stats stats = sprite.getStats();
 
         if (stats != null) {
-            GLES20.glUniform1f(sprite.getDamagePosition(), stats.getDamageLevel() / 2);
+            GLES20.glUniform1f(sprite.getDamagePosition(), stats.getDamageLevel() / 4);
         }
 
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, sprite.getDrawOrder().length, GLES20.GL_UNSIGNED_SHORT, sprite.getOrderBuffer());

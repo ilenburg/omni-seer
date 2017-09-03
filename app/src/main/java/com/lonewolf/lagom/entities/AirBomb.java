@@ -1,8 +1,8 @@
 package com.lonewolf.lagom.entities;
 
-import com.lonewolf.lagom.modules.Sprite;
-import com.lonewolf.lagom.modules.effects.ColorTransition;
 import com.lonewolf.lagom.modules.RigidBody;
+import com.lonewolf.lagom.modules.Sprite;
+import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.physics.Vector2;
 
 import java.util.Random;
@@ -17,6 +17,7 @@ public class AirBomb {
 
     private final Sprite sprite;
     private final RigidBody rigidBody;
+    private final Stats stats;
 
     private boolean active;
 
@@ -24,13 +25,13 @@ public class AirBomb {
 
         float radius = 0.1f;
 
-        this.rigidBody = new RigidBody(1, radius, new Vector2(2.0f + (random.nextFloat() * 2), -0.51f), new Vector2(-0.5f, 0.0f));
+        this.rigidBody = new RigidBody(1, radius / 2, new Vector2(2.0f + (random.nextFloat() * 2), -0.51f), new Vector2(-0.5f, 0.0f));
 
-        ColorTransition colorTransition = new ColorTransition(10.0f);
+        this.stats = new Stats(12);
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), EntityUtils.GenerateFullTexture(), colorTransition);
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), EntityUtils.GenerateFullTexture(), stats);
 
-        active = false;
+        active = true;
     }
 
     public boolean isActive() {
@@ -43,5 +44,9 @@ public class AirBomb {
 
     public RigidBody getRigidBody() {
         return rigidBody;
+    }
+
+    public Stats getStats() {
+        return stats;
     }
 }
