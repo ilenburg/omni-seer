@@ -23,13 +23,6 @@ public class Player {
 
     public Player(int shaderProgram, int texture) {
 
-        float[] textureCoordinates = new float[]{
-                0.0f, 0.0f,
-                0.0f, 0.5f,
-                0.5f, 0.5f,
-                0.5f, 0.0f
-        };
-
         float[] jumpCoordinates = new float[]{
                 0.5f, 0.5f,
                 0.5f, 1.0f,
@@ -68,7 +61,7 @@ public class Player {
 
         ColorTransition colorTransition = new ColorTransition(MAX_RADIANS, this.input);
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), textureCoordinates, animation, colorTransition);
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymmetricGeometryCoordinates(radius), EntityUtils.QUARTER_TEXTURE_COORDINATES, animation, colorTransition);
 
         active = true;
     }

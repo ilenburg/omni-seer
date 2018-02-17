@@ -6,11 +6,19 @@ package com.lonewolf.lagom.entities;
 
 public final class EntityUtils {
 
+    public static final float[] FULL_TEXTURE_COORDINATES;
+    public static final float[] QUARTER_TEXTURE_COORDINATES;
+
+    static {
+        FULL_TEXTURE_COORDINATES = GenerateTextureCoordinates(1.0f);
+        QUARTER_TEXTURE_COORDINATES = GenerateTextureCoordinates(0.5f);
+    }
+
     private EntityUtils() {
 
     }
 
-    public static float[] GenerateSymetricGeometry(float radius) {
+    public static float[] GenerateSymmetricGeometryCoordinates(float radius) {
         return new float[]{
                 -radius, radius,
                 -radius, -radius,
@@ -19,12 +27,12 @@ public final class EntityUtils {
         };
     }
 
-    public static float[] GenerateFullTexture() {
+    public static float[] GenerateTextureCoordinates(float radius) {
         return new float[]{
                 0.0f, 0.0f,
-                0.0f, 1.0f,
-                1.0f, 1.0f,
-                1.0f, 0.0f
+                0.0f, radius,
+                radius, radius,
+                radius, 0.0f
         };
     }
 }

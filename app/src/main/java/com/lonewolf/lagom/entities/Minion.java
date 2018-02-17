@@ -23,20 +23,13 @@ public class Minion {
 
     public Minion(int shaderProgram, int texture) {
 
-        float[] textureCoordinates = new float[]{
-                0.0f, 0.0f,
-                0.0f, 1.0f,
-                1.0f, 1.0f,
-                1.0f, 0.0f
-        };
-
         float radius = 0.06f;
 
         this.rigidBody = new RigidBody(0.5f, radius / 2, new Vector2((random.nextFloat() * 2) + 1, random.nextFloat() - 0.5f), new Vector2(-0.2f, 0.0f));
 
         this.stats = new Stats(6);
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymetricGeometry(radius), textureCoordinates, stats);
+        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymmetricGeometryCoordinates(radius), EntityUtils.FULL_TEXTURE_COORDINATES, stats);
 
         active = true;
         aggressive = false;
