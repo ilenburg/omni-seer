@@ -15,6 +15,7 @@ import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Panorama;
 import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.Roller;
+import com.lonewolf.lagom.entities.Score;
 import com.lonewolf.lagom.entities.ShadowLord;
 import com.lonewolf.lagom.entities.Spell;
 
@@ -53,6 +54,7 @@ public class ResourceManager {
     private Panorama foreground;
     private Panorama panorama;
     private Panorama panoramaFar;
+    private Score score;
 
     public ResourceManager(Context context) {
         this.context = context;
@@ -102,6 +104,10 @@ public class ResourceManager {
         return rollers;
     }
 
+    public Score getScore() {
+        return score;
+    }
+
     public void loadResources() {
         initShaders();
         initTextures();
@@ -118,6 +124,7 @@ public class ResourceManager {
         this.foreground = new Panorama(shaderPrograms[1], textures[4], scrollBase * 4);
         this.player = new Player(shaderPrograms[4], textures[0]);
         this.shadowLord = new ShadowLord(shaderPrograms[0], textures[7]);
+        this.score = new Score(shaderPrograms[0], textures[12]);
 
         int i;
 
@@ -181,7 +188,6 @@ public class ResourceManager {
     }
 
     private void initTextures() {
-
         loadTexture(R.drawable.player_sprite, 0, false);
         loadTexture(R.drawable.day, 1, true);
         loadTexture(R.drawable.panorama, 2, true);
@@ -194,6 +200,7 @@ public class ResourceManager {
         loadTexture(R.drawable.bomb, 9, false);
         loadTexture(R.drawable.goo, 10, false);
         loadTexture(R.drawable.egg, 11, false);
+        loadTexture(R.drawable.numbers, 12, false);
     }
 
     private String getShaderCode(int resourceId) throws IOException {

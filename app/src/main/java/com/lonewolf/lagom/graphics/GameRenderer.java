@@ -154,6 +154,10 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         draw(resourceManager.getForeground().getSprite());
 
+        for (Sprite sprite : resourceManager.getScore().getSprites()) {
+            draw(sprite, sprite.getModelMatrix());
+        }
+
     }
 
     private void draw(Sprite sprite) {

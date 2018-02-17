@@ -283,9 +283,9 @@ public class GameEngine implements Runnable {
 
             for (Minion minion : resourceManager.getMinions()) {
                 if (minion.isActive()) {
-                    if (PhysicsUtils.Collide(playerRigidBody, minion.getRigidBody())) {
+                    /*if (PhysicsUtils.Collide(playerRigidBody, minion.getRigidBody())) {
                         playerDead = true;
-                    }
+                    }*/
                 }
             }
 
@@ -299,9 +299,9 @@ public class GameEngine implements Runnable {
 
             for (AirBomb airBomb : resourceManager.getAirBombs()) {
                 if (airBomb.isActive()) {
-                    if (PhysicsUtils.Collide(playerRigidBody, airBomb.getRigidBody())) {
+                    /*if (PhysicsUtils.Collide(playerRigidBody, airBomb.getRigidBody())) {
                         playerDead = true;
-                    }
+                    }*/
                 }
             }
 
