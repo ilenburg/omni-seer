@@ -5,6 +5,7 @@ import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.Roller;
+import com.lonewolf.lagom.entities.Score;
 import com.lonewolf.lagom.entities.ShadowLord;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.modules.Input;
@@ -104,6 +105,8 @@ public class GameEngine implements Runnable {
 
                 updateRollers();
 
+                updateScore();
+
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException e) {
@@ -111,6 +114,11 @@ public class GameEngine implements Runnable {
                 }
             }
         }
+    }
+
+    private void updateScore() {
+        Score score = resourceManager.getScore();
+            score.addValue(1);
     }
 
     private void updateAirBombs() {

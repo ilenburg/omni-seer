@@ -6,6 +6,7 @@ import android.opengl.Matrix;
 import com.lonewolf.lagom.modules.effects.Animation;
 import com.lonewolf.lagom.modules.effects.ColorTransition;
 import com.lonewolf.lagom.modules.effects.Scroll;
+import com.lonewolf.lagom.modules.effects.TextureMapping;
 import com.lonewolf.lagom.modules.effects.TextureTransition;
 import com.lonewolf.lagom.physics.Vector2;
 
@@ -36,50 +37,47 @@ public class Sprite {
     private final int damagePosition;
 
     private final Scroll scroll;
-
     private final Animation animation;
-
+    private final TextureMapping textureMapping;
     private final TextureTransition textureTransition;
-
     private final ColorTransition colorTransition;
-
     private final Stats stats;
 
     private final float[] mModelMatrix;
 
     public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, TextureTransition textureTransition) {
-        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, textureTransition, null, null, null);
+        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, textureTransition, null, null, null, null);
     }
 
     public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Animation animation, ColorTransition colorTransition) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null, colorTransition, null, null);
+        this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null, colorTransition, null, null, null);
     }
 
     public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Stats stats) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null, stats, null);
+        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null, stats, null, null);
     }
 
     public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null, null, null);
+        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null, null, null, null);
     }
 
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Vector2 fixedPosition) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null, null, fixedPosition);
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Vector2 fixedPosition, TextureMapping textureMapping) {
+        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null, null, fixedPosition, textureMapping);
     }
 
     public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, ColorTransition colorTransition) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, colorTransition, null, null);
+        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, colorTransition, null, null, null);
     }
 
     public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll) {
-        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, null, null, null, null);
+        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, null, null, null, null, null);
     }
 
     public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Animation animation) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null, null, null, null);
+        this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null, null, null, null, null);
     }
 
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, Animation animation, TextureTransition textureTransition, ColorTransition colorTransition, Stats stats, Vector2 fixedPosition) {
+    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, Animation animation, TextureTransition textureTransition, ColorTransition colorTransition, Stats stats, Vector2 fixedPosition, TextureMapping textureMapping) {
 
         this.shaderProgram = shaderProgram;
         this.texture = texture;
@@ -146,6 +144,12 @@ public class Sprite {
         if (this.animation != null) {
             this.animation.setTextureBuffer(textureBuffer);
         }
+
+        this.textureMapping = textureMapping;
+
+        if (this.textureMapping != null) {
+            this.textureMapping.setTextureBuffer(textureBuffer);
+        }
     }
 
     public static short[] getDrawOrder() {
@@ -190,6 +194,10 @@ public class Sprite {
 
     public Animation getAnimation() {
         return animation;
+    }
+
+    public TextureMapping getTextureMapping() {
+        return textureMapping;
     }
 
     public TextureTransition getTextureTransition() {

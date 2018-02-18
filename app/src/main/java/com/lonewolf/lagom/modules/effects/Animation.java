@@ -58,10 +58,6 @@ public class Animation {
         }
     }
 
-    public void setTextureBuffer(FloatBuffer textureBuffer) {
-        this.textureBuffer = textureBuffer;
-    }
-
     public void update(float deltaTime) {
         if (inputAffected && !input.isGrounded()) {
             setCurrentTextureCoordinates(jumpTextureCoordinates);
@@ -80,6 +76,10 @@ public class Animation {
 
             setCurrentTextureCoordinates(textureFramesCoordinates[frame]);
         }
+    }
+
+    public void setTextureBuffer(FloatBuffer textureBuffer) {
+        this.textureBuffer = textureBuffer;
     }
 
     private void setCurrentTextureCoordinates(float[] textureCoordinates) {

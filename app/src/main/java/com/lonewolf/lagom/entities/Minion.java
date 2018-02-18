@@ -59,7 +59,7 @@ public class Minion {
         return aggressive;
     }
 
-    public void setAggressive(boolean aggresive) {
-        this.aggressive = aggresive;
+    public void setAggressive(boolean aggressive) {
+        this.aggressive = aggressive;
     }
 }
