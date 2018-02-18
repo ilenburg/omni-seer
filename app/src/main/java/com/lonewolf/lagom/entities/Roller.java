@@ -1,5 +1,6 @@
 package com.lonewolf.lagom.entities;
 
+import com.lonewolf.lagom.builders.SpriteBuilder;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Stats;
@@ -25,11 +26,14 @@ public class Roller {
 
         float radius = 0.15f;
 
-        this.rigidBody = new RigidBody(1, radius / 1.5f, new Vector2(2.0f + (random.nextFloat() * 2), -0.49f), new Vector2(-1.5f, 0.0f));
+        this.rigidBody = new RigidBody(1, radius / 1.5f, new Vector2(2.0f + (random.nextFloat() *
+                2), -0.49f), new Vector2(-1.5f, 0.0f));
 
         this.stats = new Stats(20);
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymmetricGeometryCoordinates(radius), EntityUtils.FULL_TEXTURE_COORDINATES, stats);
+        this.sprite = new SpriteBuilder(shaderProgram, texture, EntityUtils
+                .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
+                .FULL_TEXTURE_COORDINATES).withStats(stats).build();
 
         active = true;
     }

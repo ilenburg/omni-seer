@@ -1,5 +1,6 @@
 package com.lonewolf.lagom.entities;
 
+import com.lonewolf.lagom.builders.SpriteBuilder;
 import com.lonewolf.lagom.modules.effects.Animation;
 import com.lonewolf.lagom.modules.effects.ColorTransition;
 import com.lonewolf.lagom.modules.Sprite;
@@ -42,13 +43,17 @@ public class Spell {
 
         float radius = 0.08f;
 
-        this.rigidBody = new RigidBody(0.1f, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2(0.0f, 0.0f));
+        this.rigidBody = new RigidBody(0.1f, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2
+                (0.0f, 0.0f));
 
         Animation animation = new Animation(animationCoordinates, 1.0f);
 
         ColorTransition colorTransition = new ColorTransition(5.0f);
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymmetricGeometryCoordinates(radius), EntityUtils.QUARTER_TEXTURE_COORDINATES, animation, colorTransition);
+        this.sprite = new SpriteBuilder(shaderProgram, texture, EntityUtils
+                .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
+                .QUARTER_TEXTURE_COORDINATES).withAnimation(animation).withColorTransition
+                (colorTransition).build();
         this.active = false;
     }
 

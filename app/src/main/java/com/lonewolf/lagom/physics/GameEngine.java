@@ -118,7 +118,7 @@ public class GameEngine implements Runnable {
 
     private void updateScore() {
         Score score = resourceManager.getScore();
-            score.addValue(1);
+        score.addValue(1);
     }
 
     private void updateAirBombs() {
@@ -126,7 +126,8 @@ public class GameEngine implements Runnable {
             if (airBomb.isActive()) {
                 RigidBody airBombRigidBody = airBomb.getRigidBody();
 
-                airBombRigidBody.addAngle(Math.abs(airBombRigidBody.getVelocity().getX()) * deltaTime * 500);
+                airBombRigidBody.addAngle(Math.abs(airBombRigidBody.getVelocity().getX()) *
+                        deltaTime * 500);
 
                 if (airBombRigidBody.getPosition().getX() < -2.0f) {
                     airBombRigidBody.setPositionX(2.0f + random.nextFloat());
@@ -148,7 +149,8 @@ public class GameEngine implements Runnable {
             if (roller.isActive()) {
                 RigidBody rollerRigidBody = roller.getRigidBody();
 
-                rollerRigidBody.addAngle(Math.abs(rollerRigidBody.getVelocity().getX()) * deltaTime * 500);
+                rollerRigidBody.addAngle(Math.abs(rollerRigidBody.getVelocity().getX()) *
+                        deltaTime * 500);
 
                 if (rollerRigidBody.getPosition().getX() < -2.0f) {
                     rollerRigidBody.setPositionX(2.0f + random.nextFloat());
@@ -179,7 +181,8 @@ public class GameEngine implements Runnable {
                     minionRigidBody.setAcceleration(vectorFromPlayer);
                 }
 
-                if (minionRigidBody.getPosition().getY() < GROUND_POSITION - minionRigidBody.getRadius()) {
+                if (minionRigidBody.getPosition().getY() < GROUND_POSITION - minionRigidBody
+                        .getRadius()) {
                     minionRigidBody.setPositionY(GROUND_POSITION - minionRigidBody.getRadius());
                     minionRigidBody.setVelocityY(0.5f);
                 }
@@ -269,7 +272,8 @@ public class GameEngine implements Runnable {
                     }
                 }
 
-                if (spellRigidBody.getPosition().getY() <= GROUND_POSITION - 0.06f || !spellRigidBody.getPosition().isBounded()) {
+                if (spellRigidBody.getPosition().getY() <= GROUND_POSITION - 0.06f ||
+                        !spellRigidBody.getPosition().isBounded()) {
                     spell.setActive(false);
                 } else {
                     updateRigidBody(spellRigidBody);
@@ -331,7 +335,8 @@ public class GameEngine implements Runnable {
                 for (MegaSpell megaSpell : resourceManager.getMegaSpells()) {
                     if (!megaSpell.isActive()) {
                         Vector2 startingPosition = playerRigidBody.getPosition();
-                        megaSpell.getRigidBody().setPosition(startingPosition.getX() + 0.1f, startingPosition.getY());
+                        megaSpell.getRigidBody().setPosition(startingPosition.getX() + 0.1f,
+                                startingPosition.getY());
                         megaSpell.getRigidBody().setVelocity(SPELL_BASE_VELOCITY);
                         megaSpell.setActive(true);
                         playerInput.setMegaSpell(false);
@@ -374,7 +379,8 @@ public class GameEngine implements Runnable {
             cameraPosition = cameraPosition % 1000;
 
             if (playerRigidBody.getPosition().getY() > GROUND_POSITION) {
-                playerRigidBody.setAccelerationY(playerInput.isInvulnerable() ? GRAVITY_ACCELERATION / 2.0f : GRAVITY_ACCELERATION);
+                playerRigidBody.setAccelerationY(playerInput.isInvulnerable() ?
+                        GRAVITY_ACCELERATION / 2.0f : GRAVITY_ACCELERATION);
             } else {
                 playerRigidBody.setAccelerationY(ZERO);
                 playerRigidBody.setVelocityY(ZERO);
@@ -385,19 +391,24 @@ public class GameEngine implements Runnable {
     }
 
     private void updatePlayerPosition(RigidBody playerRigidBody) {
-        PhysicsUtils.EulerMethod(playerRigidBody.getVelocity(), playerRigidBody.getVelocity(), playerRigidBody.getAcceleration(), deltaTime);
-        PhysicsUtils.EulerMethod(RESULT_AUX, playerRigidBody.getPosition(), playerRigidBody.getVelocity(), deltaTime);
+        PhysicsUtils.EulerMethod(playerRigidBody.getVelocity(), playerRigidBody.getVelocity(),
+                playerRigidBody.getAcceleration(), deltaTime);
+        PhysicsUtils.EulerMethod(RESULT_AUX, playerRigidBody.getPosition(), playerRigidBody
+                .getVelocity(), deltaTime);
         playerRigidBody.setPositionY(RESULT_AUX.getY());
     }
 
     private void updateRigidBody(RigidBody rigidBody) {
-        PhysicsUtils.EulerMethod(rigidBody.getVelocity(), rigidBody.getVelocity(), rigidBody.getAcceleration(), deltaTime);
-        PhysicsUtils.EulerMethod(rigidBody.getPosition(), rigidBody.getPosition(), rigidBody.getVelocity(), deltaTime);
+        PhysicsUtils.EulerMethod(rigidBody.getVelocity(), rigidBody.getVelocity(), rigidBody
+                .getAcceleration(), deltaTime);
+        PhysicsUtils.EulerMethod(rigidBody.getPosition(), rigidBody.getPosition(), rigidBody
+                .getVelocity(), deltaTime);
     }
 
     private Vector2 getVectorFromPlayer(RigidBody rigidBody) {
         VECTOR_FROM_PLAYER.setCoordinates(rigidBody.getPosition());
-        Vector2.sub(VECTOR_FROM_PLAYER, VECTOR_FROM_PLAYER, resourceManager.getPlayer().getRigidBody().getPosition());
+        Vector2.sub(VECTOR_FROM_PLAYER, VECTOR_FROM_PLAYER, resourceManager.getPlayer()
+                .getRigidBody().getPosition());
         return VECTOR_FROM_PLAYER;
     }
 

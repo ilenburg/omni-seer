@@ -169,10 +169,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         GLES20.glUseProgram(sprite.getShaderProgram());
 
         GLES20.glEnableVertexAttribArray(sprite.getVertexPosition());
-        GLES20.glVertexAttribPointer(sprite.getVertexPosition(), 2, GLES20.GL_FLOAT, false, 2 * 4, sprite.getVertexBuffer());
+        GLES20.glVertexAttribPointer(sprite.getVertexPosition(), 2, GLES20.GL_FLOAT, false, 2 *
+                4, sprite.getVertexBuffer());
 
         GLES20.glEnableVertexAttribArray(sprite.getTexturePosition());
-        GLES20.glVertexAttribPointer(sprite.getTexturePosition(), 2, GLES20.GL_FLOAT, false, 2 * 4, sprite.getTextureBuffer());
+        GLES20.glVertexAttribPointer(sprite.getTexturePosition(), 2, GLES20.GL_FLOAT, false, 2 *
+                4, sprite.getTextureBuffer());
 
         Matrix.multiplyMM(mMVPMatrix, 0, mVPMatrix, 0, mModelMatrix, 0);
 
@@ -217,7 +219,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             GLES20.glUniform1f(sprite.getDamagePosition(), stats.getDamageLevel() / 4);
         }
 
-        GLES20.glDrawElements(GLES20.GL_TRIANGLES, sprite.getDrawOrder().length, GLES20.GL_UNSIGNED_SHORT, sprite.getOrderBuffer());
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, sprite.getDrawOrder().length,
+                GLES20.GL_UNSIGNED_SHORT, sprite.getOrderBuffer());
 
     }
 

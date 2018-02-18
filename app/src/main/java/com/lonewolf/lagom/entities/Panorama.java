@@ -1,5 +1,6 @@
 package com.lonewolf.lagom.entities;
 
+import com.lonewolf.lagom.builders.SpriteBuilder;
 import com.lonewolf.lagom.modules.effects.Scroll;
 import com.lonewolf.lagom.modules.Sprite;
 
@@ -31,7 +32,7 @@ public class Panorama {
                 3.0f, 0.0f
         };
 
-        this.sprite = new Sprite(shaderProgram, texture,
-                geometry, textureCoordinates, new Scroll(scrollRatio));
+        this.sprite = new SpriteBuilder(shaderProgram, texture,
+                geometry, textureCoordinates).withScroll(new Scroll(scrollRatio)).build();
     }
 }

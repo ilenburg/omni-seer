@@ -1,5 +1,6 @@
 package com.lonewolf.lagom.entities;
 
+import com.lonewolf.lagom.builders.SpriteBuilder;
 import com.lonewolf.lagom.modules.effects.Animation;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Input;
@@ -55,13 +56,18 @@ public class Player {
         float radius = 0.12f;
 
         this.input = new Input();
-        this.rigidBody = new RigidBody(1, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2(2.0f, 0.0f));
+        this.rigidBody = new RigidBody(1, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2
+                (2.0f, 0.0f));
 
-        Animation animation = new Animation(animationCoordinates, 1.5f, this.rigidBody, jumpCoordinates, this.input);
+        Animation animation = new Animation(animationCoordinates, 1.5f, this.rigidBody,
+                jumpCoordinates, this.input);
 
         ColorTransition colorTransition = new ColorTransition(MAX_RADIANS, this.input);
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymmetricGeometryCoordinates(radius), EntityUtils.QUARTER_TEXTURE_COORDINATES, animation, colorTransition);
+        this.sprite = new SpriteBuilder(shaderProgram, texture, EntityUtils
+                .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
+                .QUARTER_TEXTURE_COORDINATES).withAnimation(animation).withColorTransition
+                (colorTransition).build();
 
         active = true;
     }

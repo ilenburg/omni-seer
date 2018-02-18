@@ -1,5 +1,6 @@
 package com.lonewolf.lagom.entities;
 
+import com.lonewolf.lagom.builders.SpriteBuilder;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.modules.Stats;
@@ -25,11 +26,14 @@ public class Minion {
 
         float radius = 0.06f;
 
-        this.rigidBody = new RigidBody(0.5f, radius / 2, new Vector2((random.nextFloat() * 2) + 1, random.nextFloat() - 0.5f), new Vector2(-0.2f, 0.0f));
+        this.rigidBody = new RigidBody(0.5f, radius / 2, new Vector2((random.nextFloat() * 2) +
+                1, random.nextFloat() - 0.5f), new Vector2(-0.2f, 0.0f));
 
         this.stats = new Stats(6);
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymmetricGeometryCoordinates(radius), EntityUtils.FULL_TEXTURE_COORDINATES, stats);
+        this.sprite = new SpriteBuilder(shaderProgram, texture, EntityUtils
+                .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
+                .FULL_TEXTURE_COORDINATES).withStats(stats).build();
 
         active = true;
         aggressive = false;

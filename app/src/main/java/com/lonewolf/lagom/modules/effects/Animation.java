@@ -36,7 +36,8 @@ public class Animation {
         this(textureFramesCoordinates, cycleDuration, rigidBody, null, null);
     }
 
-    public Animation(float[][] textureFramesCoordinates, float cycleDuration, RigidBody rigidBody, float[] jumpTextureCoordinates, Input input) {
+    public Animation(float[][] textureFramesCoordinates, float cycleDuration, RigidBody
+            rigidBody, float[] jumpTextureCoordinates, Input input) {
         this.textureFramesCoordinates = textureFramesCoordinates;
         this.cycleDuration = cycleDuration;
         this.cycleStepDuration = cycleDuration / textureFramesCoordinates.length;
@@ -62,7 +63,8 @@ public class Animation {
         if (inputAffected && !input.isGrounded()) {
             setCurrentTextureCoordinates(jumpTextureCoordinates);
         } else {
-            this.cycleStep += movementBased ? Math.abs(rigidBody.getVelocity().getLength()) * deltaTime : deltaTime;
+            this.cycleStep += movementBased ? Math.abs(rigidBody.getVelocity().getLength()) *
+                    deltaTime : deltaTime;
 
             if (cycleStep >= cycleDuration) {
                 cycleStep = cycleStep - cycleDuration;

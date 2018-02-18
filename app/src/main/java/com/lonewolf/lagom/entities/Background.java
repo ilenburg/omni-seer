@@ -1,5 +1,6 @@
 package com.lonewolf.lagom.entities;
 
+import com.lonewolf.lagom.builders.SpriteBuilder;
 import com.lonewolf.lagom.modules.effects.Scroll;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.effects.TextureTransition;
@@ -8,7 +9,7 @@ import com.lonewolf.lagom.modules.effects.TextureTransition;
  * Created by Ian on 11/02/2017.
  */
 
-public class Background{
+public class Background {
 
     private final Sprite sprite;
 
@@ -31,7 +32,8 @@ public class Background{
                 3.0f, 0.0f
         };
 
-        this.sprite = new Sprite(shaderProgram, texture1,
-                geometry, textureCoordinates, new Scroll(scrollRatio), new TextureTransition(texture2));
+        this.sprite = new SpriteBuilder(shaderProgram, texture1,
+                geometry, textureCoordinates).withScroll(new Scroll(scrollRatio))
+                .withTextureTransition(new TextureTransition(texture2)).build();
     }
 }

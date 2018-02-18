@@ -1,5 +1,6 @@
 package com.lonewolf.lagom.entities;
 
+import com.lonewolf.lagom.builders.SpriteBuilder;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.physics.Vector2;
@@ -23,11 +24,14 @@ public class Egg {
 
         float radius = 0.15f;
 
-        this.rigidBody = new RigidBody(1, radius, new Vector2(2.0f + (random.nextFloat() * 2), -0.53f), new Vector2(-2.00f, 0.0f));
+        this.rigidBody = new RigidBody(1, radius, new Vector2(2.0f + (random.nextFloat() * 2),
+                -0.53f), new Vector2(-2.00f, 0.0f));
 
         this.rigidBody.addAngle(90);
 
-        this.sprite = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymmetricGeometryCoordinates(radius), EntityUtils.FULL_TEXTURE_COORDINATES);
+        this.sprite = new SpriteBuilder(shaderProgram, texture, EntityUtils
+                .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
+                .FULL_TEXTURE_COORDINATES).build();
 
         active = false;
     }

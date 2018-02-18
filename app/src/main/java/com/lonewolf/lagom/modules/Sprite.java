@@ -34,92 +34,29 @@ public class Sprite {
     private final int vertexPosition;
     private final int texturePosition;
     private final int uniformMVPMatrixPosition;
-    private final int damagePosition;
-
-    private final Scroll scroll;
-    private final Animation animation;
-    private final TextureMapping textureMapping;
-    private final TextureTransition textureTransition;
-    private final ColorTransition colorTransition;
-    private final Stats stats;
+    private int damagePosition;
 
     private final float[] mModelMatrix;
 
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, TextureTransition textureTransition) {
-        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, textureTransition, null, null, null, null);
-    }
-
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Animation animation, ColorTransition colorTransition) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null, colorTransition, null, null, null);
-    }
-
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Stats stats) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null, stats, null, null);
-    }
+    private Scroll scroll;
+    private Animation animation;
+    private TextureMapping textureMapping;
+    private TextureTransition textureTransition;
+    private ColorTransition colorTransition;
+    private Stats stats;
 
     public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null, null, null, null);
-    }
-
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Vector2 fixedPosition, TextureMapping textureMapping) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, null, null, fixedPosition, textureMapping);
-    }
-
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, ColorTransition colorTransition) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, null, null, colorTransition, null, null, null);
-    }
-
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll) {
-        this(shaderProgram, texture, geometry, textureCoordinates, scroll, null, null, null, null, null, null);
-    }
-
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Animation animation) {
-        this(shaderProgram, texture, geometry, textureCoordinates, null, animation, null, null, null, null, null);
-    }
-
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates, Scroll scroll, Animation animation, TextureTransition textureTransition, ColorTransition colorTransition, Stats stats, Vector2 fixedPosition, TextureMapping textureMapping) {
-
         this.shaderProgram = shaderProgram;
         this.texture = texture;
 
         this.uniformMVPMatrixPosition = GLES20.glGetUniformLocation(shaderProgram, "uMVPMatrix");
-
         this.vertexPosition = GLES20.glGetAttribLocation(shaderProgram, "vPosition");
-
         this.texturePosition = GLES20.glGetAttribLocation(shaderProgram, "texCoordIn");
 
-        this.scroll = scroll;
-
-        mModelMatrix = new float[16];
+        this.mModelMatrix = new float[16];
         Matrix.setIdentityM(mModelMatrix, 0);
-        if (fixedPosition != null) {
-            Matrix.translateM(mModelMatrix, 0, fixedPosition.getX(), fixedPosition.getY(), 0);
-        }
 
-        if (this.scroll != null) {
-            this.scroll.setScrollPosition(GLES20.glGetUniformLocation(shaderProgram, "scroll"));
-        }
-
-        this.textureTransition = textureTransition;
-
-        if (this.textureTransition != null) {
-            this.textureTransition.setTexturePosition(GLES20.glGetUniformLocation(shaderProgram, "tex2"));
-            this.textureTransition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
-        }
-
-        this.colorTransition = colorTransition;
-
-        if (this.colorTransition != null) {
-            this.colorTransition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
-        }
-
-        this.stats = stats;
-
-        if (this.stats != null) {
-            this.damagePosition = GLES20.glGetUniformLocation(shaderProgram, "damage");
-        } else {
-            this.damagePosition = 0;
-        }
+        this.damagePosition = 0;
 
         ByteBuffer bb = ByteBuffer.allocateDirect(geometry.length * 4);
         bb.order(ByteOrder.nativeOrder());
@@ -138,18 +75,43 @@ public class Sprite {
         orderBuffer = dlb.asShortBuffer();
         orderBuffer.put(drawOrder);
         orderBuffer.rewind();
+    }
 
+    public void setScroll(Scroll scroll) {
+        this.scroll = scroll;
+        this.scroll.setScrollPosition(GLES20.glGetUniformLocation(shaderProgram, "scroll"));
+    }
+
+    public void setPosition(Vector2 position) {
+        Matrix.translateM(mModelMatrix, 0, position.getX(), position.getY(), 0);
+    }
+
+    public void setTextureTransition(TextureTransition textureTransition) {
+        this.textureTransition = textureTransition;
+        this.textureTransition.setTexturePosition(GLES20.glGetUniformLocation(shaderProgram,
+                "tex2"));
+        this.textureTransition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
+
+    }
+
+    public void setColorTransition(ColorTransition colorTransition) {
+        this.colorTransition = colorTransition;
+        this.colorTransition.setTimePosition(GLES20.glGetUniformLocation(shaderProgram, "time"));
+    }
+
+    public void setStats(Stats stats) {
+        this.stats = stats;
+        this.damagePosition = GLES20.glGetUniformLocation(shaderProgram, "damage");
+    }
+
+    public void setAnimation(Animation animation) {
         this.animation = animation;
+        this.animation.setTextureBuffer(textureBuffer);
+    }
 
-        if (this.animation != null) {
-            this.animation.setTextureBuffer(textureBuffer);
-        }
-
+    public void setTextureMapping(TextureMapping textureMapping) {
         this.textureMapping = textureMapping;
-
-        if (this.textureMapping != null) {
-            this.textureMapping.setTextureBuffer(textureBuffer);
-        }
+        this.textureMapping.setTextureBuffer(textureBuffer);
     }
 
     public static short[] getDrawOrder() {

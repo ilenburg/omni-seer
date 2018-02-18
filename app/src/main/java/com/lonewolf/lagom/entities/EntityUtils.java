@@ -9,7 +9,7 @@ public final class EntityUtils {
     public static final float[] FULL_TEXTURE_COORDINATES;
     public static final float[] QUARTER_TEXTURE_COORDINATES;
 
-    public static final float[][] EIGHT_TEXTURE_COORDINATES = new float[12][8];
+    public static final float[][] EIGHT_TEXTURE_COORDINATES = new float[16][8];
 
     static {
         FULL_TEXTURE_COORDINATES = GenerateTextureCoordinates(1.0f);
@@ -20,9 +20,10 @@ public final class EntityUtils {
         float horizontalDisplacement = 0.0f;
         float verticalDisplacement = 0.0f;
 
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 4; ++i) {
             for (int j = 0; j < 4; ++j) {
-                EIGHT_TEXTURE_COORDINATES[index] = GenerateTextureCoordinates(radius, horizontalDisplacement, verticalDisplacement);
+                EIGHT_TEXTURE_COORDINATES[index] = GenerateTextureCoordinates(radius,
+                        horizontalDisplacement, verticalDisplacement);
                 horizontalDisplacement += 0.25f;
                 ++index;
             }
@@ -53,7 +54,8 @@ public final class EntityUtils {
         };
     }
 
-    public static float[] GenerateTextureCoordinates(float radius, float horizontalDisplacement, float verticalDisplacement) {
+    public static float[] GenerateTextureCoordinates(float radius, float horizontalDisplacement,
+                                                     float verticalDisplacement) {
         return new float[]{
                 horizontalDisplacement, verticalDisplacement,
                 horizontalDisplacement, verticalDisplacement + radius,

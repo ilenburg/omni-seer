@@ -1,5 +1,6 @@
 package com.lonewolf.lagom.entities;
 
+import com.lonewolf.lagom.builders.SpriteBuilder;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.effects.Animation;
 import com.lonewolf.lagom.modules.RigidBody;
@@ -60,11 +61,13 @@ public class Bomb {
 
         float radius = 0.25f;
 
-        this.rigidBody = new RigidBody(1, radius, new Vector2(2.0f + (random.nextFloat() * 2), -0.51f), new Vector2(-0.5f, 0.0f));
+        this.rigidBody = new RigidBody(1, radius, new Vector2(2.0f + (random.nextFloat() * 2),
+                -0.51f), new Vector2(-0.5f, 0.0f));
 
         Animation animation = new Animation(animationCoordinates, radius, rigidBody);
 
-        this.sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates, animation);
+        this.sprite = new SpriteBuilder(shaderProgram, texture, geometry, textureCoordinates)
+                .withAnimation(animation).build();
 
         active = false;
     }

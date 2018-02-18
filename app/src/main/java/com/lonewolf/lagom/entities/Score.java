@@ -1,5 +1,6 @@
 package com.lonewolf.lagom.entities;
 
+import com.lonewolf.lagom.builders.SpriteBuilder;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.effects.TextureMapping;
 import com.lonewolf.lagom.physics.Vector2;
@@ -22,7 +23,10 @@ public class Score {
         float positionX = -1.55f;
 
         for (int i = 0; i < sprites.length; ++i) {
-            sprites[i] = new Sprite(shaderProgram, texture, EntityUtils.GenerateSymmetricGeometryCoordinates(radius), EntityUtils.EIGHT_TEXTURE_COORDINATES[0], new Vector2(positionX, 0.83f), new TextureMapping());
+            sprites[i] = new SpriteBuilder(shaderProgram, texture, EntityUtils
+                    .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
+                    .EIGHT_TEXTURE_COORDINATES[0]).withPosition(new Vector2(positionX, 0.83f))
+                    .withTextureMapping(new TextureMapping()).build();
             positionX += displacement;
         }
     }
@@ -34,7 +38,8 @@ public class Score {
     public void setValue(int value) {
         this.value = value;
         for (int i = sprites.length - 1; i >= 0; --i) {
-            sprites[i].getTextureMapping().setCurrentTextureCoordinates(EntityUtils.EIGHT_TEXTURE_COORDINATES[value % 10]);
+            sprites[i].getTextureMapping().setCurrentTextureCoordinates(EntityUtils
+                    .EIGHT_TEXTURE_COORDINATES[value % 10]);
             value /= 10;
         }
     }
