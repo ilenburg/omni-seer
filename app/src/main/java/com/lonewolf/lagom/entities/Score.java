@@ -4,6 +4,7 @@ import com.lonewolf.lagom.builders.SpriteBuilder;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.effects.TextureMapping;
 import com.lonewolf.lagom.physics.Vector2;
+import com.lonewolf.lagom.utils.EntityUtils;
 
 /**
  * Created by Ian on 17/02/2018.

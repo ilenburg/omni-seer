@@ -3,6 +3,7 @@ package com.lonewolf.lagom.entities;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.physics.Vector2;
+import com.lonewolf.lagom.utils.EntityUtils;
 
 /**
  * Created by Ian on 21/05/2017.

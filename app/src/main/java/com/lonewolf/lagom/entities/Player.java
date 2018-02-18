@@ -7,6 +7,7 @@ import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.modules.effects.ColorTransition;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.physics.Vector2;
+import com.lonewolf.lagom.utils.EntityUtils;
 
 /**
  * Created by Ian on 23/01/2017.
