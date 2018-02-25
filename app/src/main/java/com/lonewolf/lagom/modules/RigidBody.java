@@ -50,6 +50,11 @@ public class RigidBody {
         this.velocity = velocity;
     }
 
+    public void setVelocity(float x, float y) {
+        this.velocity.setX(x);
+        this.velocity.setY(y);
+    }
+
     public Vector2 getAcceleration() {
         return acceleration;
     }

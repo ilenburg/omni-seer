@@ -60,7 +60,7 @@ public class SpellHandler {
                 }
 
                 for (Minion minion : resourceManager.getMinions()) {
-                    if (minion.isActive()) {
+                    if (minion.isActive() && !minion.getStats().isDead()) {
                         if (PhysicsUtils.Collide(spellRigidBody, minion.getRigidBody())) {
                             activateImpact(spell.getImpact(), spellRigidBody);
                             CollisionResponse(spellRigidBody, minion.getRigidBody());
@@ -68,7 +68,7 @@ public class SpellHandler {
                             minion.setAggressive(true);
                             minion.getStats().dealDamage(SPELL_DAMAGE);
                             if (minion.getStats().isDead()) {
-                                minion.setActive(false);
+                                //minion.setActive(false);
                             }
                         }
                     }

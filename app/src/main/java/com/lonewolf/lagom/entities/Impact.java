@@ -46,7 +46,7 @@ public class Impact {
 
         this.entityStateReference = new EntityStateReference(EntityState.DISABLED);
 
-        Animation animation = new Animation.Builder(animationCoordinates, 0.5f)
+        Animation animation = new Animation.Builder(animationCoordinates, 0.4f)
                 .withEntityStateReference(entityStateReference).build();
 
         this.position = new Position();

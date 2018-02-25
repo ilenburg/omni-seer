@@ -23,6 +23,7 @@ import static com.lonewolf.lagom.utils.PhysicsUtils.updateRigidBody;
 
 public class EnemyHandler {
 
+    private static final Vector2 WAY_DOWN = new Vector2(0.0f, -0.3f);
     private static final Random random = new Random();
     private final ResourceManager resourceManager;
 
@@ -32,10 +33,8 @@ public class EnemyHandler {
 
     public void updateMinions(float deltaTime) {
         for (Minion minion : resourceManager.getMinions()) {
-
-            if (minion.isActive()) {
-                RigidBody minionRigidBody = minion.getRigidBody();
-
+            RigidBody minionRigidBody = minion.getRigidBody();
+            if (minion.isActive() && !minion.getStats().isDead()) {
                 Vector2 vectorFromPlayer = getVectorFromPlayer(minionRigidBody, resourceManager
                         .getPlayer()
                         .getRigidBody().getPosition());
@@ -62,9 +61,12 @@ public class EnemyHandler {
                 if (minionRigidBody.getPosition().getX() < -1.0f) {
                     minionRigidBody.applyForce(VECTOR_FORWARD);
                 }
-
-                updateRigidBody(minionRigidBody, deltaTime);
+            } else {
+                minionRigidBody.setVelocity(WAY_DOWN.getX(), WAY_DOWN.getY());
+                minionRigidBody.addAngle(Math.abs(deltaTime * 500) * -1);
             }
+
+            updateRigidBody(minionRigidBody, deltaTime);
         }
     }
 
@@ -99,8 +101,10 @@ public class EnemyHandler {
                     airBombRigidBody.setPositionX(2.0f + random.nextFloat());
                 }
 
-                if (airBombRigidBody.getPosition().getY() <= GROUND_POSITION - 0.03f) {
-                    airBombRigidBody.setVelocityY(1.5f + random.nextFloat());
+                if (!airBomb.getStats().isDead()) {
+                    if (airBombRigidBody.getPosition().getY() <= GROUND_POSITION - 0.03f) {
+                        airBombRigidBody.setVelocityY(1.5f + random.nextFloat());
+                    }
                 }
 
                 airBombRigidBody.setAccelerationY(GRAVITY_ACCELERATION / 3);
@@ -120,6 +124,10 @@ public class EnemyHandler {
 
                 if (rollerRigidBody.getPosition().getX() < -2.0f) {
                     rollerRigidBody.setPositionX(2.0f + random.nextFloat());
+                }
+
+                if (roller.getStats().isDead()) {
+                    rollerRigidBody.setVelocityY(-0.5f);
                 }
                 updateRigidBody(roller.getRigidBody(), deltaTime);
             }

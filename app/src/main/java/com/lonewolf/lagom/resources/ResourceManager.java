@@ -153,12 +153,12 @@ public class ResourceManager {
 
         size = airBombs.length;
         for (i = 0; i < size; ++i) {
-            airBombs[i] = new AirBomb(shaderPrograms[6], textures[10]);
+            airBombs[i] = new AirBomb(shaderPrograms[0], textures[14]);
         }
 
         size = rollers.length;
         for (i = 0; i < size; ++i) {
-            rollers[i] = new Roller(shaderPrograms[6], textures[10]);
+            rollers[i] = new Roller(shaderPrograms[0], textures[14]);
         }
     }
 
@@ -210,6 +210,7 @@ public class ResourceManager {
         loadTexture(R.drawable.egg, 11, false);
         loadTexture(R.drawable.numbers, 12, false);
         loadTexture(R.drawable.impact2, 13, false);
+        loadTexture(R.drawable.meat_blow, 14, false);
     }
 
     private String getShaderCode(int resourceId) throws IOException {
