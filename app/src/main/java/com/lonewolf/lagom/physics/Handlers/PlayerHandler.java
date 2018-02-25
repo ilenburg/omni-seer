@@ -1,4 +1,4 @@
-package com.lonewolf.lagom.physics;
+package com.lonewolf.lagom.physics.Handlers;
 
 import com.lonewolf.lagom.entities.AirBomb;
 import com.lonewolf.lagom.entities.MegaSpell;
@@ -8,6 +8,7 @@ import com.lonewolf.lagom.entities.Roller;
 import com.lonewolf.lagom.entities.Spell;
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.modules.RigidBody;
+import com.lonewolf.lagom.physics.Vector2;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.utils.PhysicsUtils;
 
@@ -17,6 +18,7 @@ import static com.lonewolf.lagom.utils.GameConstants.SPELL_BASE_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.SPELL_DISPLACEMENT;
 import static com.lonewolf.lagom.utils.GameConstants.VECTOR_FORWARD;
 import static com.lonewolf.lagom.utils.GameConstants.ZERO;
+import static com.lonewolf.lagom.utils.PhysicsUtils.updatePlayerPosition;
 
 /**
  * Created by Ian on 18/02/2018.
@@ -24,10 +26,7 @@ import static com.lonewolf.lagom.utils.GameConstants.ZERO;
 
 public class PlayerHandler {
 
-    private static final Vector2 RESULT_AUX = new Vector2();
-
     private final ResourceManager resourceManager;
-
     private float cameraPosition;
 
     public PlayerHandler(ResourceManager resourceManager) {
@@ -145,14 +144,6 @@ public class PlayerHandler {
                 playerInput.setGrounded(true);
             }
         }
-    }
-
-    private void updatePlayerPosition(RigidBody playerRigidBody, float deltaTime) {
-        PhysicsUtils.EulerMethod(playerRigidBody.getVelocity(), playerRigidBody.getVelocity(),
-                playerRigidBody.getAcceleration(), deltaTime);
-        PhysicsUtils.EulerMethod(RESULT_AUX, playerRigidBody.getPosition(), playerRigidBody
-                .getVelocity(), deltaTime);
-        playerRigidBody.setPositionY(RESULT_AUX.getY());
     }
 
 }

@@ -4,6 +4,7 @@ import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.physics.Vector2;
 
 import static com.lonewolf.lagom.physics.Vector2.dotProduct;
+import static com.lonewolf.lagom.utils.GameConstants.VECTOR_FORWARD;
 
 /**
  * Created by Ian on 12/02/2017.
@@ -12,6 +13,7 @@ import static com.lonewolf.lagom.physics.Vector2.dotProduct;
 public final class PhysicsUtils {
 
     private static final float RADIAN_ANGLE = 57.2958f;
+    private static final Vector2 VECTOR_FROM_PLAYER = new Vector2();
     private static final Vector2 OPERAND_AUX_1 = new Vector2();
     private static final Vector2 OPERAND_AUX_2 = new Vector2();
     private static final Vector2 OPERAND_AUX_3 = new Vector2();
@@ -79,6 +81,40 @@ public final class PhysicsUtils {
 
         r1.setVelocityValue(OPERAND_AUX_2);
         r2.setVelocityValue(OPERAND_AUX_3);
+    }
+
+    public static void updateRigidBody(RigidBody rigidBody, float deltaTime) {
+        PhysicsUtils.EulerMethod(rigidBody.getVelocity(), rigidBody.getVelocity(), rigidBody
+                .getAcceleration(), deltaTime);
+        PhysicsUtils.EulerMethod(rigidBody.getPosition(), rigidBody.getPosition(), rigidBody
+                .getVelocity(), deltaTime);
+    }
+
+    public static void updatePlayerPosition(RigidBody playerRigidBody, float deltaTime) {
+        PhysicsUtils.EulerMethod(playerRigidBody.getVelocity(), playerRigidBody.getVelocity(),
+                playerRigidBody.getAcceleration(), deltaTime);
+        PhysicsUtils.EulerMethod(RESULT_AUX, playerRigidBody.getPosition(), playerRigidBody
+                .getVelocity(), deltaTime);
+        playerRigidBody.setPositionY(RESULT_AUX.getY());
+    }
+
+    public static Vector2 getVectorFromPlayer(RigidBody rigidBody, Vector2 playerPosition) {
+        VECTOR_FROM_PLAYER.setCoordinates(rigidBody.getPosition());
+        Vector2.sub(VECTOR_FROM_PLAYER, VECTOR_FROM_PLAYER, playerPosition);
+        return VECTOR_FROM_PLAYER;
+    }
+
+    public static void lookAtPlayer(RigidBody rigidBody, Vector2 vectorToPlayer) {
+        float angle = PhysicsUtils.CalcAngle(vectorToPlayer, VECTOR_FORWARD);
+        rigidBody.setAngle(angle);
+    }
+
+    public static void floatEffect(RigidBody rigidBody, float positionY) {
+        if (positionY > 0.2f) {
+            rigidBody.setAccelerationY(-0.1f);
+        } else {
+            rigidBody.setAccelerationY(0.1f);
+        }
     }
 
 }
