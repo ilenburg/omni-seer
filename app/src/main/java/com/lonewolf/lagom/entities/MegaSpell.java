@@ -47,7 +47,7 @@ public class MegaSpell {
         this.rigidBody = new RigidBody(0.5f, radius, new Vector2(-1.0f, -0.535f), new Vector2
                 (0.0f, 0.0f));
 
-        Animation animation = new Animation(animationCoordinates, 1.0f);
+        Animation animation = new Animation.Builder(animationCoordinates, 1.0f).build();
 
         ColorTransition colorTransition = new ColorTransition(5.0f);
 

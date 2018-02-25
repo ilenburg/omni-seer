@@ -16,9 +16,10 @@ public class Spell {
 
     private final Sprite sprite;
     private final RigidBody rigidBody;
+    private final Impact impact;
     private boolean active;
 
-    public Spell(int shaderProgram, int texture) {
+    public Spell(int shaderProgram, int texture, Impact impact) {
 
         float[][] animationCoordinates = new float[][]{{
                 0.0f, 0.0f,
@@ -47,7 +48,9 @@ public class Spell {
         this.rigidBody = new RigidBody(0.1f, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2
                 (0.0f, 0.0f));
 
-        Animation animation = new Animation(animationCoordinates, 1.0f);
+        this.impact = impact;
+
+        Animation animation = new Animation.Builder(animationCoordinates, 1.0f).build();
 
         ColorTransition colorTransition = new ColorTransition(5.0f);
 
@@ -72,5 +75,9 @@ public class Spell {
 
     public RigidBody getRigidBody() {
         return rigidBody;
+    }
+
+    public Impact getImpact() {
+        return impact;
     }
 }

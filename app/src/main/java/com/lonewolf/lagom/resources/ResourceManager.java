@@ -10,6 +10,7 @@ import android.util.Log;
 import com.lonewolf.lagom.R;
 import com.lonewolf.lagom.entities.AirBomb;
 import com.lonewolf.lagom.entities.Background;
+import com.lonewolf.lagom.entities.Impact;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Panorama;
@@ -47,6 +48,8 @@ public class ResourceManager {
     private AirBomb[] airBombs = new AirBomb[1];
 
     private Roller[] rollers = new Roller[1];
+
+    private Impact[] impacts = new Impact[activeSpells.length];
 
     private Player player;
     private ShadowLord shadowLord;
@@ -108,6 +111,10 @@ public class ResourceManager {
         return score;
     }
 
+    public Impact[] getImpacts() {
+        return impacts;
+    }
+
     public void loadResources() {
         initShaders();
         initTextures();
@@ -130,7 +137,8 @@ public class ResourceManager {
 
         int size = activeSpells.length;
         for (i = 0; i < size; ++i) {
-            activeSpells[i] = new Spell(shaderPrograms[3], textures[6]);
+            impacts[i] = new Impact(shaderPrograms[0], textures[13]);
+            activeSpells[i] = new Spell(shaderPrograms[3], textures[6], impacts[i]);
         }
 
         size = megaSpells.length;
@@ -201,6 +209,7 @@ public class ResourceManager {
         loadTexture(R.drawable.goo, 10, false);
         loadTexture(R.drawable.egg, 11, false);
         loadTexture(R.drawable.numbers, 12, false);
+        loadTexture(R.drawable.impact2, 13, false);
     }
 
     private String getShaderCode(int resourceId) throws IOException {

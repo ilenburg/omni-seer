@@ -32,10 +32,6 @@ public class Score {
         }
     }
 
-    public void addValue(int value) {
-        setValue(this.value + value);
-    }
-
     public void setValue(int value) {
         this.value = value;
         for (int i = sprites.length - 1; i >= 0; --i) {

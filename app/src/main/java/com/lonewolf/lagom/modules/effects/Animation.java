@@ -2,6 +2,8 @@ package com.lonewolf.lagom.modules.effects;
 
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.modules.RigidBody;
+import com.lonewolf.lagom.states.EntityState;
+import com.lonewolf.lagom.states.EntityStateReference;
 
 import java.nio.FloatBuffer;
 import java.util.Random;
@@ -23,40 +25,30 @@ public class Animation {
 
     private float cycleStep;
 
+    private final EntityStateReference entityStateReference;
     private final RigidBody rigidBody;
     private final Input input;
+
     private final boolean movementBased;
     private final boolean inputAffected;
+    private final boolean triggered;
 
-    public Animation(float[][] textureFramesCoordinates, float cycleDuration) {
-        this(textureFramesCoordinates, cycleDuration, null, null, null);
-    }
-
-    public Animation(float[][] textureFramesCoordinates, float cycleDuration, RigidBody rigidBody) {
-        this(textureFramesCoordinates, cycleDuration, rigidBody, null, null);
-    }
-
-    public Animation(float[][] textureFramesCoordinates, float cycleDuration, RigidBody
-            rigidBody, float[] jumpTextureCoordinates, Input input) {
+    private Animation(float[][] textureFramesCoordinates, float cycleDuration, RigidBody
+            rigidBody, float[] jumpTextureCoordinates, Input input, EntityStateReference
+                              entityStateReference) {
         this.textureFramesCoordinates = textureFramesCoordinates;
         this.cycleDuration = cycleDuration;
         this.cycleStepDuration = cycleDuration / textureFramesCoordinates.length;
-        this.cycleStep = random.nextFloat() * 3;
         this.rigidBody = rigidBody;
         this.input = input;
         this.jumpTextureCoordinates = jumpTextureCoordinates;
+        this.entityStateReference = entityStateReference;
 
-        if (this.rigidBody != null) {
-            this.movementBased = true;
-        } else {
-            this.movementBased = false;
-        }
+        this.movementBased = this.rigidBody != null;
+        this.inputAffected = this.input != null;
+        this.triggered = this.entityStateReference != null;
 
-        if (this.input != null) {
-            this.inputAffected = true;
-        } else {
-            this.inputAffected = false;
-        }
+        this.cycleStep = triggered ? 0.0f : random.nextFloat() * 3;
     }
 
     public void update(float deltaTime) {
@@ -68,6 +60,10 @@ public class Animation {
 
             if (cycleStep >= cycleDuration) {
                 cycleStep = cycleStep - cycleDuration;
+                if (triggered) {
+                    entityStateReference.setEntityState(EntityState.DISABLED);
+                    return;
+                }
             }
 
             int frame = (int) Math.floor(cycleStep / cycleStepDuration);
@@ -77,6 +73,13 @@ public class Animation {
             }
 
             setCurrentTextureCoordinates(textureFramesCoordinates[frame]);
+        }
+    }
+
+    public void trigger() {
+        this.cycleStep = 0;
+        if (triggered) {
+            entityStateReference.setEntityState(EntityState.ENABLED);
         }
     }
 
@@ -90,4 +93,44 @@ public class Animation {
         this.textureBuffer.rewind();
     }
 
+    public static class Builder {
+
+        private final float[][] textureFramesCoordinates;
+        private final float cycleDuration;
+
+        private RigidBody rigidBody;
+        private EntityStateReference entityStateReference;
+        private float[] jumpTextureCoordinates;
+        private Input input;
+
+        public Builder(float[][] textureFramesCoordinates, float cycleDuration) {
+            this.textureFramesCoordinates = textureFramesCoordinates;
+            this.cycleDuration = cycleDuration;
+        }
+
+        public Builder withRigidBody(RigidBody rigidBody) {
+            this.rigidBody = rigidBody;
+            return this;
+        }
+
+        public Builder withJumpTextureCoordinates(float[] jumpTextureCoordinates) {
+            this.jumpTextureCoordinates = jumpTextureCoordinates;
+            return this;
+        }
+
+        public Builder withInput(Input input) {
+            this.input = input;
+            return this;
+        }
+
+        public Builder withEntityStateReference(EntityStateReference entityStateReference) {
+            this.entityStateReference = entityStateReference;
+            return this;
+        }
+
+        public Animation build() {
+            return new Animation(textureFramesCoordinates, cycleDuration, rigidBody,
+                    jumpTextureCoordinates, input, entityStateReference);
+        }
+    }
 }

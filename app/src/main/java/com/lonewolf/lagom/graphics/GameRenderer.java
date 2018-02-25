@@ -6,6 +6,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.lonewolf.lagom.entities.AirBomb;
+import com.lonewolf.lagom.entities.Impact;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Player;
@@ -20,6 +21,7 @@ import com.lonewolf.lagom.modules.effects.Scroll;
 import com.lonewolf.lagom.modules.effects.TextureTransition;
 import com.lonewolf.lagom.physics.GameEngine;
 import com.lonewolf.lagom.resources.ResourceManager;
+import com.lonewolf.lagom.states.EntityState;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -158,6 +160,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             draw(sprite, sprite.getModelMatrix());
         }
 
+        for (Impact impact : resourceManager.getImpacts()) {
+            if (impact.getEntityState() == EntityState.ENABLED) {
+                draw(impact.getSprite(), impact.getPosition().getModelMatrix());
+            }
+        }
     }
 
     private void draw(Sprite sprite) {

@@ -1,7 +1,5 @@
 package com.lonewolf.lagom.modules;
 
-import android.opengl.Matrix;
-
 import com.lonewolf.lagom.physics.Vector2;
 
 /**
@@ -15,13 +13,10 @@ public class RigidBody {
     private final float mass;
     private final float radius;
 
-    private float angle;
-
-    private Vector2 position;
     private Vector2 velocity;
     private Vector2 acceleration;
 
-    private final float[] mModelMatrix;
+    private final Position position;
 
     public RigidBody(float mass, float radius) {
         this(mass, radius, new Vector2());
@@ -31,39 +26,20 @@ public class RigidBody {
         this(mass, radius, position, new Vector2());
     }
 
-    public RigidBody(float mass, float radius, Vector2 position, Vector2 velocity) {
+    public RigidBody(float mass, float radius, Vector2 positionCoordinates, Vector2 velocity) {
         this.mass = mass;
         this.radius = radius;
-        this.angle = 0.0f;
-        this.position = position;
         this.velocity = velocity;
         this.acceleration = new Vector2();
-        this.mModelMatrix = new float[16];
+        this.position = new Position(positionCoordinates);
     }
 
     public float getRadius() {
         return radius;
     }
 
-    public Vector2 getPosition() {
-        return position;
-    }
-
-    public void setPosition(Vector2 position) {
-        this.position = position;
-    }
-
-    public void setPosition(float x, float y) {
-        this.position.setX(x);
-        this.position.setY(y);
-    }
-
     public float getMass() {
         return mass;
-    }
-
-    public void setPositionX(float x) {
-        setPosition(x, this.position.getY());
     }
 
     public Vector2 getVelocity() {
@@ -99,27 +75,40 @@ public class RigidBody {
         this.velocity.setY(velocity.getY());
     }
 
-    public void setPositionY(float positionY) {
-        this.position.setY(positionY);
-    }
-
     public void applyForce(Vector2 force) {
         Vector2.divide(RESULT_AUX, force, this.mass);
         Vector2.add(this.acceleration, RESULT_AUX, this.acceleration);
     }
 
+    public Vector2 getPosition() {
+        return position.getCoordinates();
+    }
+
+    public void setPosition(Vector2 positionCoordinates) {
+        this.position.setCoordinates(positionCoordinates);
+    }
+
+    public void setPosition(float x, float y) {
+        this.position.setCoordinates(x, y);
+    }
+
+    public void setPositionX(float x) {
+        this.position.setCoordinateX(x);
+    }
+
+    public void setPositionY(float positionY) {
+        this.position.setCoordinateY(positionY);
+    }
+
     public void setAngle(float angle) {
-        this.angle = angle;
+        this.position.setAngle(angle);
     }
 
     public void addAngle(float angle) {
-        this.angle += angle;
+        this.position.addAngle(angle);
     }
 
     public float[] getModelMatrix() {
-        Matrix.setIdentityM(this.mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, this.position.getX(), this.position.getY(), 0);
-        Matrix.rotateM(mModelMatrix, 0, angle, 0, 0, 1);
-        return mModelMatrix;
+        return this.position.getModelMatrix();
     }
 }

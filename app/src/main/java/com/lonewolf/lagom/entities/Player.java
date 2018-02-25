@@ -60,8 +60,8 @@ public class Player {
         this.rigidBody = new RigidBody(1, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2
                 (2.0f, 0.0f));
 
-        Animation animation = new Animation(animationCoordinates, 1.5f, this.rigidBody,
-                jumpCoordinates, this.input);
+        Animation animation = new Animation.Builder(animationCoordinates, 1.5f).withRigidBody
+                (rigidBody).withJumpTextureCoordinates(jumpCoordinates).withInput(input).build();
 
         ColorTransition colorTransition = new ColorTransition(MAX_RADIANS, this.input);
 

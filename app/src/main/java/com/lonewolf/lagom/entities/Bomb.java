@@ -64,7 +64,8 @@ public class Bomb {
         this.rigidBody = new RigidBody(1, radius, new Vector2(2.0f + (random.nextFloat() * 2),
                 -0.51f), new Vector2(-0.5f, 0.0f));
 
-        Animation animation = new Animation(animationCoordinates, radius, rigidBody);
+        Animation animation = new Animation.Builder(animationCoordinates, radius).withRigidBody
+                (rigidBody).build();
 
         this.sprite = new SpriteBuilder(shaderProgram, texture, geometry, textureCoordinates)
                 .withAnimation(animation).build();

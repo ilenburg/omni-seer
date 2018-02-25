@@ -1,6 +1,7 @@
 package com.lonewolf.lagom.physics.Handlers;
 
 import com.lonewolf.lagom.entities.AirBomb;
+import com.lonewolf.lagom.entities.Impact;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Roller;
@@ -61,6 +62,7 @@ public class SpellHandler {
                 for (Minion minion : resourceManager.getMinions()) {
                     if (minion.isActive()) {
                         if (PhysicsUtils.Collide(spellRigidBody, minion.getRigidBody())) {
+                            activateImpact(spell.getImpact(), spellRigidBody);
                             CollisionResponse(spellRigidBody, minion.getRigidBody());
                             spell.setActive(false);
                             minion.setAggressive(true);
@@ -74,6 +76,7 @@ public class SpellHandler {
 
                 for (Roller roller : resourceManager.getRollers()) {
                     if (PhysicsUtils.Collide(spellRigidBody, roller.getRigidBody())) {
+                        activateImpact(spell.getImpact(), spellRigidBody);
                         roller.getStats().dealDamage(SPELL_DAMAGE);
                         spell.setActive(false);
                     }
@@ -81,6 +84,7 @@ public class SpellHandler {
 
                 for (AirBomb airBomb : resourceManager.getAirBombs()) {
                     if (PhysicsUtils.Collide(spellRigidBody, airBomb.getRigidBody())) {
+                        activateImpact(spell.getImpact(), spellRigidBody);
                         airBomb.getStats().dealDamage(SPELL_DAMAGE);
                         spell.setActive(false);
                     }
@@ -88,11 +92,17 @@ public class SpellHandler {
 
                 if (spellRigidBody.getPosition().getY() <= GROUND_POSITION - 0.06f ||
                         !spellRigidBody.getPosition().isBounded()) {
+                    activateImpact(spell.getImpact(), spellRigidBody);
                     spell.setActive(false);
                 } else {
                     updateRigidBody(spellRigidBody, deltaTime);
                 }
             }
         }
+    }
+
+    private void activateImpact(Impact spellImpact, RigidBody rigidBody) {
+        spellImpact.setPosition(rigidBody.getPosition().copy());
+        spellImpact.trigger();
     }
 }
