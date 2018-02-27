@@ -2,6 +2,8 @@ package com.lonewolf.lagom.modules;
 
 import com.lonewolf.lagom.physics.Vector2;
 
+import static com.lonewolf.lagom.utils.GameConstants.VECTOR_ZERO;
+
 /**
  * Created by Ian on 11/02/2017.
  */
@@ -13,8 +15,8 @@ public class RigidBody {
     private final float mass;
     private final float radius;
 
-    private Vector2 velocity;
-    private Vector2 acceleration;
+    private final Vector2 velocity;
+    private final Vector2 acceleration;
 
     private final Position position;
 
@@ -47,12 +49,8 @@ public class RigidBody {
     }
 
     public void setVelocity(Vector2 velocity) {
-        this.velocity = velocity;
-    }
-
-    public void setVelocity(float x, float y) {
-        this.velocity.setX(x);
-        this.velocity.setY(y);
+        this.velocity.setX(velocity.getX());
+        this.velocity.setY(velocity.getY());
     }
 
     public Vector2 getAcceleration() {
@@ -60,7 +58,8 @@ public class RigidBody {
     }
 
     public void setAcceleration(Vector2 acceleration) {
-        this.acceleration = acceleration;
+        this.acceleration.setX(acceleration.getX());
+        this.acceleration.setY(acceleration.getY());
     }
 
     public void setAccelerationY(float accelerationY) {
@@ -73,11 +72,6 @@ public class RigidBody {
 
     public void setVelocityY(float velocityY) {
         this.velocity.setY(velocityY);
-    }
-
-    public void setVelocityValue(Vector2 velocity) {
-        this.velocity.setX(velocity.getX());
-        this.velocity.setY(velocity.getY());
     }
 
     public void applyForce(Vector2 force) {
@@ -111,6 +105,12 @@ public class RigidBody {
 
     public void addAngle(float angle) {
         this.position.addAngle(angle);
+    }
+
+    public void stop() {
+        this.setAcceleration(VECTOR_ZERO);
+        this.setVelocity(VECTOR_ZERO);
+        this.setAngle(0);
     }
 
     public float[] getModelMatrix() {

@@ -41,7 +41,7 @@ public class Stats {
         }
     }
 
-    public void recover() {
+    public void restore() {
         this.hp = maxHp;
         if (textureMapping != null) {
             textureMapping.setTexturePosition(0);

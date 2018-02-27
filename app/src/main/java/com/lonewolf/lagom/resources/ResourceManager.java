@@ -43,11 +43,11 @@ public class ResourceManager {
 
     private MegaSpell[] megaSpells = new MegaSpell[6];
 
-    private Minion[] minions = new Minion[6];
+    private Minion[] minions = new Minion[60];
 
-    private AirBomb[] airBombs = new AirBomb[1];
+    private AirBomb[] airBombs = new AirBomb[6];
 
-    private Roller[] rollers = new Roller[1];
+    private Roller[] rollers = new Roller[6];
 
     private Impact[] impacts = new Impact[activeSpells.length];
 

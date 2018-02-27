@@ -74,13 +74,7 @@ public class GameEngine implements Runnable {
 
                 spellHandler.update(deltaTime);
 
-                enemyHandler.updateShadowLord(deltaTime);
-
-                enemyHandler.updateMinions(deltaTime);
-
-                enemyHandler.updateAirBombs(deltaTime);
-
-                enemyHandler.updateRollers(deltaTime);
+                enemyHandler.update(deltaTime, 1 + resourceManager.getScore().getValue() / 100);
 
                 scoreHandler.update(deltaTime);
 

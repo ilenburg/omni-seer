@@ -36,7 +36,7 @@ public class Minion {
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
                 .FULL_TEXTURE_COORDINATES).withStats(stats).build();
 
-        active = true;
+        active = false;
         aggressive = false;
     }
 

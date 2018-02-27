@@ -79,8 +79,8 @@ public final class PhysicsUtils {
         Vector2.multiply(OPERAND_AUX_3, OPERAND_AUX_1, sForce / r2.getMass());
         Vector2.sub(OPERAND_AUX_3, r2.getVelocity(), OPERAND_AUX_3);
 
-        r1.setVelocityValue(OPERAND_AUX_2);
-        r2.setVelocityValue(OPERAND_AUX_3);
+        r1.setVelocity(OPERAND_AUX_2);
+        r2.setVelocity(OPERAND_AUX_3);
     }
 
     public static void updateRigidBody(RigidBody rigidBody, float deltaTime) {

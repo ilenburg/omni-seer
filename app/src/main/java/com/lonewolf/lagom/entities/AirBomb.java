@@ -43,11 +43,15 @@ public class AirBomb {
                 .QUARTER_TEXTURE_COORDINATES).withTextureMapping(textureMapping).build();
 
         this.stats = new Stats(12, textureMapping);
-        active = true;
+        active = false;
     }
 
     public boolean isActive() {
         return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Sprite getSprite() {

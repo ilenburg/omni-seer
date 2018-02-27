@@ -67,9 +67,6 @@ public class SpellHandler {
                             spell.setActive(false);
                             minion.setAggressive(true);
                             minion.getStats().dealDamage(SPELL_DAMAGE);
-                            if (minion.getStats().isDead()) {
-                                //minion.setActive(false);
-                            }
                         }
                     }
                 }

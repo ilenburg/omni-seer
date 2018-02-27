@@ -16,9 +16,7 @@ public class Score {
     private int value;
 
     public Score(int shaderProgram, int texture) {
-
         value = 0;
-
         float radius = 0.08f;
         float displacement = radius * 1.5f;
         float positionX = -1.55f;
@@ -39,6 +37,10 @@ public class Score {
                     .EIGHT_TEXTURE_COORDINATES[value % 10]);
             value /= 10;
         }
+    }
+
+    public int getValue() {
+        return value;
     }
 
     public Sprite[] getSprites() {

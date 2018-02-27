@@ -10,7 +10,7 @@ import com.lonewolf.lagom.physics.Vector2;
 
 public class Position {
 
-    private Vector2 coordinates;
+    private final Vector2 coordinates;
     private float angle;
 
     private final float[] mModelMatrix;
@@ -30,7 +30,8 @@ public class Position {
     }
 
     public void setCoordinates(Vector2 coordinates) {
-        this.coordinates = coordinates;
+        this.coordinates.setX(coordinates.getX());
+        this.coordinates.setY(coordinates.getY());
     }
 
     public void setCoordinates(float x, float y) {

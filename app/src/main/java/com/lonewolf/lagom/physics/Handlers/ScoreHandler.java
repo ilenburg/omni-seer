@@ -10,7 +10,6 @@ import com.lonewolf.lagom.resources.ResourceManager;
 public class ScoreHandler {
 
     private int traveledDistance;
-
     private final ResourceManager resourceManager;
 
     public ScoreHandler(ResourceManager resourceManager) {
