@@ -2,7 +2,6 @@ package com.lonewolf.lagom.physics.Handlers;
 
 import com.lonewolf.lagom.entities.AirBomb;
 import com.lonewolf.lagom.entities.Impact;
-import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Roller;
 import com.lonewolf.lagom.entities.ShadowLord;
@@ -12,7 +11,6 @@ import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.utils.PhysicsUtils;
 
 import static com.lonewolf.lagom.utils.GameConstants.GROUND_POSITION;
-import static com.lonewolf.lagom.utils.GameConstants.SPELL_DAMAGE;
 import static com.lonewolf.lagom.utils.PhysicsUtils.CollisionResponse;
 import static com.lonewolf.lagom.utils.PhysicsUtils.updateRigidBody;
 
@@ -30,71 +28,102 @@ public class SpellHandler {
 
     public void update(float deltaTime) {
 
-        RigidBody spellRigidBody;
-
-        for (MegaSpell megaSpell : resourceManager.getMegaSpells()) {
+        for (Spell megaSpell : resourceManager.getMegaSpells()) {
             if (megaSpell.isActive()) {
-                spellRigidBody = megaSpell.getRigidBody();
+                RigidBody spellRigidBody = megaSpell.getRigidBody();
+
+                checkImpactShadowLord(megaSpell);
+
+                checkImpactMinions(megaSpell);
+
+                checkImpactRoller(megaSpell);
+
+                checkImpactAirBomb(megaSpell);
+
                 if (spellRigidBody.getPosition().getY() <= GROUND_POSITION - 0.06f) {
                     megaSpell.setActive(false);
                 }
 
-                updateRigidBody(spellRigidBody, deltaTime);
-
                 if (!spellRigidBody.getPosition().isBounded()) {
                     megaSpell.setActive(false);
                 }
+
+                updateRigidBody(spellRigidBody, deltaTime);
             }
         }
 
-        for (Spell spell : resourceManager.getActiveSpells()) {
-            if (spell.isActive()) {
-                spellRigidBody = spell.getRigidBody();
+        for (Spell minorSpell : resourceManager.getMinorSpells()) {
+            if (minorSpell.isActive()) {
 
-                ShadowLord shadowLord = resourceManager.getShadowLord();
+                checkImpactShadowLord(minorSpell);
 
-                if (shadowLord.isActive()) {
-                    if (PhysicsUtils.Collide(spellRigidBody, shadowLord.getRigidBody())) {
-                        spell.setActive(false);
-                    }
-                }
+                checkImpactMinions(minorSpell);
 
-                for (Minion minion : resourceManager.getMinions()) {
-                    if (minion.isActive() && !minion.getStats().isDead()) {
-                        if (PhysicsUtils.Collide(spellRigidBody, minion.getRigidBody())) {
-                            activateImpact(spell.getImpact(), spellRigidBody);
-                            CollisionResponse(spellRigidBody, minion.getRigidBody());
-                            spell.setActive(false);
-                            minion.setAggressive(true);
-                            minion.getStats().dealDamage(SPELL_DAMAGE);
-                        }
-                    }
-                }
+                checkImpactRoller(minorSpell);
 
-                for (Roller roller : resourceManager.getRollers()) {
-                    if (PhysicsUtils.Collide(spellRigidBody, roller.getRigidBody())) {
-                        activateImpact(spell.getImpact(), spellRigidBody);
-                        roller.getStats().dealDamage(SPELL_DAMAGE);
-                        spell.setActive(false);
-                    }
-                }
+                checkImpactAirBomb(minorSpell);
 
-                for (AirBomb airBomb : resourceManager.getAirBombs()) {
-                    if (PhysicsUtils.Collide(spellRigidBody, airBomb.getRigidBody())) {
-                        activateImpact(spell.getImpact(), spellRigidBody);
-                        airBomb.getStats().dealDamage(SPELL_DAMAGE);
-                        spell.setActive(false);
-                    }
-                }
+                checkImpactGround(minorSpell);
 
-                if (spellRigidBody.getPosition().getY() <= GROUND_POSITION - 0.06f ||
-                        !spellRigidBody.getPosition().isBounded()) {
+                updateRigidBody(minorSpell.getRigidBody(), deltaTime);
+            }
+        }
+    }
+
+    private void checkImpactShadowLord(Spell spell) {
+        RigidBody spellRigidBody = spell.getRigidBody();
+        ShadowLord shadowLord = resourceManager.getShadowLord();
+        if (shadowLord.isActive()) {
+            if (PhysicsUtils.Collide(spellRigidBody, shadowLord.getRigidBody())) {
+                activateImpact(spell.getImpact(), spellRigidBody);
+                spell.setActive(false);
+            }
+        }
+    }
+
+    private void checkImpactMinions(Spell spell) {
+        RigidBody spellRigidBody = spell.getRigidBody();
+        for (Minion minion : resourceManager.getMinions()) {
+            if (minion.isActive() && !minion.getStats().isDead()) {
+                if (PhysicsUtils.Collide(spellRigidBody, minion.getRigidBody())) {
                     activateImpact(spell.getImpact(), spellRigidBody);
+                    CollisionResponse(spellRigidBody, minion.getRigidBody());
                     spell.setActive(false);
-                } else {
-                    updateRigidBody(spellRigidBody, deltaTime);
+                    minion.setAggressive(true);
+                    minion.getStats().dealDamage(spell.getDamage());
                 }
             }
+        }
+    }
+
+    private void checkImpactRoller(Spell spell) {
+        RigidBody spellRigidBody = spell.getRigidBody();
+        for (Roller roller : resourceManager.getRollers()) {
+            if (PhysicsUtils.Collide(spellRigidBody, roller.getRigidBody())) {
+                activateImpact(spell.getImpact(), spellRigidBody);
+                roller.getStats().dealDamage(spell.getDamage());
+                spell.setActive(false);
+            }
+        }
+    }
+
+    private void checkImpactAirBomb(Spell spell) {
+        RigidBody spellRigidBody = spell.getRigidBody();
+        for (AirBomb airBomb : resourceManager.getAirBombs()) {
+            if (PhysicsUtils.Collide(spellRigidBody, airBomb.getRigidBody())) {
+                activateImpact(spell.getImpact(), spellRigidBody);
+                airBomb.getStats().dealDamage(spell.getDamage());
+                spell.setActive(false);
+            }
+        }
+    }
+
+    private void checkImpactGround(Spell spell) {
+        RigidBody spellRigidBody = spell.getRigidBody();
+        if (spellRigidBody.getPosition().getY() <= GROUND_POSITION - 0.06f ||
+                !spellRigidBody.getPosition().isBounded()) {
+            activateImpact(spell.getImpact(), spellRigidBody);
+            spell.setActive(false);
         }
     }
 

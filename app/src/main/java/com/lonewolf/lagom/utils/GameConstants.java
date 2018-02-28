@@ -22,8 +22,7 @@ public final class GameConstants {
     public static final Vector2 SPELL_BASE_VELOCITY = new Vector2(2.0f, ZERO);
     public static final Vector2 SPELL_DISPLACEMENT = new Vector2(0.03f, -0.03f);
     public static final Vector2 MINION_STARTING_VELOCITY = new Vector2(-0.2f, 0.0f);
-
-    public static final int SPELL_DAMAGE = 1;
+    public static final Vector2 MINION_DOWN_VELOCITY = new Vector2(-0.2f, -0.3f);
 
     private GameConstants() {
 

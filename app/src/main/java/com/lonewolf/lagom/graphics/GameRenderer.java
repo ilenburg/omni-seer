@@ -12,7 +12,7 @@ import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.Roller;
 import com.lonewolf.lagom.entities.ShadowLord;
-import com.lonewolf.lagom.entities.Spell;
+import com.lonewolf.lagom.entities.MinorSpell;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.modules.effects.Animation;
@@ -114,9 +114,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
         draw(resourceManager.getPanorama().getSprite());
 
-        for (Spell spell : resourceManager.getActiveSpells()) {
-            if (spell.isActive()) {
-                draw(spell.getSprite(), spell.getRigidBody().getModelMatrix());
+        for (MinorSpell minorSpell : resourceManager.getMinorSpells()) {
+            if (minorSpell.isActive()) {
+                draw(minorSpell.getSprite(), minorSpell.getRigidBody().getModelMatrix());
             }
         }
 

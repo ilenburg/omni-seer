@@ -5,7 +5,7 @@ import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.Roller;
-import com.lonewolf.lagom.entities.Spell;
+import com.lonewolf.lagom.entities.MinorSpell;
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.physics.Vector2;
@@ -105,16 +105,16 @@ public class PlayerHandler {
                 Vector2 startingVelocity = playerInput.getSpellTarget().copy();
                 Vector2.sub(startingVelocity, startingVelocity, playerRigidBody.getPosition());
                 Vector2.normalize(startingVelocity, startingVelocity);
-                for (Spell spell : resourceManager.getActiveSpells()) {
-                    if (!spell.isActive()) {
+                for (MinorSpell minorSpell : resourceManager.getMinorSpells()) {
+                    if (!minorSpell.isActive()) {
                         Vector2 spellPosition = playerRigidBody.getPosition().copy();
                         Vector2.add(spellPosition, spellPosition, SPELL_DISPLACEMENT);
-                        spell.getRigidBody().setPosition(spellPosition);
+                        minorSpell.getRigidBody().setPosition(spellPosition);
                         Vector2.multiply(startingVelocity, startingVelocity, 2.0f);
-                        spell.getRigidBody().setVelocity(startingVelocity);
+                        minorSpell.getRigidBody().setVelocity(startingVelocity);
                         float angle = PhysicsUtils.CalcAngle(startingVelocity, VECTOR_FORWARD);
-                        spell.getRigidBody().setAngle(angle);
-                        spell.setActive(true);
+                        minorSpell.getRigidBody().setAngle(angle);
+                        minorSpell.setActive(true);
                         break;
                     }
                 }

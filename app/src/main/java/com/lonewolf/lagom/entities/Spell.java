@@ -1,64 +1,30 @@
 package com.lonewolf.lagom.entities;
 
-import com.lonewolf.lagom.builders.SpriteBuilder;
-import com.lonewolf.lagom.modules.effects.Animation;
-import com.lonewolf.lagom.modules.effects.ColorTransition;
-import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.RigidBody;
-import com.lonewolf.lagom.physics.Vector2;
-import com.lonewolf.lagom.utils.EntityUtils;
 
 /**
- * Created by Ian on 23/01/2017.
+ * Created by Ian on 27/02/2018.
  */
 
 public class Spell {
 
-    private final Sprite sprite;
-    private final RigidBody rigidBody;
     private final Impact impact;
-    private boolean active;
+    private final int damage;
+    protected boolean active;
 
-    public Spell(int shaderProgram, int texture, Impact impact) {
+    protected RigidBody rigidBody;
 
-        float[][] animationCoordinates = new float[][]{{
-                0.0f, 0.0f,
-                0.0f, 0.5f,
-                0.5f, 0.5f,
-                0.5f, 0.0f
-        }, {
-                0.5f, 0.0f,
-                0.5f, 0.5f,
-                1.0f, 0.5f,
-                1.0f, 0.0f
-        }, {
-                0.0f, 0.5f,
-                0.0f, 1.0f,
-                0.5f, 1.0f,
-                0.5f, 0.5f
-        }, {
-                0.5f, 0.0f,
-                0.5f, 0.5f,
-                1.0f, 0.5f,
-                1.0f, 0.0f
-        }};
-
-        float radius = 0.08f;
-
-        this.rigidBody = new RigidBody(0.1f, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2
-                (0.0f, 0.0f));
-
+    protected Spell(Impact impact, int damage) {
         this.impact = impact;
+        this.damage = damage;
+    }
 
-        Animation animation = new Animation.Builder(animationCoordinates, 1.0f).build();
+    public RigidBody getRigidBody() {
+        return rigidBody;
+    }
 
-        ColorTransition colorTransition = new ColorTransition(5.0f);
-
-        this.sprite = new SpriteBuilder(shaderProgram, texture, EntityUtils
-                .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
-                .QUARTER_TEXTURE_COORDINATES).withAnimation(animation).withColorTransition
-                (colorTransition).build();
-        this.active = false;
+    public Impact getImpact() {
+        return impact;
     }
 
     public boolean isActive() {
@@ -69,15 +35,7 @@ public class Spell {
         this.active = active;
     }
 
-    public Sprite getSprite() {
-        return sprite;
-    }
-
-    public RigidBody getRigidBody() {
-        return rigidBody;
-    }
-
-    public Impact getImpact() {
-        return impact;
+    public int getDamage() {
+        return damage;
     }
 }

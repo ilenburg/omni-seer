@@ -20,7 +20,7 @@ public class Impact {
 
     private Position position;
 
-    public Impact(int shaderProgram, int texture) {
+    public Impact(int shaderProgram, int texture, float radius) {
 
         float[][] animationCoordinates = new float[][]{{
                 0.0f, 0.0f,
@@ -46,12 +46,10 @@ public class Impact {
 
         this.entityStateReference = new EntityStateReference(EntityState.DISABLED);
 
-        Animation animation = new Animation.Builder(animationCoordinates, 0.4f)
+        Animation animation = new Animation.Builder(animationCoordinates, 0.3f)
                 .withEntityStateReference(entityStateReference).build();
 
         this.position = new Position();
-
-        float radius = 0.1f;
 
         this.sprite = new SpriteBuilder(shaderProgram, texture, EntityUtils
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils

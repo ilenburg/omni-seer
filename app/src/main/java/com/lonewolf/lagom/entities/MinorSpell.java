@@ -12,13 +12,13 @@ import com.lonewolf.lagom.utils.EntityUtils;
  * Created by Ian on 23/01/2017.
  */
 
-public class MegaSpell extends Spell {
+public class MinorSpell extends Spell {
 
     private final Sprite sprite;
 
-    public MegaSpell(int shaderProgram, int texture, Impact impact) {
+    public MinorSpell(int shaderProgram, int texture, Impact impact) {
 
-        super(impact, 10);
+        super(impact, 1);
 
         float[][] animationCoordinates = new float[][]{{
                 0.0f, 0.0f,
@@ -42,9 +42,9 @@ public class MegaSpell extends Spell {
                 1.0f, 0.0f
         }};
 
-        float radius = 0.2f;
+        float radius = 0.08f;
 
-        this.rigidBody = new RigidBody(0.5f, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2
+        this.rigidBody = new RigidBody(0.1f, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2
                 (0.0f, 0.0f));
 
         Animation animation = new Animation.Builder(animationCoordinates, 1.0f).build();

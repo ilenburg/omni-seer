@@ -18,7 +18,7 @@ import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.Roller;
 import com.lonewolf.lagom.entities.Score;
 import com.lonewolf.lagom.entities.ShadowLord;
-import com.lonewolf.lagom.entities.Spell;
+import com.lonewolf.lagom.entities.MinorSpell;
 
 import org.apache.commons.io.IOUtils;
 
@@ -39,7 +39,7 @@ public class ResourceManager {
     private int[] shaderPrograms = new int[8];
     private int[] textures = new int[16];
 
-    private Spell[] activeSpells = new Spell[30];
+    private MinorSpell[] minorSpells = new MinorSpell[30];
 
     private MegaSpell[] megaSpells = new MegaSpell[6];
 
@@ -49,7 +49,7 @@ public class ResourceManager {
 
     private Roller[] rollers = new Roller[6];
 
-    private Impact[] impacts = new Impact[activeSpells.length];
+    private Impact[] impacts = new Impact[minorSpells.length + megaSpells.length];
 
     private Player player;
     private ShadowLord shadowLord;
@@ -91,8 +91,8 @@ public class ResourceManager {
         return panoramaFar;
     }
 
-    public Spell[] getActiveSpells() {
-        return activeSpells;
+    public MinorSpell[] getMinorSpells() {
+        return minorSpells;
     }
 
     public Minion[] getMinions() {
@@ -135,15 +135,21 @@ public class ResourceManager {
 
         int i;
 
-        int size = activeSpells.length;
+        float spellImpactRadius = 0.1f;
+        int size = minorSpells.length;
         for (i = 0; i < size; ++i) {
-            impacts[i] = new Impact(shaderPrograms[0], textures[13]);
-            activeSpells[i] = new Spell(shaderPrograms[3], textures[6], impacts[i]);
+            impacts[i] = new Impact(shaderPrograms[0], textures[13], spellImpactRadius);
+            minorSpells[i] = new MinorSpell(shaderPrograms[3], textures[6], impacts[i]);
         }
 
+        float megaSpellImpactRadius = 0.2f;
+        int spellsLastIndex = size;
         size = megaSpells.length;
         for (i = 0; i < size; ++i) {
-            megaSpells[i] = new MegaSpell(shaderPrograms[3], textures[6]);
+            impacts[i + spellsLastIndex] = new Impact(shaderPrograms[0], textures[13],
+                    megaSpellImpactRadius);
+            megaSpells[i] = new MegaSpell(shaderPrograms[3], textures[6], impacts[i +
+                    spellsLastIndex]);
         }
 
         size = minions.length;

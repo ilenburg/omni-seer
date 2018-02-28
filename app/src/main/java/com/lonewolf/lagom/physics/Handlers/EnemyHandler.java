@@ -11,6 +11,7 @@ import java.util.Random;
 
 import static com.lonewolf.lagom.utils.GameConstants.GRAVITY_ACCELERATION;
 import static com.lonewolf.lagom.utils.GameConstants.GROUND_POSITION;
+import static com.lonewolf.lagom.utils.GameConstants.MINION_DOWN_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.MINION_STARTING_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.OUT_OF_SIGH;
 import static com.lonewolf.lagom.utils.GameConstants.VECTOR_FORWARD;
@@ -25,7 +26,6 @@ import static com.lonewolf.lagom.utils.PhysicsUtils.updateRigidBody;
 
 public class EnemyHandler {
 
-    private static final Vector2 WAY_DOWN = new Vector2(0.0f, -0.3f);
     private static final Random random = new Random();
     private static final int MINION_CHANCE_IN = 100;
     private static final int ROLLER_CHANCE_IN = 500;
@@ -120,7 +120,7 @@ public class EnemyHandler {
                     }
                 } else {
                     if (minionRigidBody.getPosition().getY() > OUT_OF_SIGH) {
-                        minionRigidBody.setVelocity(WAY_DOWN);
+                        minionRigidBody.setVelocity(MINION_DOWN_VELOCITY);
                         minionRigidBody.addAngle(Math.abs(deltaTime * 500) * -1);
                     } else {
                         minion.setActive(false);
