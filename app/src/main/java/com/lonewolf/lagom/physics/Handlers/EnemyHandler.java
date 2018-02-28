@@ -172,6 +172,11 @@ public class EnemyHandler {
 
                 airBombRigidBody.setAccelerationY(GRAVITY_ACCELERATION / 3);
 
+                if (airBomb.getStats().isDead() && airBomb.getRigidBody().getPosition().getY() <
+                        OUT_OF_SIGH) {
+                    airBomb.setActive(false);
+                }
+
                 updateRigidBody(airBomb.getRigidBody(), deltaTime);
             }
         }
@@ -191,8 +196,13 @@ public class EnemyHandler {
                 }
 
                 if (roller.getStats().isDead()) {
-                    rollerRigidBody.setVelocityY(-0.5f);
+                    if (rollerRigidBody.getPosition().getY() > OUT_OF_SIGH) {
+                        rollerRigidBody.setVelocityY(-0.5f);
+                    } else {
+                        roller.setActive(false);
+                    }
                 }
+
                 updateRigidBody(roller.getRigidBody(), deltaTime);
             }
         }

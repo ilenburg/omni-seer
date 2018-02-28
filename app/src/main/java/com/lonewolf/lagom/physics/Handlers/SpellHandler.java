@@ -99,10 +99,12 @@ public class SpellHandler {
     private void checkImpactRoller(Spell spell) {
         RigidBody spellRigidBody = spell.getRigidBody();
         for (Roller roller : resourceManager.getRollers()) {
-            if (PhysicsUtils.Collide(spellRigidBody, roller.getRigidBody())) {
-                activateImpact(spell.getImpact(), spellRigidBody);
-                roller.getStats().dealDamage(spell.getDamage());
-                spell.setActive(false);
+            if (roller.isActive() && !roller.getStats().isDead()) {
+                if (PhysicsUtils.Collide(spellRigidBody, roller.getRigidBody())) {
+                    activateImpact(spell.getImpact(), spellRigidBody);
+                    roller.getStats().dealDamage(spell.getDamage());
+                    spell.setActive(false);
+                }
             }
         }
     }
@@ -110,10 +112,12 @@ public class SpellHandler {
     private void checkImpactAirBomb(Spell spell) {
         RigidBody spellRigidBody = spell.getRigidBody();
         for (AirBomb airBomb : resourceManager.getAirBombs()) {
-            if (PhysicsUtils.Collide(spellRigidBody, airBomb.getRigidBody())) {
-                activateImpact(spell.getImpact(), spellRigidBody);
-                airBomb.getStats().dealDamage(spell.getDamage());
-                spell.setActive(false);
+            if (airBomb.isActive() && !airBomb.getStats().isDead()) {
+                if (PhysicsUtils.Collide(spellRigidBody, airBomb.getRigidBody())) {
+                    activateImpact(spell.getImpact(), spellRigidBody);
+                    airBomb.getStats().dealDamage(spell.getDamage());
+                    spell.setActive(false);
+                }
             }
         }
     }
