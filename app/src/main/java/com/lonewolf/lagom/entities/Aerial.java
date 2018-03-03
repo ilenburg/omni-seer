@@ -14,7 +14,7 @@ import java.util.Random;
  * Created by Ian on 23/01/2017.
  */
 
-public class AirBomb {
+public class Aerial {
 
     private static final Random random = new Random();
 
@@ -24,7 +24,7 @@ public class AirBomb {
 
     private boolean active;
 
-    public AirBomb(int shaderProgram, int texture) {
+    public Aerial(int shaderProgram, int texture) {
 
         float radius = 0.1f;
 
@@ -42,7 +42,7 @@ public class AirBomb {
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
                 .QUARTER_TEXTURE_COORDINATES).withTextureMapping(textureMapping).build();
 
-        this.stats = new Stats(12, textureMapping);
+        this.stats = new Stats(10, textureMapping);
         active = false;
     }
 

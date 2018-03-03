@@ -52,9 +52,9 @@ public class Animation {
     }
 
     public void update(float deltaTime) {
-        if (inputAffected && !input.isGrounded()) {
+        if (inputAffected && !input.isGrounded() && input.isActive()) {
             setCurrentTextureCoordinates(jumpTextureCoordinates);
-        } else {
+        } else if (!inputAffected || input.isActive()) {
             this.cycleStep += movementBased ? Math.abs(rigidBody.getVelocity().getLength()) *
                     deltaTime : deltaTime;
 
@@ -73,6 +73,8 @@ public class Animation {
             }
 
             setCurrentTextureCoordinates(textureFramesCoordinates[frame]);
+        } else {
+            setCurrentTextureCoordinates(textureFramesCoordinates[0]);
         }
     }
 

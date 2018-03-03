@@ -1,6 +1,7 @@
 package com.lonewolf.lagom.entities;
 
 import com.lonewolf.lagom.builders.SpriteBuilder;
+import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.modules.effects.Animation;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Input;
@@ -20,6 +21,7 @@ public class Player {
     private final Sprite sprite;
     private final RigidBody rigidBody;
     private final Input input;
+    private final Stats stats;
 
     private boolean active;
 
@@ -70,6 +72,8 @@ public class Player {
                 .QUARTER_TEXTURE_COORDINATES).withAnimation(animation).withColorTransition
                 (colorTransition).build();
 
+        this.stats = new Stats(1);
+
         active = true;
     }
 
@@ -85,11 +89,23 @@ public class Player {
         return input;
     }
 
+    public boolean isDead() {
+        return stats.isDead();
+    }
+
+    public boolean isAlive() {
+        return stats.isAlive();
+    }
+
     public boolean isActive() {
         return active;
     }
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public Stats getStats() {
+        return stats;
     }
 }

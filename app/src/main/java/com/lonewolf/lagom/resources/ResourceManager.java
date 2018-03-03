@@ -8,7 +8,7 @@ import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.lonewolf.lagom.R;
-import com.lonewolf.lagom.entities.AirBomb;
+import com.lonewolf.lagom.entities.Aerial;
 import com.lonewolf.lagom.entities.Background;
 import com.lonewolf.lagom.entities.Impact;
 import com.lonewolf.lagom.entities.MegaSpell;
@@ -45,7 +45,7 @@ public class ResourceManager {
 
     private Minion[] minions = new Minion[60];
 
-    private AirBomb[] airBombs = new AirBomb[6];
+    private Aerial[] aerials = new Aerial[6];
 
     private Roller[] rollers = new Roller[6];
 
@@ -99,8 +99,8 @@ public class ResourceManager {
         return minions;
     }
 
-    public AirBomb[] getAirBombs() {
-        return airBombs;
+    public Aerial[] getAerials() {
+        return aerials;
     }
 
     public Roller[] getRollers() {
@@ -157,9 +157,9 @@ public class ResourceManager {
             minions[i] = new Minion(shaderPrograms[6], textures[8]);
         }
 
-        size = airBombs.length;
+        size = aerials.length;
         for (i = 0; i < size; ++i) {
-            airBombs[i] = new AirBomb(shaderPrograms[0], textures[14]);
+            aerials[i] = new Aerial(shaderPrograms[0], textures[14]);
         }
 
         size = rollers.length;

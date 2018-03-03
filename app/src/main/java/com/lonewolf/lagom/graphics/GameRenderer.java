@@ -5,7 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.lonewolf.lagom.entities.AirBomb;
+import com.lonewolf.lagom.entities.Aerial;
 import com.lonewolf.lagom.entities.Impact;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
@@ -126,9 +126,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         }
 
-        for (AirBomb airBomb : resourceManager.getAirBombs()) {
-            if (airBomb.isActive()) {
-                draw(airBomb.getSprite(), airBomb.getRigidBody().getModelMatrix());
+        for (Aerial aerial : resourceManager.getAerials()) {
+            if (aerial.isActive()) {
+                draw(aerial.getSprite(), aerial.getRigidBody().getModelMatrix());
             }
         }
 

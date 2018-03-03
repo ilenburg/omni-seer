@@ -69,9 +69,6 @@ public class GestureListener implements GestureDetector.OnGestureListener {
             if (distanceX > 0) {
                 playerInput.setMegaSpell(true);
                 validFling = true;
-            } else {
-                playerInput.setInvulnerable(true);
-                validFling = true;
             }
         }
 

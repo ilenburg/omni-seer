@@ -35,6 +35,10 @@ public final class PhysicsUtils {
     }
 
     public static boolean Collide(RigidBody r1, RigidBody r2) {
+        return Collide(r1, r2, true);
+    }
+
+    public static boolean Collide(RigidBody r1, RigidBody r2, boolean applyFeedback) {
 
         Vector2 p1 = r1.getPosition();
         Vector2 p2 = r2.getPosition();
@@ -45,12 +49,14 @@ public final class PhysicsUtils {
 
         if (dist < r1.getRadius() + r2.getRadius()) {
 
-            float pen = r1.getRadius() + r2.getRadius() - dist;
-            Vector2.sub(RESULT_AUX, r1.getPosition(), r2.getPosition());
-            Vector2.normalize(RESULT_AUX, RESULT_AUX);
-            Vector2.multiply(RESULT_AUX, RESULT_AUX, pen);
+            if (applyFeedback) {
+                float pen = r1.getRadius() + r2.getRadius() - dist;
+                Vector2.sub(RESULT_AUX, r1.getPosition(), r2.getPosition());
+                Vector2.normalize(RESULT_AUX, RESULT_AUX);
+                Vector2.multiply(RESULT_AUX, RESULT_AUX, pen);
 
-            Vector2.add(r1.getPosition(), r1.getPosition(), RESULT_AUX);
+                Vector2.add(r1.getPosition(), r1.getPosition(), RESULT_AUX);
+            }
 
             return true;
         }

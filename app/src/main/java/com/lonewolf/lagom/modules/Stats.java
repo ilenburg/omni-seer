@@ -22,6 +22,10 @@ public class Stats {
         this.textureMapping = textureMapping;
     }
 
+    public boolean isAlive() {
+        return !isDead();
+    }
+
     public boolean isDead() {
         return hp <= 0;
     }

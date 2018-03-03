@@ -1,6 +1,6 @@
 package com.lonewolf.lagom.physics.Handlers;
 
-import com.lonewolf.lagom.entities.AirBomb;
+import com.lonewolf.lagom.entities.Aerial;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Roller;
 import com.lonewolf.lagom.modules.RigidBody;
@@ -11,9 +11,11 @@ import java.util.Random;
 
 import static com.lonewolf.lagom.utils.GameConstants.GRAVITY_ACCELERATION;
 import static com.lonewolf.lagom.utils.GameConstants.GROUND_POSITION;
+import static com.lonewolf.lagom.utils.GameConstants.AERIAL_STARTING_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.MINION_DOWN_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.MINION_STARTING_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.OUT_OF_SIGH;
+import static com.lonewolf.lagom.utils.GameConstants.ROLLER_STARTING_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.VECTOR_FORWARD;
 import static com.lonewolf.lagom.utils.PhysicsUtils.floatEffect;
 import static com.lonewolf.lagom.utils.PhysicsUtils.getVectorFromPlayer;
@@ -27,9 +29,9 @@ import static com.lonewolf.lagom.utils.PhysicsUtils.updateRigidBody;
 public class EnemyHandler {
 
     private static final Random random = new Random();
-    private static final int MINION_CHANCE_IN = 100;
-    private static final int ROLLER_CHANCE_IN = 500;
-    private static final int AERIAL_CHANCE_IN = 2000;
+    private static final int MINION_CHANCE_IN = 200;
+    private static final int ROLLER_CHANCE_IN = 1000;
+    private static final int AERIAL_CHANCE_IN = 4000;
 
     private final ResourceManager resourceManager;
 
@@ -49,15 +51,13 @@ public class EnemyHandler {
     }
 
     private void updateRespawn(int level) {
-        if (random.nextInt(MINION_CHANCE_IN) == 1) {
+        if (random.nextInt(MINION_CHANCE_IN) == 0) {
             int maxMinions = resourceManager.getMinions().length;
             if (activeMinionCount < level && activeMinionCount < maxMinions) {
                 for (Minion minion : resourceManager.getMinions()) {
                     if (!minion.isActive()) {
-                        RigidBody minionRigidBody = minion.getRigidBody();
-                        minionRigidBody.stop();
-                        minionRigidBody.setVelocity(MINION_STARTING_VELOCITY);
-                        minionRigidBody.setPosition(generateMinionSpawnPosition());
+                        resetVelocity(minion.getRigidBody(), MINION_STARTING_VELOCITY);
+                        setMinionSpawnPosition(minion.getRigidBody());
                         minion.getStats().restore();
                         minion.setAggressive(false);
                         minion.setActive(true);
@@ -68,19 +68,25 @@ public class EnemyHandler {
             }
         }
 
-        if (random.nextInt(ROLLER_CHANCE_IN) == 1) {
+        if (random.nextInt(ROLLER_CHANCE_IN) == 0) {
             for (Roller roller : resourceManager.getRollers()) {
                 if (!roller.isActive()) {
+                    resetVelocity(roller.getRigidBody(), ROLLER_STARTING_VELOCITY);
+                    setRollerSpawnPosition(roller.getRigidBody());
+                    roller.getStats().restore();
                     roller.setActive(true);
                     break;
                 }
             }
         }
 
-        if (random.nextInt(AERIAL_CHANCE_IN) == 1) {
-            for (AirBomb airBomb : resourceManager.getAirBombs()) {
-                if (!airBomb.isActive()) {
-                    airBomb.setActive(true);
+        if (random.nextInt(AERIAL_CHANCE_IN) == 0) {
+            for (Aerial aerial : resourceManager.getAerials()) {
+                if (!aerial.isActive()) {
+                    resetVelocity(aerial.getRigidBody(), AERIAL_STARTING_VELOCITY);
+                    setKickerSpawnPosition(aerial.getRigidBody());
+                    aerial.getStats().restore();
+                    aerial.setActive(true);
                     break;
                 }
             }
@@ -115,7 +121,8 @@ public class EnemyHandler {
                         minionRigidBody.setVelocityY(0.5f);
                     }
 
-                    if (minionRigidBody.getPosition().getX() < -1.0f) {
+                    if (minionRigidBody.getPosition().getX() < -1.0f && resourceManager.getPlayer
+                            ().isAlive()) {
                         minionRigidBody.applyForce(VECTOR_FORWARD);
                     }
                 } else {
@@ -152,14 +159,14 @@ public class EnemyHandler {
     }
 
     private void updateAirBombs(float deltaTime) {
-        for (AirBomb airBomb : resourceManager.getAirBombs()) {
-            if (airBomb.isActive()) {
-                RigidBody airBombRigidBody = airBomb.getRigidBody();
+        for (Aerial aerial : resourceManager.getAerials()) {
+            if (aerial.isActive()) {
+                RigidBody airBombRigidBody = aerial.getRigidBody();
 
                 airBombRigidBody.addAngle(Math.abs(airBombRigidBody.getVelocity().getX()) *
                         deltaTime * 500);
 
-                if (!airBomb.getStats().isDead()) {
+                if (!aerial.getStats().isDead()) {
                     if (airBombRigidBody.getPosition().getY() <= GROUND_POSITION - 0.03f) {
                         airBombRigidBody.setVelocityY(1.5f + random.nextFloat());
                     }
@@ -167,17 +174,17 @@ public class EnemyHandler {
 
                 if (airBombRigidBody.getPosition().getX() < -2.0f) {
                     airBombRigidBody.setPositionX(2.0f + random.nextFloat());
-                    airBomb.setActive(false);
+                    aerial.setActive(false);
                 }
 
                 airBombRigidBody.setAccelerationY(GRAVITY_ACCELERATION / 3);
 
-                if (airBomb.getStats().isDead() && airBomb.getRigidBody().getPosition().getY() <
+                if (aerial.getStats().isDead() && aerial.getRigidBody().getPosition().getY() <
                         OUT_OF_SIGH) {
-                    airBomb.setActive(false);
+                    aerial.setActive(false);
                 }
 
-                updateRigidBody(airBomb.getRigidBody(), deltaTime);
+                updateRigidBody(aerial.getRigidBody(), deltaTime);
             }
         }
     }
@@ -191,7 +198,6 @@ public class EnemyHandler {
                         deltaTime * 500);
 
                 if (rollerRigidBody.getPosition().getX() < -2.0f) {
-                    rollerRigidBody.setPositionX(2.0f + random.nextFloat());
                     roller.setActive(false);
                 }
 
@@ -208,7 +214,20 @@ public class EnemyHandler {
         }
     }
 
-    private Vector2 generateMinionSpawnPosition() {
-        return new Vector2((random.nextFloat()) + 2, random.nextFloat() - 0.5f);
+    private void setMinionSpawnPosition(RigidBody rigidBody) {
+        rigidBody.setPosition((random.nextFloat()) + 2, random.nextFloat() - 0.5f);
+    }
+
+    private void setRollerSpawnPosition(RigidBody rigidBody) {
+        rigidBody.setPosition(2.0f + (random.nextFloat() * 2), -0.49f);
+    }
+
+    private void setKickerSpawnPosition(RigidBody rigidBody) {
+        rigidBody.setPosition(2.0f + (random.nextFloat() * 2), -0.51f);
+    }
+
+    private void resetVelocity(RigidBody rigidBody, Vector2 velocity) {
+        rigidBody.stop();
+        rigidBody.setVelocity(velocity);
     }
 }

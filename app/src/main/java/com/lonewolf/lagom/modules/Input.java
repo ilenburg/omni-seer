@@ -17,6 +17,7 @@ public class Input {
     private float screenHeight;
     private float ratio;
 
+    private boolean active;
     private boolean invulnerable;
     private float time;
 
@@ -29,6 +30,7 @@ public class Input {
 
         this.invulnerable = false;
         this.time = 0.0f;
+        this.active = true;
     }
 
     public Vector2 getSpellTarget() {
@@ -85,6 +87,14 @@ public class Input {
     public void setInvulnerable(boolean invulnerable) {
         this.invulnerable = invulnerable;
         this.time = 0.0f;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public void update(float deltaTime) {

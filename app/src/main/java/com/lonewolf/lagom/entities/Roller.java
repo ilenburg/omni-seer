@@ -42,7 +42,7 @@ public class Roller {
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
                 .QUARTER_TEXTURE_COORDINATES).withTextureMapping(textureMapping).build();
 
-        this.stats = new Stats(20, textureMapping);
+        this.stats = new Stats(15, textureMapping);
         active = false;
     }
 

@@ -1,6 +1,6 @@
 package com.lonewolf.lagom.physics.Handlers;
 
-import com.lonewolf.lagom.entities.AirBomb;
+import com.lonewolf.lagom.entities.Aerial;
 import com.lonewolf.lagom.entities.Impact;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Roller;
@@ -111,11 +111,11 @@ public class SpellHandler {
 
     private void checkImpactAirBomb(Spell spell) {
         RigidBody spellRigidBody = spell.getRigidBody();
-        for (AirBomb airBomb : resourceManager.getAirBombs()) {
-            if (airBomb.isActive() && !airBomb.getStats().isDead()) {
-                if (PhysicsUtils.Collide(spellRigidBody, airBomb.getRigidBody())) {
+        for (Aerial aerial : resourceManager.getAerials()) {
+            if (aerial.isActive() && !aerial.getStats().isDead()) {
+                if (PhysicsUtils.Collide(spellRigidBody, aerial.getRigidBody())) {
                     activateImpact(spell.getImpact(), spellRigidBody);
-                    airBomb.getStats().dealDamage(spell.getDamage());
+                    aerial.getStats().dealDamage(spell.getDamage());
                     spell.setActive(false);
                 }
             }

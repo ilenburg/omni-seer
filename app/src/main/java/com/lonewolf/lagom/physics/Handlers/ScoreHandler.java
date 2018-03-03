@@ -18,8 +18,10 @@ public class ScoreHandler {
     }
 
     public void update(float deltaTime) {
-        traveledDistance += (int) (deltaTime * 1000);
-        Score score = resourceManager.getScore();
-        score.setValue(traveledDistance / 300);
+        if (resourceManager.getPlayer().isAlive()) {
+            traveledDistance += (int) (deltaTime * 1000);
+            Score score = resourceManager.getScore();
+            score.setValue(traveledDistance / 300);
+        }
     }
 }
