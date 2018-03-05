@@ -10,6 +10,7 @@ public class Stats {
 
     private final int maxHp;
     private final TextureMapping textureMapping;
+    private boolean killed;
     private int hp;
 
     public Stats(int maxHp) {
@@ -20,6 +21,7 @@ public class Stats {
         this.maxHp = maxHp;
         this.hp = maxHp;
         this.textureMapping = textureMapping;
+        this.killed = false;
     }
 
     public boolean isAlive() {
@@ -28,6 +30,12 @@ public class Stats {
 
     public boolean isDead() {
         return hp <= 0;
+    }
+
+    public boolean wasKilled() {
+        boolean justKilled = killed;
+        this.killed = false;
+        return justKilled;
     }
 
     public float getDamageLevel() {
@@ -42,6 +50,9 @@ public class Stats {
             } else if (this.hp <= maxHp / 2) {
                 textureMapping.setTexturePosition(1);
             }
+        }
+        if (isDead()) {
+            this.killed = true;
         }
     }
 

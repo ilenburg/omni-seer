@@ -6,13 +6,14 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.lonewolf.lagom.entities.Aerial;
+import com.lonewolf.lagom.entities.Capsule;
 import com.lonewolf.lagom.entities.Impact;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
+import com.lonewolf.lagom.entities.MinorSpell;
 import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.Roller;
 import com.lonewolf.lagom.entities.ShadowLord;
-import com.lonewolf.lagom.entities.MinorSpell;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.modules.effects.Animation;
@@ -145,13 +146,23 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         }
 
         ShadowLord shadowLord = resourceManager.getShadowLord();
-
         if (shadowLord.isActive()) {
             draw(shadowLord.getSprite(), shadowLord.getRigidBody().getModelMatrix());
         }
 
-        Player player = resourceManager.getPlayer();
+        for (Impact impact : resourceManager.getImpacts()) {
+            if (impact.getEntityState() == EntityState.ENABLED) {
+                draw(impact.getSprite(), impact.getPosition().getModelMatrix());
+            }
+        }
 
+        for (Capsule capsule : resourceManager.getCapsules()) {
+            if (capsule.isActive()) {
+                draw(capsule.getSprite(), capsule.getRigidBody().getModelMatrix());
+            }
+        }
+
+        Player player = resourceManager.getPlayer();
         draw(player.getSprite(), player.getRigidBody().getModelMatrix());
 
         draw(resourceManager.getForeground().getSprite());
@@ -160,10 +171,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             draw(sprite, sprite.getModelMatrix());
         }
 
-        for (Impact impact : resourceManager.getImpacts()) {
-            if (impact.getEntityState() == EntityState.ENABLED) {
-                draw(impact.getSprite(), impact.getPosition().getModelMatrix());
-            }
+        for (Sprite sprite : resourceManager.getScore().getSprites()) {
+            draw(sprite, sprite.getModelMatrix());
+        }
+
+        for (Sprite sprite : resourceManager.getManaGauge().getSprites()) {
+            draw(sprite, sprite.getModelMatrix());
         }
     }
 

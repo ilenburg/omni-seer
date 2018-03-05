@@ -10,7 +10,7 @@ import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.utils.PhysicsUtils;
 
-import static com.lonewolf.lagom.utils.GameConstants.GROUND_POSITION;
+import static com.lonewolf.lagom.utils.GameConstants.PLAYER_GROUND_POSITION;
 import static com.lonewolf.lagom.utils.PhysicsUtils.CollisionResponse;
 import static com.lonewolf.lagom.utils.PhysicsUtils.updateRigidBody;
 
@@ -40,7 +40,7 @@ public class SpellHandler {
 
                 checkImpactAirBomb(megaSpell);
 
-                if (spellRigidBody.getPosition().getY() <= GROUND_POSITION - 0.06f) {
+                if (spellRigidBody.getPosition().getY() <= PLAYER_GROUND_POSITION - 0.06f) {
                     megaSpell.setActive(false);
                 }
 
@@ -124,7 +124,7 @@ public class SpellHandler {
 
     private void checkImpactGround(Spell spell) {
         RigidBody spellRigidBody = spell.getRigidBody();
-        if (spellRigidBody.getPosition().getY() <= GROUND_POSITION - 0.06f ||
+        if (spellRigidBody.getPosition().getY() <= PLAYER_GROUND_POSITION - 0.06f ||
                 !spellRigidBody.getPosition().isBounded()) {
             activateImpact(spell.getImpact(), spellRigidBody);
             spell.setActive(false);

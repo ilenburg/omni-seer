@@ -1,6 +1,7 @@
 package com.lonewolf.lagom.physics.Handlers;
 
 import com.lonewolf.lagom.entities.Aerial;
+import com.lonewolf.lagom.entities.Capsule;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.MinorSpell;
@@ -13,11 +14,11 @@ import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.utils.PhysicsUtils;
 
 import static com.lonewolf.lagom.utils.GameConstants.GRAVITY_ACCELERATION;
-import static com.lonewolf.lagom.utils.GameConstants.GROUND_POSITION;
+import static com.lonewolf.lagom.utils.GameConstants.PLAYER_GROUND_POSITION;
 import static com.lonewolf.lagom.utils.GameConstants.SPELL_BASE_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.SPELL_DISPLACEMENT;
 import static com.lonewolf.lagom.utils.GameConstants.VECTOR_FORWARD;
-import static com.lonewolf.lagom.utils.GameConstants.VECTOR_GHOST;
+import static com.lonewolf.lagom.utils.GameConstants.GHOST_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.ZERO;
 import static com.lonewolf.lagom.utils.PhysicsUtils.updatePlayerPosition;
 
@@ -72,11 +73,19 @@ public class PlayerHandler {
                 }
             }
 
+            for (Capsule capsule : resourceManager.getCapsules()) {
+                if (capsule.isActive()) {
+                    if (PhysicsUtils.Collide(playerRigidBody, capsule.getRigidBody(), false)) {
+                        capsule.setActive(false);
+                    }
+                }
+            }
+
             if (player.isDead()) {
                 player.getInput().setActive(false);
                 playerInput.setInvulnerable(true);
                 playerRigidBody.stop();
-                playerRigidBody.setVelocity(VECTOR_GHOST);
+                playerRigidBody.setVelocity(GHOST_VELOCITY);
             }
 
         }
@@ -137,13 +146,13 @@ public class PlayerHandler {
             cameraPosition = cameraPosition % 1000;
 
             if (playerAlive) {
-                if (playerRigidBody.getPosition().getY() > GROUND_POSITION) {
+                if (playerRigidBody.getPosition().getY() > PLAYER_GROUND_POSITION) {
                     playerRigidBody.setAccelerationY(playerInput.isInvulnerable() ?
                             GRAVITY_ACCELERATION / 2.0f : GRAVITY_ACCELERATION);
                 } else {
                     playerRigidBody.setAccelerationY(ZERO);
                     playerRigidBody.setVelocityY(ZERO);
-                    playerRigidBody.setPositionY(GROUND_POSITION);
+                    playerRigidBody.setPositionY(PLAYER_GROUND_POSITION);
                     playerInput.setGrounded(true);
                 }
             }

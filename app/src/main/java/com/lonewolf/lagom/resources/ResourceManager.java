@@ -10,7 +10,9 @@ import android.util.Log;
 import com.lonewolf.lagom.R;
 import com.lonewolf.lagom.entities.Aerial;
 import com.lonewolf.lagom.entities.Background;
+import com.lonewolf.lagom.entities.Capsule;
 import com.lonewolf.lagom.entities.Impact;
+import com.lonewolf.lagom.entities.ManaGauge;
 import com.lonewolf.lagom.entities.MegaSpell;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Panorama;
@@ -39,17 +41,19 @@ public class ResourceManager {
     private int[] shaderPrograms = new int[8];
     private int[] textures = new int[16];
 
-    private MinorSpell[] minorSpells = new MinorSpell[30];
+    private final MinorSpell[] minorSpells = new MinorSpell[30];
 
-    private MegaSpell[] megaSpells = new MegaSpell[6];
+    private final MegaSpell[] megaSpells = new MegaSpell[6];
 
-    private Minion[] minions = new Minion[60];
+    private final Minion[] minions = new Minion[60];
 
-    private Aerial[] aerials = new Aerial[6];
+    private final Aerial[] aerials = new Aerial[6];
 
-    private Roller[] rollers = new Roller[6];
+    private final Roller[] rollers = new Roller[6];
 
-    private Impact[] impacts = new Impact[minorSpells.length + megaSpells.length];
+    private final Impact[] impacts = new Impact[minorSpells.length + megaSpells.length];
+
+    private final Capsule[] capsules = new Capsule[6];
 
     private Player player;
     private ShadowLord shadowLord;
@@ -58,6 +62,7 @@ public class ResourceManager {
     private Panorama panorama;
     private Panorama panoramaFar;
     private Score score;
+    private ManaGauge manaGauge;
 
     public ResourceManager(Context context) {
         this.context = context;
@@ -111,8 +116,16 @@ public class ResourceManager {
         return score;
     }
 
+    public ManaGauge getManaGauge() {
+        return manaGauge;
+    }
+
     public Impact[] getImpacts() {
         return impacts;
+    }
+
+    public Capsule[] getCapsules() {
+        return capsules;
     }
 
     public void loadResources() {
@@ -132,6 +145,7 @@ public class ResourceManager {
         this.player = new Player(shaderPrograms[4], textures[0]);
         this.shadowLord = new ShadowLord(shaderPrograms[0], textures[7]);
         this.score = new Score(shaderPrograms[0], textures[12]);
+        this.manaGauge = new ManaGauge(shaderPrograms[0], textures[15]);
 
         int i;
 
@@ -165,6 +179,11 @@ public class ResourceManager {
         size = rollers.length;
         for (i = 0; i < size; ++i) {
             rollers[i] = new Roller(shaderPrograms[0], textures[14]);
+        }
+
+        size = capsules.length;
+        for (i = 0; i < size; ++i) {
+            capsules[i] = new Capsule(shaderPrograms[3], textures[15]);
         }
     }
 
@@ -217,6 +236,7 @@ public class ResourceManager {
         loadTexture(R.drawable.numbers, 12, false);
         loadTexture(R.drawable.impact2, 13, false);
         loadTexture(R.drawable.meat_blow, 14, false);
+        loadTexture(R.drawable.glass_orb, 15, false);
     }
 
     private String getShaderCode(int resourceId) throws IOException {

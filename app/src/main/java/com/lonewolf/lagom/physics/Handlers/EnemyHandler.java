@@ -1,6 +1,7 @@
 package com.lonewolf.lagom.physics.Handlers;
 
 import com.lonewolf.lagom.entities.Aerial;
+import com.lonewolf.lagom.entities.Capsule;
 import com.lonewolf.lagom.entities.Minion;
 import com.lonewolf.lagom.entities.Roller;
 import com.lonewolf.lagom.modules.RigidBody;
@@ -9,14 +10,17 @@ import com.lonewolf.lagom.resources.ResourceManager;
 
 import java.util.Random;
 
-import static com.lonewolf.lagom.utils.GameConstants.GRAVITY_ACCELERATION;
-import static com.lonewolf.lagom.utils.GameConstants.GROUND_POSITION;
 import static com.lonewolf.lagom.utils.GameConstants.AERIAL_STARTING_VELOCITY;
+import static com.lonewolf.lagom.utils.GameConstants.CAPSULE_GROUND_POSITION;
+import static com.lonewolf.lagom.utils.GameConstants.CAPSULE_STARTING_VELOCITY;
+import static com.lonewolf.lagom.utils.GameConstants.GRAVITY_ACCELERATION;
 import static com.lonewolf.lagom.utils.GameConstants.MINION_DOWN_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.MINION_STARTING_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.OUT_OF_SIGH;
+import static com.lonewolf.lagom.utils.GameConstants.PLAYER_GROUND_POSITION;
 import static com.lonewolf.lagom.utils.GameConstants.ROLLER_STARTING_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.VECTOR_FORWARD;
+import static com.lonewolf.lagom.utils.GameConstants.ZERO;
 import static com.lonewolf.lagom.utils.PhysicsUtils.floatEffect;
 import static com.lonewolf.lagom.utils.PhysicsUtils.getVectorFromPlayer;
 import static com.lonewolf.lagom.utils.PhysicsUtils.lookAtPlayer;
@@ -32,6 +36,8 @@ public class EnemyHandler {
     private static final int MINION_CHANCE_IN = 200;
     private static final int ROLLER_CHANCE_IN = 1000;
     private static final int AERIAL_CHANCE_IN = 4000;
+    private static final int MINION_DROP_CHANCE_IN = 4;
+    private static final int DROP_CHANCE_IN = 2;
 
     private final ResourceManager resourceManager;
 
@@ -47,7 +53,35 @@ public class EnemyHandler {
         updateMinions(deltaTime);
         updateAirBombs(deltaTime);
         updateRollers(deltaTime);
+        updateDrop(deltaTime);
         updateRespawn(level);
+    }
+
+    private void updateDrop(float deltaTime) {
+        for (Capsule capsule : resourceManager.getCapsules()) {
+            if (capsule.isActive()) {
+                RigidBody capsuleRigidBody = capsule.getRigidBody();
+
+                if (capsuleRigidBody.getPosition().getY() > CAPSULE_GROUND_POSITION) {
+                    capsuleRigidBody.setAccelerationY(GRAVITY_ACCELERATION / 10.0f);
+                } else {
+                    if (!capsule.isGrounded()) {
+                        capsule.setGrounded(true);
+                        capsuleRigidBody.setVelocityY(random.nextFloat() / 2.0f);
+                    } else {
+                        capsuleRigidBody.setVelocityY(ZERO);
+                    }
+                    capsuleRigidBody.setAccelerationY(ZERO);
+                    capsuleRigidBody.setPositionY(CAPSULE_GROUND_POSITION);
+                }
+
+                if (resourceManager.getPlayer().isDead()) {
+                    capsuleRigidBody.setVelocityX(0.0f);
+                }
+
+                updateRigidBody(capsuleRigidBody, deltaTime);
+            }
+        }
     }
 
     private void updateRespawn(int level) {
@@ -99,8 +133,7 @@ public class EnemyHandler {
             if (minion.isActive()) {
                 if (!minion.getStats().isDead()) {
                     Vector2 vectorFromPlayer = getVectorFromPlayer(minionRigidBody, resourceManager
-                            .getPlayer()
-                            .getRigidBody().getPosition());
+                            .getPlayer().getRigidBody().getPosition());
 
                     lookAtPlayer(minionRigidBody, vectorFromPlayer);
 
@@ -115,9 +148,11 @@ public class EnemyHandler {
                         minionRigidBody.setAcceleration(vectorFromPlayer);
                     }
 
-                    if (minionRigidBody.getPosition().getY() < GROUND_POSITION - minionRigidBody
-                            .getRadius()) {
-                        minionRigidBody.setPositionY(GROUND_POSITION - minionRigidBody.getRadius());
+                    if (minionRigidBody.getPosition().getY() < PLAYER_GROUND_POSITION -
+                            minionRigidBody
+                                    .getRadius()) {
+                        minionRigidBody.setPositionY(PLAYER_GROUND_POSITION - minionRigidBody
+                                .getRadius());
                         minionRigidBody.setVelocityY(0.5f);
                     }
 
@@ -127,11 +162,25 @@ public class EnemyHandler {
                     }
                 } else {
                     if (minionRigidBody.getPosition().getY() > OUT_OF_SIGH) {
+                        if (resourceManager.getPlayer().isDead()) {
+                            minionRigidBody.setVelocityX(0.0f);
+                        }
                         minionRigidBody.setVelocity(MINION_DOWN_VELOCITY);
                         minionRigidBody.addAngle(Math.abs(deltaTime * 500) * -1);
                     } else {
                         minion.setActive(false);
                         --activeMinionCount;
+                    }
+                }
+
+                if (minion.getStats().wasKilled()) {
+                    if (random.nextInt(MINION_DROP_CHANCE_IN) == 0) {
+                        for (Capsule capsule : resourceManager.getCapsules()) {
+                            if (!capsule.isActive()) {
+                                spawnCapsule(capsule, minionRigidBody);
+                                break;
+                            }
+                        }
                     }
                 }
 
@@ -161,27 +210,38 @@ public class EnemyHandler {
     private void updateAirBombs(float deltaTime) {
         for (Aerial aerial : resourceManager.getAerials()) {
             if (aerial.isActive()) {
-                RigidBody airBombRigidBody = aerial.getRigidBody();
+                RigidBody aerialRigidBody = aerial.getRigidBody();
 
-                airBombRigidBody.addAngle(Math.abs(airBombRigidBody.getVelocity().getX()) *
+                aerialRigidBody.addAngle(Math.abs(aerialRigidBody.getVelocity().getX()) *
                         deltaTime * 500);
 
                 if (!aerial.getStats().isDead()) {
-                    if (airBombRigidBody.getPosition().getY() <= GROUND_POSITION - 0.03f) {
-                        airBombRigidBody.setVelocityY(1.5f + random.nextFloat());
+                    if (aerialRigidBody.getPosition().getY() <= PLAYER_GROUND_POSITION - 0.03f) {
+                        aerialRigidBody.setVelocityY(1.5f + random.nextFloat());
                     }
                 }
 
-                if (airBombRigidBody.getPosition().getX() < -2.0f) {
-                    airBombRigidBody.setPositionX(2.0f + random.nextFloat());
+                if (aerialRigidBody.getPosition().getX() < -2.0f) {
+                    aerialRigidBody.setPositionX(2.0f + random.nextFloat());
                     aerial.setActive(false);
                 }
 
-                airBombRigidBody.setAccelerationY(GRAVITY_ACCELERATION / 3);
+                aerialRigidBody.setAccelerationY(GRAVITY_ACCELERATION / 3);
 
                 if (aerial.getStats().isDead() && aerial.getRigidBody().getPosition().getY() <
                         OUT_OF_SIGH) {
                     aerial.setActive(false);
+                }
+
+                if (aerial.getStats().wasKilled()) {
+                    if (random.nextInt(DROP_CHANCE_IN) == 0) {
+                        for (Capsule capsule : resourceManager.getCapsules()) {
+                            if (!capsule.isActive()) {
+                                spawnCapsule(capsule, aerialRigidBody);
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 updateRigidBody(aerial.getRigidBody(), deltaTime);
@@ -209,6 +269,17 @@ public class EnemyHandler {
                     }
                 }
 
+                if (roller.getStats().wasKilled()) {
+                    if (random.nextInt(DROP_CHANCE_IN) == 0) {
+                        for (Capsule capsule : resourceManager.getCapsules()) {
+                            if (!capsule.isActive()) {
+                                spawnCapsule(capsule, rollerRigidBody);
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 updateRigidBody(roller.getRigidBody(), deltaTime);
             }
         }
@@ -229,5 +300,14 @@ public class EnemyHandler {
     private void resetVelocity(RigidBody rigidBody, Vector2 velocity) {
         rigidBody.stop();
         rigidBody.setVelocity(velocity);
+    }
+
+    private void spawnCapsule(Capsule capsule, RigidBody rigidBody) {
+        RigidBody capsuleRigidBody = capsule.getRigidBody();
+        capsuleRigidBody.stop();
+        capsule.setGrounded(false);
+        capsuleRigidBody.setPosition(rigidBody.getPosition());
+        capsuleRigidBody.setVelocity(CAPSULE_STARTING_VELOCITY);
+        capsule.setActive(true);
     }
 }
