@@ -6,17 +6,13 @@ package com.lonewolf.lagom.states;
 
 public class EntityStateReference {
 
-    private EntityState entityState;
+    private boolean active;
 
-    public EntityStateReference(EntityState entityState) {
-        this.entityState = entityState;
+    public boolean isActive() {
+        return active;
     }
 
-    public EntityState getEntityState() {
-        return entityState;
-    }
-
-    public void setEntityState(EntityState entityState) {
-        this.entityState = entityState;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

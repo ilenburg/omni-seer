@@ -45,7 +45,7 @@ public class Sprite {
     private ColorTransition colorTransition;
     private Stats stats;
 
-    public Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates) {
+    private Sprite(int shaderProgram, int texture, float[] geometry, float[] textureCoordinates) {
         this.shaderProgram = shaderProgram;
         this.texture = texture;
 
@@ -180,6 +180,77 @@ public class Sprite {
 
     public int getDamagePosition() {
         return damagePosition;
+    }
+
+    public static class Builder {
+
+        private final int shaderProgram;
+        private final int texture;
+        private final float[] geometry;
+        private final float[] textureCoordinates;
+
+        private Scroll scroll;
+        private Animation animation;
+        private TextureMapping textureMapping;
+        private TextureTransition textureTransition;
+        private ColorTransition colorTransition;
+        private Stats stats;
+        private Vector2 positionCoordinates;
+
+        public Builder(int shaderProgram, int texture, float[] geometry, float[]
+                textureCoordinates) {
+            this.shaderProgram = shaderProgram;
+            this.texture = texture;
+            this.geometry = geometry;
+            this.textureCoordinates = textureCoordinates;
+        }
+
+        public Sprite build() {
+            Sprite sprite = new Sprite(shaderProgram, texture, geometry, textureCoordinates);
+            if (scroll != null) sprite.setScroll(scroll);
+            if (animation != null) sprite.setAnimation(animation);
+            if (textureMapping != null) sprite.setTextureMapping(textureMapping);
+            if (textureTransition != null) sprite.setTextureTransition(textureTransition);
+            if (colorTransition != null) sprite.setColorTransition(colorTransition);
+            if (stats != null) sprite.setStats(stats);
+            if (positionCoordinates != null) sprite.setPosition(positionCoordinates);
+            return sprite;
+        }
+
+        public Builder withScroll(Scroll scroll) {
+            this.scroll = scroll;
+            return this;
+        }
+
+        public Builder withAnimation(Animation animation) {
+            this.animation = animation;
+            return this;
+        }
+
+        public Builder withTextureMapping(TextureMapping textureMapping) {
+            this.textureMapping = textureMapping;
+            return this;
+        }
+
+        public Builder withTextureTransition(TextureTransition textureTransition) {
+            this.textureTransition = textureTransition;
+            return this;
+        }
+
+        public Builder withColorTransition(ColorTransition colorTransition) {
+            this.colorTransition = colorTransition;
+            return this;
+        }
+
+        public Builder withStats(Stats stats) {
+            this.stats = stats;
+            return this;
+        }
+
+        public Builder withPosition(Vector2 positionCoordinates) {
+            this.positionCoordinates = positionCoordinates;
+            return this;
+        }
     }
 
 }

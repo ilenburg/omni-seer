@@ -1,22 +1,17 @@
 package com.lonewolf.lagom.entities;
 
-import com.lonewolf.lagom.builders.SpriteBuilder;
+import com.lonewolf.lagom.entities.base.DrawableEntity;
 import com.lonewolf.lagom.modules.Position;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.effects.Animation;
 import com.lonewolf.lagom.physics.Vector2;
-import com.lonewolf.lagom.states.EntityState;
-import com.lonewolf.lagom.states.EntityStateReference;
 import com.lonewolf.lagom.utils.EntityUtils;
 
 /**
  * Created by Ian on 25/02/2018.
  */
 
-public class Impact {
-
-    private final Sprite sprite;
-    private final EntityStateReference entityStateReference;
+public class Impact extends DrawableEntity {
 
     private Position position;
 
@@ -44,28 +39,14 @@ public class Impact {
                 1.0f, 0.5f
         }};
 
-        this.entityStateReference = new EntityStateReference(EntityState.DISABLED);
-
         Animation animation = new Animation.Builder(animationCoordinates, 0.3f)
-                .withEntityStateReference(entityStateReference).build();
+                .withEntityStateReference(this.getEntityStateReference()).build();
 
         this.position = new Position();
 
-        this.sprite = new SpriteBuilder(shaderProgram, texture, EntityUtils
+        this.sprite = new Sprite.Builder(shaderProgram, texture, EntityUtils
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
                 .QUARTER_TEXTURE_COORDINATES).withAnimation(animation).build();
-    }
-
-    public Sprite getSprite() {
-        return sprite;
-    }
-
-    public EntityState getEntityState() {
-        return entityStateReference.getEntityState();
-    }
-
-    public EntityStateReference getEntityStateReference() {
-        return entityStateReference;
     }
 
     public Position getPosition() {

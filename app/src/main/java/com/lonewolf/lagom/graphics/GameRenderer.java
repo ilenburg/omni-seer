@@ -5,15 +5,16 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.lonewolf.lagom.entities.Aerial;
 import com.lonewolf.lagom.entities.Capsule;
 import com.lonewolf.lagom.entities.Impact;
-import com.lonewolf.lagom.entities.MegaSpell;
-import com.lonewolf.lagom.entities.Minion;
-import com.lonewolf.lagom.entities.MinorSpell;
 import com.lonewolf.lagom.entities.Player;
-import com.lonewolf.lagom.entities.Roller;
-import com.lonewolf.lagom.entities.ShadowLord;
+import com.lonewolf.lagom.entities.enemies.Aerial;
+import com.lonewolf.lagom.entities.enemies.Minion;
+import com.lonewolf.lagom.entities.enemies.Roller;
+import com.lonewolf.lagom.entities.enemies.ShadowLord;
+import com.lonewolf.lagom.entities.spell.MegaSpell;
+import com.lonewolf.lagom.entities.spell.MinorSpell;
+import com.lonewolf.lagom.hud.ManaGauge;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.modules.effects.Animation;
@@ -22,7 +23,6 @@ import com.lonewolf.lagom.modules.effects.Scroll;
 import com.lonewolf.lagom.modules.effects.TextureTransition;
 import com.lonewolf.lagom.physics.GameEngine;
 import com.lonewolf.lagom.resources.ResourceManager;
-import com.lonewolf.lagom.states.EntityState;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -151,7 +151,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         }
 
         for (Impact impact : resourceManager.getImpacts()) {
-            if (impact.getEntityState() == EntityState.ENABLED) {
+            if (impact.isActive()) {
                 draw(impact.getSprite(), impact.getPosition().getModelMatrix());
             }
         }
@@ -175,8 +175,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             draw(sprite, sprite.getModelMatrix());
         }
 
-        for (Sprite sprite : resourceManager.getManaGauge().getSprites()) {
-            draw(sprite, sprite.getModelMatrix());
+        ManaGauge manaGauge = resourceManager.getManaGauge();
+        int manaCount = manaGauge.getValue();
+        Sprite[] manaSprites = manaGauge.getSprites();
+        for (int i = 0; i < manaCount; ++i) {
+            draw(manaSprites[i], manaSprites[i].getModelMatrix());
         }
     }
 

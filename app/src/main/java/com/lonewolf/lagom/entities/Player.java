@@ -1,12 +1,12 @@
 package com.lonewolf.lagom.entities;
 
-import com.lonewolf.lagom.builders.SpriteBuilder;
+import com.lonewolf.lagom.entities.base.PhysicalEntity;
+import com.lonewolf.lagom.modules.Input;
+import com.lonewolf.lagom.modules.RigidBody;
+import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.modules.effects.Animation;
-import com.lonewolf.lagom.modules.Sprite;
-import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.modules.effects.ColorTransition;
-import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.physics.Vector2;
 import com.lonewolf.lagom.utils.EntityUtils;
 
@@ -14,16 +14,12 @@ import com.lonewolf.lagom.utils.EntityUtils;
  * Created by Ian on 23/01/2017.
  */
 
-public class Player {
+public class Player extends PhysicalEntity {
 
     private static final float MAX_RADIANS = 3.14159265f;
 
-    private final Sprite sprite;
-    private final RigidBody rigidBody;
     private final Input input;
     private final Stats stats;
-
-    private boolean active;
 
     public Player(int shaderProgram, int texture) {
 
@@ -67,22 +63,13 @@ public class Player {
 
         ColorTransition colorTransition = new ColorTransition(MAX_RADIANS, this.input);
 
-        this.sprite = new SpriteBuilder(shaderProgram, texture, EntityUtils
+        this.sprite = new Sprite.Builder(shaderProgram, texture, EntityUtils
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
                 .QUARTER_TEXTURE_COORDINATES).withAnimation(animation).withColorTransition
                 (colorTransition).build();
 
         this.stats = new Stats(1);
-
-        active = true;
-    }
-
-    public Sprite getSprite() {
-        return sprite;
-    }
-
-    public RigidBody getRigidBody() {
-        return rigidBody;
+        this.setActive(true);
     }
 
     public Input getInput() {
@@ -95,14 +82,6 @@ public class Player {
 
     public boolean isAlive() {
         return stats.isAlive();
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public Stats getStats() {

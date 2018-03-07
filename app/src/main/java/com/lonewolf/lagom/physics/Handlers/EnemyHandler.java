@@ -1,9 +1,9 @@
 package com.lonewolf.lagom.physics.Handlers;
 
-import com.lonewolf.lagom.entities.Aerial;
+import com.lonewolf.lagom.entities.enemies.Aerial;
 import com.lonewolf.lagom.entities.Capsule;
-import com.lonewolf.lagom.entities.Minion;
-import com.lonewolf.lagom.entities.Roller;
+import com.lonewolf.lagom.entities.enemies.Minion;
+import com.lonewolf.lagom.entities.enemies.Roller;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.physics.Vector2;
 import com.lonewolf.lagom.resources.ResourceManager;

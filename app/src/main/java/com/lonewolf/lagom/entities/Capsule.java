@@ -1,6 +1,6 @@
 package com.lonewolf.lagom.entities;
 
-import com.lonewolf.lagom.builders.SpriteBuilder;
+import com.lonewolf.lagom.entities.base.PhysicalEntity;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.effects.ColorTransition;
@@ -13,14 +13,11 @@ import java.util.Random;
  * Created by Ian on 04/03/2018.
  */
 
-public class Capsule {
+public class Capsule extends PhysicalEntity {
 
     private static final Random random = new Random();
 
-    private final RigidBody rigidBody;
-    private final Sprite sprite;
     private boolean grounded;
-    private boolean active;
 
     public Capsule(int shaderProgram, int texture) {
 
@@ -31,28 +28,11 @@ public class Capsule {
 
         ColorTransition colorTransition = new ColorTransition(6.0f);
 
-        this.sprite = new SpriteBuilder(shaderProgram, texture, EntityUtils
+        this.sprite = new Sprite.Builder(shaderProgram, texture, EntityUtils
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
                 .FULL_TEXTURE_COORDINATES).withColorTransition(colorTransition).build();
 
-        active = false;
         grounded = false;
-    }
-
-    public RigidBody getRigidBody() {
-        return rigidBody;
-    }
-
-    public Sprite getSprite() {
-        return sprite;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public boolean isGrounded() {

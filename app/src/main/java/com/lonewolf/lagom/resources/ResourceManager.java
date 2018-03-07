@@ -8,19 +8,19 @@ import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.lonewolf.lagom.R;
-import com.lonewolf.lagom.entities.Aerial;
-import com.lonewolf.lagom.entities.Background;
+import com.lonewolf.lagom.entities.enemies.Aerial;
+import com.lonewolf.lagom.scenario.Background;
 import com.lonewolf.lagom.entities.Capsule;
 import com.lonewolf.lagom.entities.Impact;
-import com.lonewolf.lagom.entities.ManaGauge;
-import com.lonewolf.lagom.entities.MegaSpell;
-import com.lonewolf.lagom.entities.Minion;
-import com.lonewolf.lagom.entities.Panorama;
+import com.lonewolf.lagom.hud.ManaGauge;
+import com.lonewolf.lagom.entities.spell.MegaSpell;
+import com.lonewolf.lagom.entities.enemies.Minion;
+import com.lonewolf.lagom.scenario.Panorama;
 import com.lonewolf.lagom.entities.Player;
-import com.lonewolf.lagom.entities.Roller;
-import com.lonewolf.lagom.entities.Score;
-import com.lonewolf.lagom.entities.ShadowLord;
-import com.lonewolf.lagom.entities.MinorSpell;
+import com.lonewolf.lagom.entities.enemies.Roller;
+import com.lonewolf.lagom.hud.Score;
+import com.lonewolf.lagom.entities.enemies.ShadowLord;
+import com.lonewolf.lagom.entities.spell.MinorSpell;
 
 import org.apache.commons.io.IOUtils;
 

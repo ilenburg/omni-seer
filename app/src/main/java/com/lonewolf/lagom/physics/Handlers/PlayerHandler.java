@@ -1,24 +1,25 @@
 package com.lonewolf.lagom.physics.Handlers;
 
-import com.lonewolf.lagom.entities.Aerial;
 import com.lonewolf.lagom.entities.Capsule;
-import com.lonewolf.lagom.entities.MegaSpell;
-import com.lonewolf.lagom.entities.Minion;
-import com.lonewolf.lagom.entities.MinorSpell;
 import com.lonewolf.lagom.entities.Player;
-import com.lonewolf.lagom.entities.Roller;
+import com.lonewolf.lagom.entities.enemies.Aerial;
+import com.lonewolf.lagom.entities.enemies.Minion;
+import com.lonewolf.lagom.entities.enemies.Roller;
+import com.lonewolf.lagom.entities.spell.MegaSpell;
+import com.lonewolf.lagom.entities.spell.MinorSpell;
+import com.lonewolf.lagom.hud.ManaGauge;
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.physics.Vector2;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.utils.PhysicsUtils;
 
+import static com.lonewolf.lagom.utils.GameConstants.GHOST_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.GRAVITY_ACCELERATION;
 import static com.lonewolf.lagom.utils.GameConstants.PLAYER_GROUND_POSITION;
 import static com.lonewolf.lagom.utils.GameConstants.SPELL_BASE_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.SPELL_DISPLACEMENT;
 import static com.lonewolf.lagom.utils.GameConstants.VECTOR_FORWARD;
-import static com.lonewolf.lagom.utils.GameConstants.GHOST_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.ZERO;
 import static com.lonewolf.lagom.utils.PhysicsUtils.updatePlayerPosition;
 
@@ -76,6 +77,7 @@ public class PlayerHandler {
             for (Capsule capsule : resourceManager.getCapsules()) {
                 if (capsule.isActive()) {
                     if (PhysicsUtils.Collide(playerRigidBody, capsule.getRigidBody(), false)) {
+                        resourceManager.getManaGauge().add();
                         capsule.setActive(false);
                     }
                 }
@@ -98,17 +100,20 @@ public class PlayerHandler {
                 playerInput.update(deltaTime);
 
                 if (playerInput.isMegaSpell()) {
-                    for (MegaSpell megaSpell : resourceManager.getMegaSpells()) {
-                        if (!megaSpell.isActive()) {
-                            Vector2 startingPosition = playerRigidBody.getPosition();
-                            megaSpell.getRigidBody().setPosition(startingPosition.getX() + 0.1f,
-                                    startingPosition.getY());
-                            megaSpell.getRigidBody().setVelocity(SPELL_BASE_VELOCITY);
-                            megaSpell.setActive(true);
-                            playerInput.setMegaSpell(false);
-                            break;
+                    ManaGauge manaGauge = resourceManager.getManaGauge();
+                    if (manaGauge.consume()) {
+                        for (MegaSpell megaSpell : resourceManager.getMegaSpells()) {
+                            if (!megaSpell.isActive()) {
+                                Vector2 startingPosition = playerRigidBody.getPosition();
+                                megaSpell.getRigidBody().setPosition(startingPosition.getX() + 0.1f,
+                                        startingPosition.getY());
+                                megaSpell.getRigidBody().setVelocity(SPELL_BASE_VELOCITY);
+                                megaSpell.setActive(true);
+                                break;
+                            }
                         }
                     }
+                    playerInput.setMegaSpell(false);
                 }
 
                 if (!playerInput.getSpellTarget().isZero()) {

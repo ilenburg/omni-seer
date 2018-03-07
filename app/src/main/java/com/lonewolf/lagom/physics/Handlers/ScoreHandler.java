@@ -1,6 +1,6 @@
 package com.lonewolf.lagom.physics.Handlers;
 
-import com.lonewolf.lagom.entities.Score;
+import com.lonewolf.lagom.hud.Score;
 import com.lonewolf.lagom.resources.ResourceManager;
 
 /**

@@ -1,15 +1,13 @@
-package com.lonewolf.lagom.entities;
+package com.lonewolf.lagom.scenario;
 
-import com.lonewolf.lagom.builders.SpriteBuilder;
 import com.lonewolf.lagom.modules.effects.Scroll;
 import com.lonewolf.lagom.modules.Sprite;
-import com.lonewolf.lagom.modules.effects.TextureTransition;
 
 /**
- * Created by Ian on 11/02/2017.
+ * Created by Ian on 10/02/2017.
  */
 
-public class Background {
+public class Panorama {
 
     private final Sprite sprite;
 
@@ -17,7 +15,8 @@ public class Background {
         return sprite;
     }
 
-    public Background(int shaderProgram, int texture1, int texture2, float scrollRatio) {
+    public Panorama(int shaderProgram, int texture, float scrollRatio) {
+
         float[] geometry = new float[]{
                 -3.0f, 1.0f,
                 -3.0f, -1.0f,
@@ -32,8 +31,7 @@ public class Background {
                 3.0f, 0.0f
         };
 
-        this.sprite = new SpriteBuilder(shaderProgram, texture1,
-                geometry, textureCoordinates).withScroll(new Scroll(scrollRatio))
-                .withTextureTransition(new TextureTransition(texture2)).build();
+        this.sprite = new Sprite.Builder(shaderProgram, texture,
+                geometry, textureCoordinates).withScroll(new Scroll(scrollRatio)).build();
     }
 }

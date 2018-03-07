@@ -1,8 +1,8 @@
-package com.lonewolf.lagom.entities;
+package com.lonewolf.lagom.entities.enemies;
 
-import com.lonewolf.lagom.builders.SpriteBuilder;
-import com.lonewolf.lagom.modules.Sprite;
+import com.lonewolf.lagom.entities.base.PhysicalEntity;
 import com.lonewolf.lagom.modules.RigidBody;
+import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.physics.Vector2;
 import com.lonewolf.lagom.utils.EntityUtils;
@@ -13,14 +13,11 @@ import java.util.Random;
  * Created by Ian on 21/05/2017.
  */
 
-public class Minion {
+public class Minion extends PhysicalEntity {
 
     private static final Random random = new Random();
 
-    private final Sprite sprite;
-    private final RigidBody rigidBody;
     private final Stats stats;
-    private boolean active;
     private boolean aggressive;
 
     public Minion(int shaderProgram, int texture) {
@@ -32,32 +29,15 @@ public class Minion {
 
         this.stats = new Stats(5);
 
-        this.sprite = new SpriteBuilder(shaderProgram, texture, EntityUtils
+        this.sprite = new Sprite.Builder(shaderProgram, texture, EntityUtils
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
                 .FULL_TEXTURE_COORDINATES).withStats(stats).build();
 
-        active = false;
-        aggressive = false;
+        this.aggressive = false;
     }
 
     public Stats getStats() {
         return stats;
-    }
-
-    public Sprite getSprite() {
-        return sprite;
-    }
-
-    public RigidBody getRigidBody() {
-        return rigidBody;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public boolean isAggressive() {

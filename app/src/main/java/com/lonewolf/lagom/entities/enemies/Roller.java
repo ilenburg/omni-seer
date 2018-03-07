@@ -1,6 +1,6 @@
-package com.lonewolf.lagom.entities;
+package com.lonewolf.lagom.entities.enemies;
 
-import com.lonewolf.lagom.builders.SpriteBuilder;
+import com.lonewolf.lagom.entities.base.PhysicalEntity;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Stats;
@@ -14,15 +14,11 @@ import java.util.Random;
  * Created by Ian on 23/01/2017.
  */
 
-public class Roller {
+public class Roller extends PhysicalEntity {
 
     private static final Random random = new Random();
 
-    private final Sprite sprite;
-    private final RigidBody rigidBody;
     private final Stats stats;
-
-    private boolean active;
 
     public Roller(int shaderProgram, int texture) {
 
@@ -38,28 +34,11 @@ public class Roller {
         TextureMapping textureMapping = new
                 TextureMapping(textureFramesCoordinates);
 
-        this.sprite = new SpriteBuilder(shaderProgram, texture, EntityUtils
+        this.sprite = new Sprite.Builder(shaderProgram, texture, EntityUtils
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
                 .QUARTER_TEXTURE_COORDINATES).withTextureMapping(textureMapping).build();
 
         this.stats = new Stats(15, textureMapping);
-        active = false;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public Sprite getSprite() {
-        return sprite;
-    }
-
-    public RigidBody getRigidBody() {
-        return rigidBody;
     }
 
     public Stats getStats() {

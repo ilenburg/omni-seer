@@ -2,7 +2,6 @@ package com.lonewolf.lagom.modules.effects;
 
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.modules.RigidBody;
-import com.lonewolf.lagom.states.EntityState;
 import com.lonewolf.lagom.states.EntityStateReference;
 
 import java.nio.FloatBuffer;
@@ -61,7 +60,7 @@ public class Animation {
             if (cycleStep >= cycleDuration) {
                 cycleStep = cycleStep - cycleDuration;
                 if (triggered) {
-                    entityStateReference.setEntityState(EntityState.DISABLED);
+                    entityStateReference.setActive(false);
                     return;
                 }
             }
@@ -81,7 +80,7 @@ public class Animation {
     public void trigger() {
         this.cycleStep = 0;
         if (triggered) {
-            entityStateReference.setEntityState(EntityState.ENABLED);
+            entityStateReference.setActive(true);
         }
     }
 
