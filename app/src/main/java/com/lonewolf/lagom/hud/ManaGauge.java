@@ -25,7 +25,7 @@ public class ManaGauge {
                     .FULL_TEXTURE_COORDINATES).withPosition(new Vector2(positionX, 0.83f)).build();
             positionX += displacement;
         }
-        this.value = 12;
+        this.value = 3;
     }
 
     public void add() {
