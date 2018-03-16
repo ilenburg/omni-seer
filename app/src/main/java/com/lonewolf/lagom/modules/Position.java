@@ -2,7 +2,7 @@ package com.lonewolf.lagom.modules;
 
 import android.opengl.Matrix;
 
-import com.lonewolf.lagom.physics.Vector2;
+import com.lonewolf.lagom.engine.Vector2;
 
 /**
  * Created by Ian on 25/02/2018.

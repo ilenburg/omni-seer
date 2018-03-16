@@ -5,8 +5,8 @@ import android.opengl.GLSurfaceView;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.MotionEvent;
 
-import com.lonewolf.lagom.physics.GameEngine;
-import com.lonewolf.lagom.physics.GestureListener;
+import com.lonewolf.lagom.engine.GameEngine;
+import com.lonewolf.lagom.engine.GestureListener;
 import com.lonewolf.lagom.resources.ResourceManager;
 
 /**

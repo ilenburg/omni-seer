@@ -4,7 +4,7 @@ import com.lonewolf.lagom.entities.base.PhysicalEntity;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.effects.ColorTransition;
-import com.lonewolf.lagom.physics.Vector2;
+import com.lonewolf.lagom.engine.Vector2;
 import com.lonewolf.lagom.utils.EntityUtils;
 
 import java.util.Random;

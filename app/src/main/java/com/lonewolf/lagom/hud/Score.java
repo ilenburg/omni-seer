@@ -2,7 +2,7 @@ package com.lonewolf.lagom.hud;
 
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.effects.TextureMapping;
-import com.lonewolf.lagom.physics.Vector2;
+import com.lonewolf.lagom.engine.Vector2;
 import com.lonewolf.lagom.utils.EntityUtils;
 
 /**

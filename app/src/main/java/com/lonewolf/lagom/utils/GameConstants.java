@@ -1,6 +1,6 @@
 package com.lonewolf.lagom.utils;
 
-import com.lonewolf.lagom.physics.Vector2;
+import com.lonewolf.lagom.engine.Vector2;
 
 /**
  * Created by Ian on 18/02/2018.

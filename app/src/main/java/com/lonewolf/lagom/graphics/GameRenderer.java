@@ -21,7 +21,7 @@ import com.lonewolf.lagom.modules.effects.Animation;
 import com.lonewolf.lagom.modules.effects.ColorTransition;
 import com.lonewolf.lagom.modules.effects.Scroll;
 import com.lonewolf.lagom.modules.effects.TextureTransition;
-import com.lonewolf.lagom.physics.GameEngine;
+import com.lonewolf.lagom.engine.GameEngine;
 import com.lonewolf.lagom.resources.ResourceManager;
 
 import javax.microedition.khronos.egl.EGLConfig;

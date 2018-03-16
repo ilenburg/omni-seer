@@ -3,24 +3,27 @@ package com.lonewolf.lagom.resources;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.lonewolf.lagom.R;
-import com.lonewolf.lagom.entities.enemies.Aerial;
-import com.lonewolf.lagom.scenario.Background;
 import com.lonewolf.lagom.entities.Capsule;
 import com.lonewolf.lagom.entities.Impact;
-import com.lonewolf.lagom.hud.ManaGauge;
-import com.lonewolf.lagom.entities.spell.MegaSpell;
-import com.lonewolf.lagom.entities.enemies.Minion;
-import com.lonewolf.lagom.scenario.Panorama;
 import com.lonewolf.lagom.entities.Player;
+import com.lonewolf.lagom.entities.enemies.Aerial;
+import com.lonewolf.lagom.entities.enemies.Minion;
 import com.lonewolf.lagom.entities.enemies.Roller;
-import com.lonewolf.lagom.hud.Score;
 import com.lonewolf.lagom.entities.enemies.ShadowLord;
+import com.lonewolf.lagom.entities.spell.MegaSpell;
 import com.lonewolf.lagom.entities.spell.MinorSpell;
+import com.lonewolf.lagom.external.PerfectLoopMediaPlayer;
+import com.lonewolf.lagom.hud.ManaGauge;
+import com.lonewolf.lagom.hud.Score;
+import com.lonewolf.lagom.scenario.Background;
+import com.lonewolf.lagom.scenario.Panorama;
 
 import org.apache.commons.io.IOUtils;
 
@@ -38,8 +41,11 @@ public class ResourceManager {
 
     private final Context context;
 
+    private SoundPool soundPool;
+
     private int[] shaderPrograms = new int[8];
     private int[] textures = new int[16];
+    private int[] sounds = new int[8];
 
     private final MinorSpell[] minorSpells = new MinorSpell[30];
 
@@ -66,6 +72,7 @@ public class ResourceManager {
 
     public ResourceManager(Context context) {
         this.context = context;
+        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
     }
 
     public MegaSpell[] getMegaSpells() {
@@ -128,9 +135,18 @@ public class ResourceManager {
         return capsules;
     }
 
+    public void playSound(int index) {
+        soundPool.play(sounds[index], 0.1f, 0.1f, 1, 0, 1.0f);
+    }
+
+    public void playMusic() {
+        PerfectLoopMediaPlayer.create(context, R.raw.background);
+    }
+
     public void loadResources() {
         initShaders();
         initTextures();
+        initSound();
         initEntities();
     }
 
@@ -185,6 +201,10 @@ public class ResourceManager {
         for (i = 0; i < size; ++i) {
             capsules[i] = new Capsule(shaderPrograms[3], textures[15]);
         }
+    }
+
+    private void initSound() {
+        sounds[0] = soundPool.load(context, R.raw.jump, 1);
     }
 
     private void initShaders() {

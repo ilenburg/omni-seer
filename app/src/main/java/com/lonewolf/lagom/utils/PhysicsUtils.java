@@ -1,9 +1,9 @@
 package com.lonewolf.lagom.utils;
 
 import com.lonewolf.lagom.modules.RigidBody;
-import com.lonewolf.lagom.physics.Vector2;
+import com.lonewolf.lagom.engine.Vector2;
 
-import static com.lonewolf.lagom.physics.Vector2.dotProduct;
+import static com.lonewolf.lagom.engine.Vector2.dotProduct;
 import static com.lonewolf.lagom.utils.GameConstants.VECTOR_FORWARD;
 
 /**

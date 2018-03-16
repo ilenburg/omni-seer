@@ -8,7 +8,7 @@ import com.lonewolf.lagom.modules.effects.ColorTransition;
 import com.lonewolf.lagom.modules.effects.Scroll;
 import com.lonewolf.lagom.modules.effects.TextureMapping;
 import com.lonewolf.lagom.modules.effects.TextureTransition;
-import com.lonewolf.lagom.physics.Vector2;
+import com.lonewolf.lagom.engine.Vector2;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
