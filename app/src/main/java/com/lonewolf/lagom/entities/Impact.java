@@ -13,9 +13,10 @@ import com.lonewolf.lagom.utils.EntityUtils;
 
 public class Impact extends DrawableEntity {
 
-    private Position position;
+    private final boolean mega;
+    private final Position position;
 
-    public Impact(int shaderProgram, int texture, float radius) {
+    public Impact(int shaderProgram, int texture, float radius, boolean mega) {
 
         float[][] animationCoordinates = new float[][]{{
                 0.0f, 0.0f,
@@ -43,6 +44,7 @@ public class Impact extends DrawableEntity {
                 .withEntityStateReference(this.getEntityStateReference()).build();
 
         this.position = new Position();
+        this.mega = mega;
 
         this.sprite = new Sprite.Builder(shaderProgram, texture, EntityUtils
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
@@ -51,6 +53,10 @@ public class Impact extends DrawableEntity {
 
     public Position getPosition() {
         return this.position;
+    }
+
+    public boolean isMega() {
+        return mega;
     }
 
     public void setPosition(Vector2 positionCoordinates) {

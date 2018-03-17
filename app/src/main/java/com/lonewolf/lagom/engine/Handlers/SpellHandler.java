@@ -65,6 +65,10 @@ public class SpellHandler {
 
                 checkImpactGround(minorSpell);
 
+                if (!minorSpell.getRigidBody().getPosition().isBounded()) {
+                    minorSpell.setActive(false);
+                }
+
                 updateRigidBody(minorSpell.getRigidBody(), deltaTime);
             }
         }
@@ -91,6 +95,7 @@ public class SpellHandler {
                     spell.setActive(false);
                     minion.setAggressive(true);
                     minion.getStats().dealDamage(spell.getDamage());
+                    resourceManager.playDamage();
                 }
             }
         }
@@ -124,8 +129,7 @@ public class SpellHandler {
 
     private void checkImpactGround(Spell spell) {
         RigidBody spellRigidBody = spell.getRigidBody();
-        if (spellRigidBody.getPosition().getY() <= PLAYER_GROUND_POSITION - 0.06f ||
-                !spellRigidBody.getPosition().isBounded()) {
+        if (spellRigidBody.getPosition().getY() <= PLAYER_GROUND_POSITION - 0.06f) {
             activateImpact(spell.getImpact(), spellRigidBody);
             spell.setActive(false);
         }
@@ -134,5 +138,10 @@ public class SpellHandler {
     private void activateImpact(Impact spellImpact, RigidBody rigidBody) {
         spellImpact.setPosition(rigidBody.getPosition().copy());
         spellImpact.trigger();
+        if (spellImpact.isMega()) {
+            resourceManager.playBigHit();
+        } else {
+            resourceManager.playHit();
+        }
     }
 }

@@ -61,6 +61,8 @@ public class ResourceManager {
 
     private final Capsule[] capsules = new Capsule[6];
 
+    private PerfectLoopMediaPlayer musicPlayer;
+
     private Player player;
     private ShadowLord shadowLord;
     private Background background;
@@ -135,12 +137,44 @@ public class ResourceManager {
         return capsules;
     }
 
-    public void playSound(int index) {
-        soundPool.play(sounds[index], 0.1f, 0.1f, 1, 0, 1.0f);
+    public void playDamage() {
+        playSound(5, 0.2f);
+    }
+
+    public void playGhost() {
+        playSound(4, 0.6f);
+    }
+
+    public void playBigHit() {
+        playSound(3, 0.2f);
+    }
+
+    public void playHit() {
+        playSound(3, 0.1f);
+    }
+
+    public void playGetItem() {
+        playSound(2, 0.4f);
+    }
+
+    public void playMegaSpell() {
+        playSound(1, 0.6f);
+    }
+
+    public void playMinorSpell() {
+        playSound(1, 0.3f);
+    }
+
+    public void playJump(float jumpPower) {
+        playSound(0, 0.2f, 1.5f - (jumpPower / 3.0f));
     }
 
     public void playMusic() {
-        PerfectLoopMediaPlayer.create(context, R.raw.background);
+        musicPlayer.start();
+    }
+
+    public void pauseMusic() {
+        musicPlayer.pause();
     }
 
     public void loadResources() {
@@ -168,7 +202,7 @@ public class ResourceManager {
         float spellImpactRadius = 0.1f;
         int size = minorSpells.length;
         for (i = 0; i < size; ++i) {
-            impacts[i] = new Impact(shaderPrograms[0], textures[13], spellImpactRadius);
+            impacts[i] = new Impact(shaderPrograms[0], textures[13], spellImpactRadius, false);
             minorSpells[i] = new MinorSpell(shaderPrograms[3], textures[6], impacts[i]);
         }
 
@@ -177,7 +211,7 @@ public class ResourceManager {
         size = megaSpells.length;
         for (i = 0; i < size; ++i) {
             impacts[i + spellsLastIndex] = new Impact(shaderPrograms[0], textures[13],
-                    megaSpellImpactRadius);
+                    megaSpellImpactRadius, true);
             megaSpells[i] = new MegaSpell(shaderPrograms[3], textures[6], impacts[i +
                     spellsLastIndex]);
         }
@@ -204,7 +238,22 @@ public class ResourceManager {
     }
 
     private void initSound() {
+        musicPlayer = PerfectLoopMediaPlayer.create(context, R.raw.background);
+
         sounds[0] = soundPool.load(context, R.raw.jump, 1);
+        sounds[1] = soundPool.load(context, R.raw.spell, 1);
+        sounds[2] = soundPool.load(context, R.raw.get_item, 1);
+        sounds[3] = soundPool.load(context, R.raw.hit, 1);
+        sounds[4] = soundPool.load(context, R.raw.ghost, 1);
+        sounds[5] = soundPool.load(context, R.raw.damage, 1);
+    }
+
+    private void playSound(int index, float volume, float rate) {
+        soundPool.play(sounds[index], volume, volume, 1, 0, rate);
+    }
+
+    private void playSound(int index, float volume) {
+        soundPool.play(sounds[index], volume, volume, 1, 0, 1.0f);
     }
 
     private void initShaders() {

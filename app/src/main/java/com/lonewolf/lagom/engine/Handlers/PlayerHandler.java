@@ -1,5 +1,6 @@
 package com.lonewolf.lagom.engine.Handlers;
 
+import com.lonewolf.lagom.engine.Vector2;
 import com.lonewolf.lagom.entities.Capsule;
 import com.lonewolf.lagom.entities.Player;
 import com.lonewolf.lagom.entities.enemies.Aerial;
@@ -10,7 +11,6 @@ import com.lonewolf.lagom.entities.spell.MinorSpell;
 import com.lonewolf.lagom.hud.ManaGauge;
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.modules.RigidBody;
-import com.lonewolf.lagom.engine.Vector2;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.utils.PhysicsUtils;
 
@@ -79,6 +79,7 @@ public class PlayerHandler {
                     if (PhysicsUtils.Collide(playerRigidBody, capsule.getRigidBody(), false)) {
                         resourceManager.getManaGauge().add();
                         capsule.setActive(false);
+                        resourceManager.playGetItem();
                     }
                 }
             }
@@ -88,6 +89,8 @@ public class PlayerHandler {
                 playerInput.setInvulnerable(true);
                 playerRigidBody.stop();
                 playerRigidBody.setVelocity(GHOST_VELOCITY);
+                resourceManager.pauseMusic();
+                resourceManager.playGhost();
             }
 
         }
@@ -109,6 +112,7 @@ public class PlayerHandler {
                                         startingPosition.getY());
                                 megaSpell.getRigidBody().setVelocity(SPELL_BASE_VELOCITY);
                                 megaSpell.setActive(true);
+                                resourceManager.playMegaSpell();
                                 break;
                             }
                         }
@@ -130,6 +134,7 @@ public class PlayerHandler {
                             float angle = PhysicsUtils.CalcAngle(startingVelocity, VECTOR_FORWARD);
                             minorSpell.getRigidBody().setAngle(angle);
                             minorSpell.setActive(true);
+                            resourceManager.playMinorSpell();
                             break;
                         }
                     }
@@ -140,8 +145,8 @@ public class PlayerHandler {
 
                 if (playerJumpPower != ZERO) {
                     playerRigidBody.setVelocityY(playerJumpPower);
+                    resourceManager.playJump(playerJumpPower);
                     playerInput.setJumpPower(ZERO);
-                    resourceManager.playSound(0);
                 }
             }
 

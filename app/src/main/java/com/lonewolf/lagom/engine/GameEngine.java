@@ -63,7 +63,7 @@ public class GameEngine implements Runnable {
     public void run() {
 
         this.lastTime = System.currentTimeMillis();
-        resourceManager.playMusic();
+        //resourceManager.playMusic();
 
         while (!Thread.currentThread().isInterrupted()) {
             if (gameState == GameState.RUNNING) {
