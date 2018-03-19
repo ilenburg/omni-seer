@@ -38,7 +38,7 @@ public class Aerial extends PhysicalEntity {
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
                 .QUARTER_TEXTURE_COORDINATES).withTextureMapping(textureMapping).build();
 
-        this.stats = new Stats(10, textureMapping);
+        this.stats = new Stats(6, textureMapping);
     }
 
     public Stats getStats() {

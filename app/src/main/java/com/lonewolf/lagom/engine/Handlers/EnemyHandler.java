@@ -38,6 +38,7 @@ public class EnemyHandler {
     private static final int AERIAL_CHANCE_IN = 4000;
     private static final int MINION_DROP_CHANCE_IN = 4;
     private static final int DROP_CHANCE_IN = 2;
+    private static final int ALWAYS_ALIVE_MINIONS = 1;
 
     private final ResourceManager resourceManager;
 
@@ -85,6 +86,21 @@ public class EnemyHandler {
     }
 
     private void updateRespawn(int level) {
+
+        if (activeMinionCount < ALWAYS_ALIVE_MINIONS) {
+            for (Minion minion : resourceManager.getMinions()) {
+                if (!minion.isActive()) {
+                    resetVelocity(minion.getRigidBody(), MINION_STARTING_VELOCITY);
+                    setMinionSpawnPosition(minion.getRigidBody());
+                    minion.getStats().restore();
+                    minion.setAggressive(false);
+                    minion.setActive(true);
+                    ++activeMinionCount;
+                    break;
+                }
+            }
+        }
+
         if (random.nextInt(MINION_CHANCE_IN) == 0) {
             int maxMinions = resourceManager.getMinions().length;
             if (activeMinionCount < level && activeMinionCount < maxMinions) {

@@ -75,7 +75,7 @@ public class GameEngine implements Runnable {
 
                 spellHandler.update(deltaTime);
 
-                enemyHandler.update(deltaTime, 1 + resourceManager.getScore().getValue() / 100);
+                enemyHandler.update(deltaTime, 1 + resourceManager.getScore().getValue() / 200);
 
                 scoreHandler.update(deltaTime);
 

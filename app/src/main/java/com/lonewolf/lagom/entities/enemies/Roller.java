@@ -38,7 +38,7 @@ public class Roller extends PhysicalEntity {
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
                 .QUARTER_TEXTURE_COORDINATES).withTextureMapping(textureMapping).build();
 
-        this.stats = new Stats(15, textureMapping);
+        this.stats = new Stats(12, textureMapping);
     }
 
     public Stats getStats() {
