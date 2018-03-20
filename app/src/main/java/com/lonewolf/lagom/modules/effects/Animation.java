@@ -2,7 +2,7 @@ package com.lonewolf.lagom.modules.effects;
 
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.modules.RigidBody;
-import com.lonewolf.lagom.states.EntityStateReference;
+import com.lonewolf.lagom.states.StateReference;
 
 import java.nio.FloatBuffer;
 import java.util.Random;
@@ -24,7 +24,7 @@ public class Animation {
 
     private float cycleStep;
 
-    private final EntityStateReference entityStateReference;
+    private final StateReference stateReference;
     private final RigidBody rigidBody;
     private final Input input;
 
@@ -33,19 +33,19 @@ public class Animation {
     private final boolean triggered;
 
     private Animation(float[][] textureFramesCoordinates, float cycleDuration, RigidBody
-            rigidBody, float[] jumpTextureCoordinates, Input input, EntityStateReference
-                              entityStateReference) {
+            rigidBody, float[] jumpTextureCoordinates, Input input, StateReference
+                              stateReference) {
         this.textureFramesCoordinates = textureFramesCoordinates;
         this.cycleDuration = cycleDuration;
         this.cycleStepDuration = cycleDuration / textureFramesCoordinates.length;
         this.rigidBody = rigidBody;
         this.input = input;
         this.jumpTextureCoordinates = jumpTextureCoordinates;
-        this.entityStateReference = entityStateReference;
+        this.stateReference = stateReference;
 
         this.movementBased = this.rigidBody != null;
         this.inputAffected = this.input != null;
-        this.triggered = this.entityStateReference != null;
+        this.triggered = this.stateReference != null;
 
         this.cycleStep = triggered ? 0.0f : random.nextFloat() * 3;
     }
@@ -60,7 +60,7 @@ public class Animation {
             if (cycleStep >= cycleDuration) {
                 cycleStep = cycleStep - cycleDuration;
                 if (triggered) {
-                    entityStateReference.setActive(false);
+                    stateReference.setActive(false);
                     return;
                 }
             }
@@ -80,7 +80,7 @@ public class Animation {
     public void trigger() {
         this.cycleStep = 0;
         if (triggered) {
-            entityStateReference.setActive(true);
+            stateReference.setActive(true);
         }
     }
 
@@ -100,7 +100,7 @@ public class Animation {
         private final float cycleDuration;
 
         private RigidBody rigidBody;
-        private EntityStateReference entityStateReference;
+        private StateReference stateReference;
         private float[] jumpTextureCoordinates;
         private Input input;
 
@@ -124,14 +124,14 @@ public class Animation {
             return this;
         }
 
-        public Builder withEntityStateReference(EntityStateReference entityStateReference) {
-            this.entityStateReference = entityStateReference;
+        public Builder withEntityStateReference(StateReference stateReference) {
+            this.stateReference = stateReference;
             return this;
         }
 
         public Animation build() {
             return new Animation(textureFramesCoordinates, cycleDuration, rigidBody,
-                    jumpTextureCoordinates, input, entityStateReference);
+                    jumpTextureCoordinates, input, stateReference);
         }
     }
 }

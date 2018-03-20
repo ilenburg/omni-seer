@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         gameView = new GameView(this);
         MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111");
 
-        RelativeLayout layout = new RelativeLayout(this);
+        final RelativeLayout layout = new RelativeLayout(this);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup
                 .LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -54,7 +55,24 @@ public class MainActivity extends AppCompatActivity {
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        setContentView(layout);
+        adView.setAdListener(new AdListener() {
+
+            boolean firstLoad = true;
+
+            public void onAdLoaded() {
+                if (firstLoad) {
+                    setContentView(layout);
+                    firstLoad = false;
+                }
+            }
+
+            public void onAdFailedToLoad(int errorCode) {
+                if (firstLoad) {
+                    setContentView(layout);
+                    firstLoad = false;
+                }
+            }
+        });
     }
 
     @Override

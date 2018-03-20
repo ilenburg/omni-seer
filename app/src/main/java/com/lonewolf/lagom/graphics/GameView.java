@@ -27,7 +27,6 @@ public class GameView extends GLSurfaceView {
         setEGLContextClientVersion(2);
 
         setPreserveEGLContextOnPause(true);
-
         this.resourceManager = new ResourceManager(context);
 
         this.gameEngine = new GameEngine(resourceManager);
@@ -35,7 +34,8 @@ public class GameView extends GLSurfaceView {
 
         setRenderer(gameRenderer);
 
-        this.mDetector = new GestureDetectorCompat(context, new GestureListener(resourceManager));
+        this.mDetector = new GestureDetectorCompat(context, new GestureListener(resourceManager,
+                gameEngine.getInputState()));
     }
 
     @Override

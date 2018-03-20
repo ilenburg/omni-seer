@@ -297,7 +297,7 @@ public class ResourceManager {
         loadTexture(R.drawable.foreground, 4, true);
         loadTexture(R.drawable.night, 5, true);
         loadTexture(R.drawable.fire_sprite, 6, false);
-        loadTexture(R.drawable.shadown_lord, 7, false);
+        loadTexture(R.drawable.shadow_lord, 7, false);
         loadTexture(R.drawable.minion, 8, false);
         loadTexture(R.drawable.bomb, 9, false);
         loadTexture(R.drawable.goo, 10, false);

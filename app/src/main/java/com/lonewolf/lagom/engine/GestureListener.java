@@ -5,6 +5,7 @@ import android.view.MotionEvent;
 
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.resources.ResourceManager;
+import com.lonewolf.lagom.states.StateReference;
 
 /**
  * Created by Ian on 14/02/2017.
@@ -13,9 +14,11 @@ import com.lonewolf.lagom.resources.ResourceManager;
 public class GestureListener implements GestureDetector.OnGestureListener {
 
     private final ResourceManager resourceManager;
+    private final StateReference inputState;
 
-    public GestureListener(ResourceManager resourceManager) {
+    public GestureListener(ResourceManager resourceManager, StateReference inputState) {
         this.resourceManager = resourceManager;
+        this.inputState = inputState;
     }
 
     @Override
@@ -30,7 +33,9 @@ public class GestureListener implements GestureDetector.OnGestureListener {
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        resourceManager.getPlayer().getInput().setSpellTarget(e.getX(), e.getY());
+        if (inputState.isActive()) {
+            resourceManager.getPlayer().getInput().setSpellTarget(e.getX(), e.getY());
+        }
         return true;
     }
 
@@ -47,28 +52,30 @@ public class GestureListener implements GestureDetector.OnGestureListener {
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-        float distanceX = e2.getX() - e1.getX();
-        float distanceY = e1.getY() - e2.getY();
-
-        Input playerInput = resourceManager.getPlayer().getInput();
-
         boolean validFling = false;
 
-        if (Math.abs(distanceY) > Math.abs(distanceX)) {
-            if (distanceY > 200) {
-                if (playerInput.isGrounded()) {
-                    if (distanceY > 600.0f) {
-                        distanceY = 600.0f;
+        if (inputState.isActive()) {
+            float distanceX = e2.getX() - e1.getX();
+            float distanceY = e1.getY() - e2.getY();
+
+            Input playerInput = resourceManager.getPlayer().getInput();
+
+            if (Math.abs(distanceY) > Math.abs(distanceX)) {
+                if (distanceY > 200) {
+                    if (playerInput.isGrounded()) {
+                        if (distanceY > 600.0f) {
+                            distanceY = 600.0f;
+                        }
+                        playerInput.setJumpPower(distanceY / 200.0f);
+                        playerInput.setGrounded(false);
                     }
-                    playerInput.setJumpPower(distanceY / 200.0f);
-                    playerInput.setGrounded(false);
+                    validFling = true;
                 }
-                validFling = true;
-            }
-        } else if (Math.abs(distanceX) > 200) {
-            if (distanceX > 0) {
-                playerInput.setMegaSpell(true);
-                validFling = true;
+            } else if (Math.abs(distanceX) > 200) {
+                if (distanceX > 0) {
+                    playerInput.setMegaSpell(true);
+                    validFling = true;
+                }
             }
         }
 
@@ -77,6 +84,5 @@ public class GestureListener implements GestureDetector.OnGestureListener {
         } else {
             return onSingleTapUp(e2);
         }
-
     }
 }

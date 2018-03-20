@@ -41,7 +41,7 @@ public class Impact extends DrawableEntity {
         }};
 
         Animation animation = new Animation.Builder(animationCoordinates, 0.3f)
-                .withEntityStateReference(this.getEntityStateReference()).build();
+                .withEntityStateReference(this.getStateReference()).build();
 
         this.position = new Position();
         this.mega = mega;

@@ -5,7 +5,7 @@ import com.lonewolf.lagom.engine.Handlers.PlayerHandler;
 import com.lonewolf.lagom.engine.Handlers.ScoreHandler;
 import com.lonewolf.lagom.engine.Handlers.SpellHandler;
 import com.lonewolf.lagom.resources.ResourceManager;
-import com.lonewolf.lagom.states.GameState;
+import com.lonewolf.lagom.states.StateReference;
 
 /**
  * Created by Ian on 28/01/2017.
@@ -18,7 +18,8 @@ public class GameEngine implements Runnable {
     private final SpellHandler spellHandler;
     private final ScoreHandler scoreHandler;
 
-    private GameState gameState;
+    private final StateReference inputState;
+    private final StateReference gameState;
 
     private long lastTime;
     private float deltaTime;
@@ -26,12 +27,8 @@ public class GameEngine implements Runnable {
 
     private ResourceManager resourceManager;
 
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
+    public StateReference getInputState() {
+        return inputState;
     }
 
     public float getCameraPosition() {
@@ -54,7 +51,8 @@ public class GameEngine implements Runnable {
         this.spellHandler = new SpellHandler(resourceManager);
         this.scoreHandler = new ScoreHandler(resourceManager);
 
-        this.gameState = GameState.RUNNING;
+        this.gameState = new StateReference(true);
+        this.inputState = new StateReference(false);
         this.deltaTime = 0.0f;
         this.animationDeltaTime = 0.0f;
     }
@@ -63,10 +61,10 @@ public class GameEngine implements Runnable {
     public void run() {
 
         this.lastTime = System.currentTimeMillis();
-        //resourceManager.playMusic();
+        this.inputState.setActive(true);
 
         while (!Thread.currentThread().isInterrupted()) {
-            if (gameState == GameState.RUNNING) {
+            if (gameState.isActive()) {
                 deltaTime = (System.currentTimeMillis() - lastTime) / 1000.0f;
                 animationDeltaTime += deltaTime;
                 lastTime = System.currentTimeMillis();

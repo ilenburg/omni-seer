@@ -1,6 +1,6 @@
 package com.lonewolf.lagom.entities.base;
 
-import com.lonewolf.lagom.states.EntityStateReference;
+import com.lonewolf.lagom.states.StateReference;
 
 /**
  * Created by Ian on 06/03/2018.
@@ -8,21 +8,21 @@ import com.lonewolf.lagom.states.EntityStateReference;
 
 public abstract class Entity {
 
-    private EntityStateReference entityStateReference = new EntityStateReference();
+    private StateReference stateReference = new StateReference();
 
     protected Entity() {
 
     }
 
     public boolean isActive() {
-        return entityStateReference.isActive();
+        return stateReference.isActive();
     }
 
     public void setActive(boolean active) {
-        this.entityStateReference.setActive(active);
+        this.stateReference.setActive(active);
     }
 
-    public EntityStateReference getEntityStateReference() {
-        return entityStateReference;
+    public StateReference getStateReference() {
+        return stateReference;
     }
 }
