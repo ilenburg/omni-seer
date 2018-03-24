@@ -120,8 +120,8 @@ public class PlayerHandler {
                     playerInput.setMegaSpell(false);
                 }
 
-                if (!playerInput.getSpellTarget().isZero()) {
-                    Vector2 startingVelocity = playerInput.getSpellTarget().copy();
+                if (playerInput.isTouchPending()) {
+                    Vector2 startingVelocity = playerInput.consumeTouchPosition().copy();
                     Vector2.sub(startingVelocity, startingVelocity, playerRigidBody.getPosition());
                     Vector2.normalize(startingVelocity, startingVelocity);
                     for (MinorSpell minorSpell : resourceManager.getMinorSpells()) {
@@ -138,7 +138,6 @@ public class PlayerHandler {
                             break;
                         }
                     }
-                    playerInput.getSpellTarget().setZero();
                 }
 
                 float playerJumpPower = playerInput.getJumpPower();

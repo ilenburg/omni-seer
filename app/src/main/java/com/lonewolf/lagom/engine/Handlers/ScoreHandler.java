@@ -1,6 +1,7 @@
 package com.lonewolf.lagom.engine.Handlers;
 
 import com.lonewolf.lagom.hud.Score;
+import com.lonewolf.lagom.hud.ScoreBoard;
 import com.lonewolf.lagom.resources.ResourceManager;
 
 /**
@@ -22,6 +23,11 @@ public class ScoreHandler {
             traveledDistance += (int) (deltaTime * 1000);
             Score score = resourceManager.getScore();
             score.setValue(traveledDistance / 300);
+        }
+
+        ScoreBoard scoreBoard = resourceManager.getScoreBoard();
+        if (scoreBoard.isActive()) {
+            scoreBoard.checkAction();
         }
     }
 }

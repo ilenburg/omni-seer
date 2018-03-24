@@ -9,7 +9,7 @@ import com.lonewolf.lagom.engine.Vector2;
 public class Input {
 
     private float jumpPower;
-    private Vector2 spellTarget;
+    private Vector2 touchPosition;
     private boolean grounded;
     private boolean megaSpell;
 
@@ -19,27 +19,36 @@ public class Input {
 
     private boolean active;
     private boolean invulnerable;
+    private boolean touchPending;
     private float time;
 
     public Input() {
         this.jumpPower = 0.0f;
         this.grounded = true;
-        this.spellTarget = new Vector2(0.0f, 0.0f);
+        this.touchPosition = new Vector2(0.0f, 0.0f);
         this.screenHeight = 0.0f;
         this.screenWidth = 0.0f;
 
         this.invulnerable = false;
+        this.touchPending = false;
         this.time = 0.0f;
         this.active = true;
     }
 
-    public Vector2 getSpellTarget() {
-        return spellTarget;
+    public Vector2 consumeTouchPosition() {
+        this.touchPending = false;
+        return touchPosition;
     }
 
-    public void setSpellTarget(float x, float y) {
-        this.spellTarget.setX(getNormalizedX(x));
-        this.spellTarget.setY(getNormalizedY(y));
+    public boolean isTouchPending() {
+        return touchPending;
+    }
+
+    public void setTouchPosition(float x, float y) {
+        this.touchPosition.setX(getNormalizedX(x));
+        this.touchPosition.setY(getNormalizedY(y));
+        this.touchPending = true;
+
     }
 
     public void setScreenSize(float screenWidth, float screenHeight, float ratio) {

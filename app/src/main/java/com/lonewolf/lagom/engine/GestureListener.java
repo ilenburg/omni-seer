@@ -34,7 +34,7 @@ public class GestureListener implements GestureDetector.OnGestureListener {
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
         if (inputState.isActive()) {
-            resourceManager.getPlayer().getInput().setSpellTarget(e.getX(), e.getY());
+            resourceManager.getPlayer().getInput().setTouchPosition(e.getX(), e.getY());
         }
         return true;
     }

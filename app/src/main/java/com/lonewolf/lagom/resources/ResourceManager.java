@@ -22,6 +22,7 @@ import com.lonewolf.lagom.entities.spell.MinorSpell;
 import com.lonewolf.lagom.external.PerfectLoopMediaPlayer;
 import com.lonewolf.lagom.hud.ManaGauge;
 import com.lonewolf.lagom.hud.Score;
+import com.lonewolf.lagom.hud.ScoreBoard;
 import com.lonewolf.lagom.scenario.Background;
 import com.lonewolf.lagom.scenario.Panorama;
 
@@ -44,7 +45,7 @@ public class ResourceManager {
     private SoundPool soundPool;
 
     private int[] shaderPrograms = new int[8];
-    private int[] textures = new int[16];
+    private int[] textures = new int[20];
     private int[] sounds = new int[8];
 
     private final MinorSpell[] minorSpells = new MinorSpell[30];
@@ -71,6 +72,7 @@ public class ResourceManager {
     private Panorama panoramaFar;
     private Score score;
     private ManaGauge manaGauge;
+    private ScoreBoard scoreBoard;
 
     public ResourceManager(Context context) {
         this.context = context;
@@ -129,6 +131,10 @@ public class ResourceManager {
         return manaGauge;
     }
 
+    public ScoreBoard getScoreBoard() {
+        return scoreBoard;
+    }
+
     public Impact[] getImpacts() {
         return impacts;
     }
@@ -138,7 +144,7 @@ public class ResourceManager {
     }
 
     public void playDamage() {
-        playSound(5, 0.2f);
+        playSound(5, 0.1f);
     }
 
     public void playGhost() {
@@ -196,6 +202,7 @@ public class ResourceManager {
         this.shadowLord = new ShadowLord(shaderPrograms[0], textures[7]);
         this.score = new Score(shaderPrograms[0], textures[12]);
         this.manaGauge = new ManaGauge(shaderPrograms[0], textures[15]);
+        this.scoreBoard = new ScoreBoard(shaderPrograms[0], textures[16], player.getInput());
 
         int i;
 
@@ -306,6 +313,7 @@ public class ResourceManager {
         loadTexture(R.drawable.impact2, 13, false);
         loadTexture(R.drawable.meat_blow, 14, false);
         loadTexture(R.drawable.glass_orb, 15, false);
+        loadTexture(R.drawable.score_board, 16, false);
     }
 
     private String getShaderCode(int resourceId) throws IOException {

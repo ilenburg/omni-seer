@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.lonewolf.lagom.engine.GameEngine;
 import com.lonewolf.lagom.entities.Capsule;
 import com.lonewolf.lagom.entities.Impact;
 import com.lonewolf.lagom.entities.Player;
@@ -21,7 +22,6 @@ import com.lonewolf.lagom.modules.effects.Animation;
 import com.lonewolf.lagom.modules.effects.ColorTransition;
 import com.lonewolf.lagom.modules.effects.Scroll;
 import com.lonewolf.lagom.modules.effects.TextureTransition;
-import com.lonewolf.lagom.engine.GameEngine;
 import com.lonewolf.lagom.resources.ResourceManager;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -180,6 +180,10 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         Sprite[] manaSprites = manaGauge.getSprites();
         for (int i = 0; i < manaCount; ++i) {
             draw(manaSprites[i], manaSprites[i].getModelMatrix());
+        }
+
+        if (resourceManager.getScoreBoard().isActive()) {
+            draw(resourceManager.getScoreBoard().getSprite());
         }
     }
 
