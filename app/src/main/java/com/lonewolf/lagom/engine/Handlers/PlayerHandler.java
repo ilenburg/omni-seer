@@ -12,11 +12,14 @@ import com.lonewolf.lagom.hud.ManaGauge;
 import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.resources.ResourceManager;
+import com.lonewolf.lagom.states.StateReference;
 import com.lonewolf.lagom.utils.PhysicsUtils;
 
 import static com.lonewolf.lagom.utils.GameConstants.GHOST_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.GRAVITY_ACCELERATION;
+import static com.lonewolf.lagom.utils.GameConstants.HEAVEN;
 import static com.lonewolf.lagom.utils.GameConstants.PLAYER_GROUND_POSITION;
+import static com.lonewolf.lagom.utils.GameConstants.PLAYER_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.SPELL_BASE_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.SPELL_DISPLACEMENT;
 import static com.lonewolf.lagom.utils.GameConstants.VECTOR_FORWARD;
@@ -29,11 +32,13 @@ import static com.lonewolf.lagom.utils.PhysicsUtils.updatePlayerPosition;
 
 public class PlayerHandler {
 
+    private final StateReference gameState;
     private final ResourceManager resourceManager;
     private float cameraPosition;
 
-    public PlayerHandler(ResourceManager resourceManager) {
+    public PlayerHandler(ResourceManager resourceManager, StateReference gameState) {
         this.resourceManager = resourceManager;
+        this.gameState = gameState;
         this.cameraPosition = 0.0f;
     }
 
@@ -85,11 +90,12 @@ public class PlayerHandler {
             }
 
             if (player.isDead()) {
-                player.getInput().setActive(false);
+                playerInput.setActive(false);
                 playerInput.setInvulnerable(true);
+                playerInput.setGrounded(false);
                 playerRigidBody.stop();
                 playerRigidBody.setVelocity(GHOST_VELOCITY);
-                resourceManager.pauseMusic();
+                resourceManager.stopMusic();
                 resourceManager.playGhost();
             }
 
@@ -167,7 +173,29 @@ public class PlayerHandler {
                 }
             }
 
+            if (player.isDead() && playerRigidBody.getPosition().getY() > HEAVEN) {
+                player.setActive(false);
+                gameState.setActive(false);
+                resourceManager.getScoreBoard().setActive(true);
+            }
+
         }
     }
 
+    public void reset() {
+        Player player = resourceManager.getPlayer();
+        RigidBody playerRigidBody = player.getRigidBody();
+
+        playerRigidBody.stop();
+        playerRigidBody.setVelocity(PLAYER_VELOCITY);
+
+        player.getStats().restore();
+
+        player.getInput().setActive(true);
+        player.getInput().setInvulnerable(false);
+        player.setActive(true);
+
+        resourceManager.getManaGauge().reset();
+        resourceManager.playMusic();
+    }
 }

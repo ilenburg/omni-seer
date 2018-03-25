@@ -7,8 +7,8 @@ import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.modules.effects.Animation;
 import com.lonewolf.lagom.modules.effects.ColorTransition;
-import com.lonewolf.lagom.engine.Vector2;
 import com.lonewolf.lagom.utils.EntityUtils;
+import com.lonewolf.lagom.utils.GameConstants;
 
 /**
  * Created by Ian on 23/01/2017.
@@ -20,6 +20,7 @@ public class Player extends PhysicalEntity {
 
     private final Input input;
     private final Stats stats;
+    private boolean wasAlive;
 
     public Player(int shaderProgram, int texture) {
 
@@ -55,8 +56,7 @@ public class Player extends PhysicalEntity {
         float radius = 0.12f;
 
         this.input = new Input();
-        this.rigidBody = new RigidBody(1, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2
-                (2.0f, 0.0f));
+        this.rigidBody = new RigidBody(1, radius / 2, GameConstants.PLAYER_POSITION.copy(), GameConstants.PLAYER_VELOCITY.copy());
 
         Animation animation = new Animation.Builder(animationCoordinates, 1.5f).withRigidBody
                 (rigidBody).withJumpTextureCoordinates(jumpCoordinates).withInput(input).build();
@@ -69,11 +69,18 @@ public class Player extends PhysicalEntity {
                 (colorTransition).build();
 
         this.stats = new Stats(1);
+        this.wasAlive = true;
         this.setActive(true);
     }
 
     public Input getInput() {
         return input;
+    }
+
+    public boolean justDied() {
+        boolean justDied = stats.isDead() && wasAlive;
+        this.wasAlive = false;
+        return justDied;
     }
 
     public boolean isDead() {

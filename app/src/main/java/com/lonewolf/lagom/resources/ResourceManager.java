@@ -79,6 +79,10 @@ public class ResourceManager {
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     public MegaSpell[] getMegaSpells() {
         return megaSpells;
     }
@@ -179,7 +183,7 @@ public class ResourceManager {
         musicPlayer.start();
     }
 
-    public void pauseMusic() {
+    public void stopMusic() {
         musicPlayer.pause();
     }
 

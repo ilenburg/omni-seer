@@ -8,11 +8,14 @@ import com.lonewolf.lagom.engine.Vector2;
 
 public final class GameConstants {
 
+    public static final int STARTING_MANA = 3;
+
     public static final float ZERO = 0.0f;
     public static final float GRAVITY_ACCELERATION = -9.8f * 0.8f;
     public static final float PLAYER_GROUND_POSITION = -0.535f;
     public static final float CAPSULE_GROUND_POSITION = -0.575f;
     public static final float OUT_OF_SIGH = -1.0f;
+    public static final float HEAVEN = 1.2f;
 
     public static final Vector2 VECTOR_ZERO = new Vector2(ZERO, ZERO);
     public static final Vector2 VECTOR_FORWARD = new Vector2(1.0f, ZERO);
@@ -27,6 +30,9 @@ public final class GameConstants {
     public static final Vector2 ROLLER_STARTING_VELOCITY = new Vector2(-1.5f, 0.0f);
     public static final Vector2 AERIAL_STARTING_VELOCITY = new Vector2(-0.5f, 0.0f);
     public static final Vector2 CAPSULE_STARTING_VELOCITY = new Vector2(-0.19f, 0.0f);
+    public static final Vector2 PLAYER_POSITION = new Vector2(-1.0f, -0.535f);
+    public static final Vector2 PLAYER_VELOCITY = new Vector2(2.0f, 0.0f);
+
 
     private GameConstants() {
 

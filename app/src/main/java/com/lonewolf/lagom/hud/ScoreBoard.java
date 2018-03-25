@@ -7,6 +7,7 @@ import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.utils.EntityUtils;
 import com.lonewolf.lagom.utils.PhysicsUtils;
+import com.lonewolf.lagom.utils.ScoreAction;
 
 /**
  * Created by Ian on 24/03/2018.
@@ -29,11 +30,14 @@ public class ScoreBoard extends DrawableEntity {
         this.setActive(false);
     }
 
-    public void checkAction() {
+    public ScoreAction checkAction() {
         if (input.isTouchPending()) {
             if (PhysicsUtils.Collide(input.consumeTouchPosition(), playRigidBody)) {
+                return ScoreAction.PLAY;
             } else if (PhysicsUtils.Collide(input.consumeTouchPosition(), shareRigidBody)) {
+                return ScoreAction.SHARE;
             }
         }
+        return ScoreAction.NONE;
     }
 }

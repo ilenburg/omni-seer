@@ -3,6 +3,7 @@ package com.lonewolf.lagom.hud;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.engine.Vector2;
 import com.lonewolf.lagom.utils.EntityUtils;
+import com.lonewolf.lagom.utils.GameConstants;
 
 /**
  * Created by Ian on 17/02/2018.
@@ -25,13 +26,17 @@ public class ManaGauge {
                     .FULL_TEXTURE_COORDINATES).withPosition(new Vector2(positionX, 0.83f)).build();
             positionX += displacement;
         }
-        this.value = 3;
+        this.value = GameConstants.STARTING_MANA;
     }
 
     public void add() {
         if (value + 1 < MAX_VALUE) {
             ++value;
         }
+    }
+
+    public void reset() {
+        this.value = GameConstants.STARTING_MANA;
     }
 
     public int getValue() {

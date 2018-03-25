@@ -326,4 +326,23 @@ public class EnemyHandler {
         capsuleRigidBody.setVelocity(CAPSULE_STARTING_VELOCITY);
         capsule.setActive(true);
     }
+
+    public void reset() {
+        for (Minion minion : resourceManager.getMinions()) {
+            minion.setActive(false);
+        }
+        activeMinionCount = 0;
+
+        for (Capsule capsule : resourceManager.getCapsules()) {
+            capsule.setActive(false);
+        }
+
+        for (Roller roller : resourceManager.getRollers()) {
+            roller.setActive(false);
+        }
+
+        for (Aerial aerial : resourceManager.getAerials()) {
+            aerial.setActive(false);
+        }
+    }
 }
