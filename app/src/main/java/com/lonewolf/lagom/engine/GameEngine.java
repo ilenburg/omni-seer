@@ -1,6 +1,6 @@
 package com.lonewolf.lagom.engine;
 
-import com.lonewolf.lagom.engine.Handlers.AndroidHandler;
+import com.lonewolf.lagom.engine.Handlers.ShareHandler;
 import com.lonewolf.lagom.engine.Handlers.EnemyHandler;
 import com.lonewolf.lagom.engine.Handlers.PlayerHandler;
 import com.lonewolf.lagom.engine.Handlers.ScoreHandler;
@@ -18,11 +18,12 @@ public class GameEngine implements Runnable {
     private final EnemyHandler enemyHandler;
     private final SpellHandler spellHandler;
     private final ScoreHandler scoreHandler;
-    private final AndroidHandler androidHandler;
+    private final ShareHandler shareHandler;
 
     private final StateReference inputState;
     private final StateReference gameState;
     private final StateReference resetState;
+    private final StateReference displayScoreState;
 
     private long lastTime;
     private float deltaTime;
@@ -52,13 +53,14 @@ public class GameEngine implements Runnable {
         this.gameState = new StateReference(true);
         this.inputState = new StateReference(false);
         this.resetState = new StateReference(false);
+        this.displayScoreState = new StateReference(false);
 
-        this.playerHandler = new PlayerHandler(resourceManager, gameState);
+        this.playerHandler = new PlayerHandler(resourceManager, gameState, displayScoreState);
         this.enemyHandler = new EnemyHandler(resourceManager);
         this.spellHandler = new SpellHandler(resourceManager);
 
-        this.androidHandler = new AndroidHandler(resourceManager.getContext());
-        this.scoreHandler = new ScoreHandler(resourceManager, androidHandler, resetState);
+        this.shareHandler = new ShareHandler(resourceManager.getContext());
+        this.scoreHandler = new ScoreHandler(resourceManager, shareHandler, resetState, displayScoreState);
 
         this.deltaTime = 0.0f;
         this.animationDeltaTime = 0.0f;

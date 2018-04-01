@@ -7,11 +7,11 @@ import android.content.Intent;
  * Created by Ian on 24/03/2018.
  */
 
-public class AndroidHandler {
+public class ShareHandler {
 
     private final Context context;
 
-    public AndroidHandler(Context context) {
+    public ShareHandler(Context context) {
         this.context = context;
     }
 

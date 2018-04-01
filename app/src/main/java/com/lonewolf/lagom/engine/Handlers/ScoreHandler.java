@@ -1,7 +1,6 @@
 package com.lonewolf.lagom.engine.Handlers;
 
-import android.util.Log;
-
+import com.lonewolf.lagom.hud.GameOverBoard;
 import com.lonewolf.lagom.hud.Score;
 import com.lonewolf.lagom.hud.ScoreBoard;
 import com.lonewolf.lagom.resources.ResourceManager;
@@ -14,15 +13,19 @@ import com.lonewolf.lagom.states.StateReference;
 public class ScoreHandler {
 
     private int traveledDistance;
-    private final AndroidHandler androidHandler;
-    private final ResourceManager resourceManager;
-    private final StateReference resetState;
 
-    public ScoreHandler(ResourceManager resourceManager, AndroidHandler androidHandler,
-                        StateReference resetState) {
+    private final ShareHandler shareHandler;
+    private final ResourceManager resourceManager;
+
+    private final StateReference resetState;
+    private final StateReference displayScoreState;
+
+    public ScoreHandler(ResourceManager resourceManager, ShareHandler shareHandler,
+                        StateReference resetState, StateReference displayScoreState) {
         this.resourceManager = resourceManager;
-        this.androidHandler = androidHandler;
+        this.shareHandler = shareHandler;
         this.resetState = resetState;
+        this.displayScoreState = displayScoreState;
         this.traveledDistance = 0;
     }
 
@@ -33,25 +36,43 @@ public class ScoreHandler {
             score.setValue(traveledDistance / 300);
         }
 
-        ScoreBoard scoreBoard = resourceManager.getScoreBoard();
-        if (scoreBoard.isActive()) {
-            switch (scoreBoard.checkAction()) {
+        GameOverBoard gameOverBoard = resourceManager.getGameOverBoard();
+        if (gameOverBoard.isActive()) {
+            switch (gameOverBoard.checkAction()) {
                 case PLAY:
                     resetState.setActive(true);
-                    scoreBoard.setActive(false);
+                    gameOverBoard.setActive(false);
                     break;
                 case SHARE:
-                    androidHandler.facebookShare();
+                    shareHandler.facebookShare();
                     break;
+            }
+        }
+
+        ScoreBoard scoreBoard = resourceManager.getScoreBoard();
+        if (scoreBoard.isActive()) {
+            if (displayScoreState.isActive()) {
+                scoreBoard.resetScores(resourceManager.getHighScore());
+                displayScoreState.setActive(false);
+            }
+            if (scoreBoard.update(resourceManager.getScore())) {
+                if (scoreBoard.getCurrentScore().getValue() % 10 == 0) {
+                    resourceManager.playCount();
+                }
+            } else {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                scoreBoard.setActive(false);
+                gameOverBoard.setActive(true);
             }
         }
     }
 
     public void reset() {
-        Score score = resourceManager.getScore();
-        resourceManager.saveHighScore(score.getValue());
-        Log.v("HighScore", Integer.toString(resourceManager.getHighScore()));
-        resourceManager.getScore().reset();
+        resourceManager.saveHighScore(resourceManager.getScoreBoard().getHighScore().getValue());
         traveledDistance = 0;
     }
 }

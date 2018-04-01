@@ -36,7 +36,7 @@ public class EnemyHandler {
     private static final int MINION_CHANCE_IN = 200;
     private static final int ROLLER_CHANCE_IN = 1000;
     private static final int AERIAL_CHANCE_IN = 4000;
-    private static final int MINION_DROP_CHANCE_IN = 4;
+    private static final int MINION_DROP_CHANCE_IN = 6;
     private static final int DROP_CHANCE_IN = 2;
     private static final int ALWAYS_ALIVE_MINIONS = 1;
 

@@ -4,7 +4,7 @@ package com.lonewolf.lagom.utils;
  * Created by Ian on 24/03/2018.
  */
 
-public enum ScoreAction {
+public enum BoardAction {
     PLAY,
     SHARE,
     NONE

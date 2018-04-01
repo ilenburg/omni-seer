@@ -33,11 +33,14 @@ import static com.lonewolf.lagom.utils.PhysicsUtils.updatePlayerPosition;
 public class PlayerHandler {
 
     private final StateReference gameState;
+    private final StateReference displayScoreState;
     private final ResourceManager resourceManager;
     private float cameraPosition;
 
-    public PlayerHandler(ResourceManager resourceManager, StateReference gameState) {
+    public PlayerHandler(ResourceManager resourceManager, StateReference gameState,
+                         StateReference scoreDisplayState) {
         this.resourceManager = resourceManager;
+        this.displayScoreState = scoreDisplayState;
         this.gameState = gameState;
         this.cameraPosition = 0.0f;
     }
@@ -178,6 +181,7 @@ public class PlayerHandler {
                 player.setActive(false);
                 player.getInput().consumeTouchPosition();
                 gameState.setActive(false);
+                displayScoreState.setActive(true);
                 resourceManager.getScoreBoard().setActive(true);
             }
 

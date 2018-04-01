@@ -15,7 +15,9 @@ import com.lonewolf.lagom.entities.enemies.Roller;
 import com.lonewolf.lagom.entities.enemies.ShadowLord;
 import com.lonewolf.lagom.entities.spell.MegaSpell;
 import com.lonewolf.lagom.entities.spell.MinorSpell;
+import com.lonewolf.lagom.hud.GameOverBoard;
 import com.lonewolf.lagom.hud.ManaGauge;
+import com.lonewolf.lagom.hud.ScoreBoard;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.modules.effects.Animation;
@@ -182,8 +184,22 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             draw(manaSprites[i], manaSprites[i].getModelMatrix());
         }
 
-        if (resourceManager.getScoreBoard().isActive()) {
-            draw(resourceManager.getScoreBoard().getSprite());
+        ScoreBoard scoreBoard = resourceManager.getScoreBoard();
+        if (scoreBoard.isActive()) {
+            draw(scoreBoard.getSprite());
+
+            for (Sprite sprite : scoreBoard.getHighScore().getSprites()) {
+                draw(sprite, sprite.getModelMatrix());
+            }
+
+            for (Sprite sprite : scoreBoard.getCurrentScore().getSprites()) {
+                draw(sprite, sprite.getModelMatrix());
+            }
+        }
+
+        GameOverBoard gameOverBoard = resourceManager.getGameOverBoard();
+        if (gameOverBoard.isActive()) {
+            draw(gameOverBoard.getSprite());
         }
     }
 

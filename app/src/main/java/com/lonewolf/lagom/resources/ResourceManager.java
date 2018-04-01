@@ -23,6 +23,7 @@ import com.lonewolf.lagom.entities.spell.MinorSpell;
 import com.lonewolf.lagom.external.PerfectLoopMediaPlayer;
 import com.lonewolf.lagom.hud.ManaGauge;
 import com.lonewolf.lagom.hud.Score;
+import com.lonewolf.lagom.hud.GameOverBoard;
 import com.lonewolf.lagom.hud.ScoreBoard;
 import com.lonewolf.lagom.scenario.Background;
 import com.lonewolf.lagom.scenario.Panorama;
@@ -76,6 +77,7 @@ public class ResourceManager {
     private Panorama panoramaFar;
     private Score score;
     private ManaGauge manaGauge;
+    private GameOverBoard gameOverBoard;
     private ScoreBoard scoreBoard;
 
     public ResourceManager(Context context) {
@@ -141,6 +143,10 @@ public class ResourceManager {
         return manaGauge;
     }
 
+    public GameOverBoard getGameOverBoard() {
+        return gameOverBoard;
+    }
+
     public ScoreBoard getScoreBoard() {
         return scoreBoard;
     }
@@ -197,6 +203,10 @@ public class ResourceManager {
         playSound(6, 0.6f);
     }
 
+    public void playCount() {
+        playSound(7, 0.6f);
+    }
+
     public void playJump(float jumpPower) {
         playSound(0, 0.2f, 1.5f - (jumpPower / 3.0f));
     }
@@ -226,9 +236,14 @@ public class ResourceManager {
         this.foreground = new Panorama(shaderPrograms[1], textures[4], scrollBase * 4);
         this.player = new Player(shaderPrograms[4], textures[0]);
         this.shadowLord = new ShadowLord(shaderPrograms[0], textures[7]);
-        this.score = new Score(shaderPrograms[0], textures[12]);
+        this.score = new Score(shaderPrograms[0], textures[12], -1.55f, 0.83f);
         this.manaGauge = new ManaGauge(shaderPrograms[0], textures[15]);
-        this.scoreBoard = new ScoreBoard(shaderPrograms[0], textures[16], player.getInput());
+        this.gameOverBoard = new GameOverBoard(shaderPrograms[0], textures[16], player.getInput());
+
+        Score highScore = new Score(shaderPrograms[0], textures[12], -0.15f, 0.23f);
+        Score currentScore = new Score(shaderPrograms[0], textures[12], -0.15f, -0.26f);
+        this.scoreBoard = new ScoreBoard(shaderPrograms[0], textures[17], player.getInput(),
+                highScore, currentScore);
 
         int i;
 
@@ -280,6 +295,7 @@ public class ResourceManager {
         sounds[4] = soundPool.load(context, R.raw.ghost, 1);
         sounds[5] = soundPool.load(context, R.raw.damage, 1);
         sounds[6] = soundPool.load(context, R.raw.bump, 1);
+        sounds[7] = soundPool.load(context, R.raw.count, 1);
     }
 
     private void playSound(int index, float volume, float rate) {
@@ -341,6 +357,7 @@ public class ResourceManager {
         loadTexture(R.drawable.meat_blow, 14, false);
         loadTexture(R.drawable.glass_orb, 15, false);
         loadTexture(R.drawable.score_board, 16, false);
+        loadTexture(R.drawable.blank_score_board, 17, false);
     }
 
     private String getShaderCode(int resourceId) throws IOException {

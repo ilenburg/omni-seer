@@ -14,16 +14,15 @@ public class Score {
     private final Sprite[] sprites = new Sprite[4];
     private int value;
 
-    public Score(int shaderProgram, int texture) {
+    public Score(int shaderProgram, int texture, float positionX, float positionY) {
         value = 0;
         float radius = 0.08f;
         float displacement = radius * 1.5f;
-        float positionX = -1.55f;
 
         for (int i = 0; i < sprites.length; ++i) {
             sprites[i] = new Sprite.Builder(shaderProgram, texture, EntityUtils
                     .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
-                    .EIGHT_TEXTURE_COORDINATES[0]).withPosition(new Vector2(positionX, 0.83f))
+                    .EIGHT_TEXTURE_COORDINATES[0]).withPosition(new Vector2(positionX, positionY))
                     .withTextureMapping(new TextureMapping()).build();
             positionX += displacement;
         }
@@ -44,6 +43,22 @@ public class Score {
 
     public Sprite[] getSprites() {
         return sprites;
+    }
+
+    public void increment(int value) {
+        setValue(this.value + value);
+    }
+
+    public void decrement(int value) {
+        setValue(this.value - value);
+    }
+
+    public void increment() {
+        increment(1);
+    }
+
+    public void decrement() {
+        decrement(1);
     }
 
     public void reset() {
