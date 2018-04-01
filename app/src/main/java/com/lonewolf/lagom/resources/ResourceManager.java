@@ -1,6 +1,7 @@
 package com.lonewolf.lagom.resources;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -25,6 +26,7 @@ import com.lonewolf.lagom.hud.Score;
 import com.lonewolf.lagom.hud.ScoreBoard;
 import com.lonewolf.lagom.scenario.Background;
 import com.lonewolf.lagom.scenario.Panorama;
+import com.lonewolf.lagom.utils.GameConstants;
 
 import org.apache.commons.io.IOUtils;
 
@@ -41,6 +43,8 @@ import static com.lonewolf.lagom.graphics.GameRenderer.checkGlError;
 public class ResourceManager {
 
     private final Context context;
+
+    private final SharedPreferences sharedPreferences;
 
     private SoundPool soundPool;
 
@@ -76,7 +80,9 @@ public class ResourceManager {
 
     public ResourceManager(Context context) {
         this.context = context;
-        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        this.sharedPreferences = context.getSharedPreferences(GameConstants.OMNI_PREFERENCE_KEY,
+                Context.MODE_PRIVATE);
+        this.soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
     }
 
     public Context getContext() {
@@ -147,6 +153,18 @@ public class ResourceManager {
         return capsules;
     }
 
+    public int getHighScore() {
+        return this.sharedPreferences.getInt(GameConstants.HIGH_SCORE, 0);
+    }
+
+    public void saveHighScore(int score) {
+        if (score > getHighScore()) {
+            SharedPreferences.Editor editor = this.sharedPreferences.edit();
+            editor.putInt(GameConstants.HIGH_SCORE, score);
+            editor.commit();
+        }
+    }
+
     public void playDamage() {
         playSound(5, 0.1f);
     }
@@ -173,6 +191,10 @@ public class ResourceManager {
 
     public void playMinorSpell() {
         playSound(1, 0.3f);
+    }
+
+    public void playBump() {
+        playSound(6, 0.6f);
     }
 
     public void playJump(float jumpPower) {
@@ -257,6 +279,7 @@ public class ResourceManager {
         sounds[3] = soundPool.load(context, R.raw.hit, 1);
         sounds[4] = soundPool.load(context, R.raw.ghost, 1);
         sounds[5] = soundPool.load(context, R.raw.damage, 1);
+        sounds[6] = soundPool.load(context, R.raw.bump, 1);
     }
 
     private void playSound(int index, float volume, float rate) {

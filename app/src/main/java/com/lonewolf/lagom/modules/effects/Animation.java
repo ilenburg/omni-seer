@@ -67,10 +67,9 @@ public class Animation {
 
             int frame = (int) Math.floor(cycleStep / cycleStepDuration);
 
-            if (frame >= textureFramesCoordinates.length) {
+            if (frame >= textureFramesCoordinates.length || frame < 0) {
                 frame = 0;
             }
-
             setCurrentTextureCoordinates(textureFramesCoordinates[frame]);
         } else {
             setCurrentTextureCoordinates(textureFramesCoordinates[0]);

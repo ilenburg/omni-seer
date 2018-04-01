@@ -165,16 +165,18 @@ public class PlayerHandler {
                 if (playerRigidBody.getPosition().getY() > PLAYER_GROUND_POSITION) {
                     playerRigidBody.setAccelerationY(playerInput.isInvulnerable() ?
                             GRAVITY_ACCELERATION / 2.0f : GRAVITY_ACCELERATION);
-                } else {
+                } else if (!playerInput.isGrounded()) {
                     playerRigidBody.setAccelerationY(ZERO);
                     playerRigidBody.setVelocityY(ZERO);
                     playerRigidBody.setPositionY(PLAYER_GROUND_POSITION);
                     playerInput.setGrounded(true);
+                    resourceManager.playBump();
                 }
             }
 
             if (player.isDead() && playerRigidBody.getPosition().getY() > HEAVEN) {
                 player.setActive(false);
+                player.getInput().consumeTouchPosition();
                 gameState.setActive(false);
                 resourceManager.getScoreBoard().setActive(true);
             }

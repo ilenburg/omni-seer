@@ -45,4 +45,8 @@ public class Score {
     public Sprite[] getSprites() {
         return sprites;
     }
+
+    public void reset() {
+        this.value = 0;
+    }
 }

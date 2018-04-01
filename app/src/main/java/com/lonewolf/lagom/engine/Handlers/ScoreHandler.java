@@ -1,5 +1,7 @@
 package com.lonewolf.lagom.engine.Handlers;
 
+import android.util.Log;
+
 import com.lonewolf.lagom.hud.Score;
 import com.lonewolf.lagom.hud.ScoreBoard;
 import com.lonewolf.lagom.resources.ResourceManager;
@@ -46,7 +48,10 @@ public class ScoreHandler {
     }
 
     public void reset() {
+        Score score = resourceManager.getScore();
+        resourceManager.saveHighScore(score.getValue());
+        Log.v("HighScore", Integer.toString(resourceManager.getHighScore()));
+        resourceManager.getScore().reset();
         traveledDistance = 0;
-        resourceManager.getScore().setValue(0);
     }
 }

@@ -16,11 +16,11 @@ public class AndroidHandler {
     }
 
     public void facebookShare() {
-        Intent share = new Intent(Intent.ACTION_SEND);
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
         String message = "Text I want to share.";
-        share.putExtra(Intent.EXTRA_TEXT, message);
-        share.setType("text/plain");
-        context.startActivity(Intent.createChooser(share, "Share Omni Seer"));
+        shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+        context.startActivity(Intent.createChooser(shareIntent, "Share Omni Seer"));
     }
 
 }
