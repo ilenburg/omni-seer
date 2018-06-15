@@ -7,6 +7,7 @@ import com.lonewolf.lagom.entities.enemies.Roller;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.engine.Vector2;
 import com.lonewolf.lagom.resources.ResourceManager;
+import com.lonewolf.lagom.utils.GameConstants;
 
 import java.util.Random;
 
@@ -208,6 +209,11 @@ public class EnemyHandler {
     private void updateShadowLord(float deltaTime) {
         if (resourceManager.getShadowLord().isActive()) {
             RigidBody shadowLordRigidBody = resourceManager.getShadowLord().getRigidBody();
+
+            if (resourceManager.getShadowLord().reachedLimit()) {
+                resourceManager.getShadowLord().getRigidBody().setVelocityX(GameConstants
+                        .SHADOW_VELOCITY_X);
+            }
 
             float shadowLordPositionY = shadowLordRigidBody.getPosition().getY();
 

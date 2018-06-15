@@ -43,6 +43,10 @@ public class Position {
         setCoordinates(x, this.coordinates.getY());
     }
 
+    public void displaceX(float displacement) {
+        this.coordinates.setX(this.coordinates.getX() + displacement);
+    }
+
     public void setCoordinateY(float coordinatesY) {
         this.coordinates.setY(coordinatesY);
     }

@@ -95,6 +95,10 @@ public class RigidBody {
         this.position.setCoordinateX(x);
     }
 
+    public void displaceX(float displacement) {
+        this.position.displaceX(displacement);
+    }
+
     public void setPositionY(float positionY) {
         this.position.setCoordinateY(positionY);
     }

@@ -18,6 +18,8 @@ public final class GameConstants {
     public static final float PLAYER_GROUND_POSITION = -0.535f;
     public static final float CAPSULE_GROUND_POSITION = -0.575f;
     public static final float OUT_OF_SIGH = -1.0f;
+    public static final float SHADOW_PUSH = 0.005f;
+    public static final float SHADOW_VELOCITY_X = -0.02f;
     public static final float HEAVEN = 1.2f;
 
     public static final Vector2 VECTOR_ZERO = new Vector2(ZERO, ZERO);

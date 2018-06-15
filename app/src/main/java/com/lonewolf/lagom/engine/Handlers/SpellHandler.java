@@ -1,13 +1,15 @@
 package com.lonewolf.lagom.engine.Handlers;
 
-import com.lonewolf.lagom.entities.enemies.Aerial;
 import com.lonewolf.lagom.entities.Impact;
+import com.lonewolf.lagom.entities.enemies.Aerial;
 import com.lonewolf.lagom.entities.enemies.Minion;
 import com.lonewolf.lagom.entities.enemies.Roller;
 import com.lonewolf.lagom.entities.enemies.ShadowLord;
+import com.lonewolf.lagom.entities.spell.MegaSpell;
 import com.lonewolf.lagom.entities.spell.Spell;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.resources.ResourceManager;
+import com.lonewolf.lagom.utils.GameConstants;
 import com.lonewolf.lagom.utils.PhysicsUtils;
 
 import static com.lonewolf.lagom.utils.GameConstants.PLAYER_GROUND_POSITION;
@@ -80,6 +82,13 @@ public class SpellHandler {
         if (shadowLord.isActive()) {
             if (PhysicsUtils.Collide(spellRigidBody, shadowLord.getRigidBody())) {
                 activateImpact(spell.getImpact(), spellRigidBody);
+                if (!shadowLord.reachedLimit()) {
+                    if (spell instanceof MegaSpell) {
+                        shadowLord.getRigidBody().setVelocityX(0.1f);
+                    } else {
+                        shadowLord.getRigidBody().displaceX(GameConstants.SHADOW_PUSH);
+                    }
+                }
                 spell.setActive(false);
             }
         }

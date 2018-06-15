@@ -60,13 +60,10 @@ public class ScoreHandler {
                     resourceManager.playCount();
                 }
             } else {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                sleep(2000);
                 scoreBoard.setActive(false);
                 gameOverBoard.setActive(true);
+                sleep(1000);
             }
         }
     }
@@ -74,5 +71,13 @@ public class ScoreHandler {
     public void reset() {
         resourceManager.saveHighScore(resourceManager.getScoreBoard().getHighScore().getValue());
         traveledDistance = 0;
+    }
+
+    private void sleep(int time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
