@@ -5,6 +5,7 @@ import com.lonewolf.lagom.entities.Capsule;
 import com.lonewolf.lagom.entities.enemies.Aerial;
 import com.lonewolf.lagom.entities.enemies.Minion;
 import com.lonewolf.lagom.entities.enemies.Roller;
+import com.lonewolf.lagom.entities.spell.MegaSpell;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.utils.GameConstants;
@@ -36,6 +37,7 @@ public class EnemyHandler {
     private static final Random random = new Random();
     private static final int MINION_CHANCE_IN = 200;
     private static final int ROLLER_CHANCE_IN = 1000;
+    private static final int SPELL_CHANCE_IN = 1000;
     private static final int AERIAL_CHANCE_IN = 4000;
     private static final int MINION_DROP_CHANCE_IN = 6;
     private static final int DROP_CHANCE_IN = 2;
@@ -253,6 +255,22 @@ public class EnemyHandler {
             lookAtPlayer(shadowLordRigidBody, vectorFromPlayer);
 
             updateRigidBody(shadowLordRigidBody, deltaTime);
+
+            MegaSpell enemySpell = resourceManager.getEnemySpell();
+            if (!enemySpell.isActive() && random.nextInt(SPELL_CHANCE_IN) == 0) {
+                Vector2 startingVelocity = resourceManager.getPlayer().getRigidBody()
+                        .getPosition().copy();
+                Vector2.sub(startingVelocity, startingVelocity, shadowLordRigidBody
+                        .getPosition());
+                Vector2.normalize(startingVelocity, startingVelocity);
+
+                Vector2 spellPosition = shadowLordRigidBody.getPosition().copy();
+                enemySpell.getRigidBody().setPosition(spellPosition);
+                Vector2.multiply(startingVelocity, startingVelocity, 2.0f);
+                enemySpell.getRigidBody().setVelocity(startingVelocity);
+                enemySpell.getRigidBody().setAngle(shadowLordRigidBody.getAngle());
+                enemySpell.setActive(true);
+            }
         }
     }
 

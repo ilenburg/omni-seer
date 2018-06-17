@@ -49,7 +49,7 @@ public class ResourceManager {
 
     private SoundPool soundPool;
 
-    private int[] shaderPrograms = new int[8];
+    private int[] shaderPrograms = new int[9];
     private int[] textures = new int[20];
     private int[] sounds = new int[8];
 
@@ -63,7 +63,7 @@ public class ResourceManager {
 
     private final Roller[] rollers = new Roller[6];
 
-    private final Impact[] impacts = new Impact[minorSpells.length + megaSpells.length];
+    private final Impact[] impacts = new Impact[minorSpells.length + megaSpells.length + 1];
 
     private final Capsule[] capsules = new Capsule[6];
 
@@ -79,6 +79,7 @@ public class ResourceManager {
     private ManaGauge manaGauge;
     private GameOverBoard gameOverBoard;
     private ScoreBoard scoreBoard;
+    private MegaSpell enemySpell;
 
     public ResourceManager(Context context) {
         this.context = context;
@@ -93,6 +94,10 @@ public class ResourceManager {
 
     public MegaSpell[] getMegaSpells() {
         return megaSpells;
+    }
+
+    public MegaSpell getEnemySpell() {
+        return enemySpell;
     }
 
     public Player getPlayer() {
@@ -235,7 +240,7 @@ public class ResourceManager {
         this.panorama = new Panorama(shaderPrograms[1], textures[2], scrollBase * 3);
         this.foreground = new Panorama(shaderPrograms[1], textures[4], scrollBase * 4);
         this.player = new Player(shaderPrograms[4], textures[0]);
-        this.shadowLord = new ShadowLord(shaderPrograms[0], textures[7]);
+        this.shadowLord = new ShadowLord(shaderPrograms[7], textures[7]);
         this.score = new Score(shaderPrograms[0], textures[12], -1.55f, 0.83f);
         this.manaGauge = new ManaGauge(shaderPrograms[0], textures[15]);
         this.gameOverBoard = new GameOverBoard(shaderPrograms[0], textures[16], player.getInput());
@@ -263,6 +268,11 @@ public class ResourceManager {
             megaSpells[i] = new MegaSpell(shaderPrograms[3], textures[6], impacts[i +
                     spellsLastIndex]);
         }
+
+        size = minorSpells.length + megaSpells.length;
+        impacts[size] = new Impact(shaderPrograms[0], textures[19],
+                megaSpellImpactRadius, true);
+        enemySpell = new MegaSpell(shaderPrograms[3], textures[18], impacts[size]);
 
         size = minions.length;
         for (i = 0; i < size; ++i) {
@@ -316,6 +326,7 @@ public class ResourceManager {
         String hueTransitionFragmentShader = null;
         String colorSwapFragmentShader = null;
         String damageFragmentShader = null;
+        String colorTransitionFragmentShaderShadow = null;
 
         try {
             vertexShader = getShaderCode(R.raw.base_vert);
@@ -326,6 +337,7 @@ public class ResourceManager {
             hueTransitionFragmentShader = getShaderCode(R.raw.hue_transition_base_frag);
             colorSwapFragmentShader = getShaderCode(R.raw.color_swap_base_frag);
             damageFragmentShader = getShaderCode(R.raw.damage_frag);
+            colorTransitionFragmentShaderShadow = getShaderCode(R.raw.color_transition_base_frag_shadow);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -337,6 +349,7 @@ public class ResourceManager {
         shaderPrograms[4] = generateShaderProgram(vertexShader, colorSwapFragmentShader);
         shaderPrograms[5] = generateShaderProgram(vertexShader, hueTransitionFragmentShader);
         shaderPrograms[6] = generateShaderProgram(vertexShader, damageFragmentShader);
+        shaderPrograms[7] = generateShaderProgram(vertexShader, colorTransitionFragmentShaderShadow);
     }
 
     private void initTextures() {
@@ -358,6 +371,8 @@ public class ResourceManager {
         loadTexture(R.drawable.glass_orb, 15, false);
         loadTexture(R.drawable.score_board, 16, false);
         loadTexture(R.drawable.blank_score_board, 17, false);
+        loadTexture(R.drawable.enemy_fire_sprite, 18, false);
+        loadTexture(R.drawable.enemy_impact, 19, false);
     }
 
     private String getShaderCode(int resourceId) throws IOException {

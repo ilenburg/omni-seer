@@ -66,9 +66,9 @@ public class RigidBody {
         this.acceleration.setY(accelerationY);
     }
 
-    public void addAccelerationX(float accelerationX) { this.acceleration.setX(this.acceleration.getX() + accelerationX); }
-
-    public void addVelocityX(float velocityX) { this.velocity.setX(this.velocity.getX() + velocityX); }
+    public void addVelocityX(float velocityX) {
+        this.velocity.setX(this.velocity.getX() + velocityX);
+    }
 
     public void setVelocityX(float velocityX) {
         this.velocity.setX(velocityX);
@@ -85,6 +85,10 @@ public class RigidBody {
 
     public Vector2 getPosition() {
         return position.getCoordinates();
+    }
+
+    public float getAngle() {
+        return this.position.getAngle();
     }
 
     public void setPosition(Vector2 positionCoordinates) {

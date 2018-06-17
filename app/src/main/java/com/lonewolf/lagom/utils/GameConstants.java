@@ -20,6 +20,7 @@ public final class GameConstants {
     public static final float OUT_OF_SIGH = -1.0f;
     public static final float SHADOW_VELOCITY_X = -0.05f;
     public static final float HEAVEN = 1.2f;
+    public static final float MAX_RADIANS = 3.14159265f;
 
     public static final Vector2 VECTOR_ZERO = new Vector2(ZERO, ZERO);
     public static final Vector2 VECTOR_FORWARD = new Vector2(1.0f, ZERO);

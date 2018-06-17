@@ -15,7 +15,6 @@ import com.lonewolf.lagom.utils.EntityUtils;
 public class MegaSpell extends Spell {
 
     public MegaSpell(int shaderProgram, int texture, Impact impact) {
-
         super(impact, 10);
 
         float[][] animationCoordinates = new float[][]{{
@@ -42,7 +41,7 @@ public class MegaSpell extends Spell {
 
         float radius = 0.2f;
 
-        this.rigidBody = new RigidBody(0.5f, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2
+        this.rigidBody = new RigidBody(0.5f, radius / 3, new Vector2(-1.0f, -0.535f), new Vector2
                 (0.0f, 0.0f));
 
         Animation animation = new Animation.Builder(animationCoordinates, 1.0f).build();

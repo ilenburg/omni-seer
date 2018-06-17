@@ -16,8 +16,6 @@ import com.lonewolf.lagom.utils.GameConstants;
 
 public class Player extends PhysicalEntity {
 
-    private static final float MAX_RADIANS = 3.14159265f;
-
     private final Input input;
     private final Stats stats;
     private boolean wasAlive;
@@ -61,7 +59,7 @@ public class Player extends PhysicalEntity {
         Animation animation = new Animation.Builder(animationCoordinates, 1.5f).withRigidBody
                 (rigidBody).withJumpTextureCoordinates(jumpCoordinates).withInput(input).build();
 
-        ColorTransition colorTransition = new ColorTransition(MAX_RADIANS, this.input);
+        ColorTransition colorTransition = new ColorTransition(GameConstants.MAX_RADIANS, this.input);
 
         this.sprite = new Sprite.Builder(shaderProgram, texture, EntityUtils
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
@@ -75,12 +73,6 @@ public class Player extends PhysicalEntity {
 
     public Input getInput() {
         return input;
-    }
-
-    public boolean justDied() {
-        boolean justDied = stats.isDead() && wasAlive;
-        this.wasAlive = false;
-        return justDied;
     }
 
     public boolean isDead() {

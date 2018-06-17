@@ -42,7 +42,7 @@ public class MinorSpell extends Spell {
 
         float radius = 0.08f;
 
-        this.rigidBody = new RigidBody(0.1f, radius / 2, new Vector2(-1.0f, -0.535f), new Vector2
+        this.rigidBody = new RigidBody(0.1f, radius / 3, new Vector2(-1.0f, -0.535f), new Vector2
                 (0.0f, 0.0f));
 
         Animation animation = new Animation.Builder(animationCoordinates, 1.0f).build();

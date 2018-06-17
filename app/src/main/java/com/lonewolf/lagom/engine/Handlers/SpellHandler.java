@@ -58,13 +58,9 @@ public class SpellHandler {
             if (minorSpell.isActive()) {
 
                 checkImpactShadowLord(minorSpell);
-
                 checkImpactMinions(minorSpell);
-
                 checkImpactRoller(minorSpell);
-
                 checkImpactAirBomb(minorSpell);
-
                 checkImpactGround(minorSpell);
 
                 if (!minorSpell.getRigidBody().getPosition().isBounded()) {
@@ -72,6 +68,19 @@ public class SpellHandler {
                 }
 
                 updateRigidBody(minorSpell.getRigidBody(), deltaTime);
+            }
+        }
+
+        Spell enemySpell = resourceManager.getEnemySpell();
+        if (enemySpell.isActive()) {
+
+            checkImpactPlayer(enemySpell);
+            checkImpactGround(enemySpell);
+
+            updateRigidBody(enemySpell.getRigidBody(), deltaTime);
+
+            if (!enemySpell.getRigidBody().getPosition().isBounded()) {
+                enemySpell.setActive(false);
             }
         }
     }
@@ -140,8 +149,18 @@ public class SpellHandler {
 
     private void checkImpactGround(Spell spell) {
         RigidBody spellRigidBody = spell.getRigidBody();
-        if (spellRigidBody.getPosition().getY() <= PLAYER_GROUND_POSITION - 0.06f) {
+        if (spellRigidBody.getPosition().getY() <= PLAYER_GROUND_POSITION - (spell instanceof
+                MegaSpell ? 0.02f : 0.06f)) {
             activateImpact(spell.getImpact(), spellRigidBody);
+            spell.setActive(false);
+        }
+    }
+
+    private void checkImpactPlayer(Spell spell) {
+        RigidBody spellRigidBody = spell.getRigidBody();
+        if (PhysicsUtils.Collide(spellRigidBody, resourceManager.getPlayer().getRigidBody())) {
+            activateImpact(spell.getImpact(), spellRigidBody);
+            resourceManager.getPlayer().getStats().dealDamage(1);
             spell.setActive(false);
         }
     }

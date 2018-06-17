@@ -59,6 +59,10 @@ public class Position {
         this.angle += angle;
     }
 
+    public float getAngle() {
+        return angle;
+    }
+
     public float[] getModelMatrix() {
         Matrix.setIdentityM(this.mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, this.coordinates.getX(), this.coordinates.getY(), 0);

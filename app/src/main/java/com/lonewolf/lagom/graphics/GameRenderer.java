@@ -129,6 +129,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         }
 
+        MegaSpell enemySpell = resourceManager.getEnemySpell();
+        if (enemySpell.isActive()) {
+            draw(resourceManager.getEnemySpell().getSprite(), enemySpell.getRigidBody()
+                    .getModelMatrix());
+        }
+
         for (Aerial aerial : resourceManager.getAerials()) {
             if (aerial.isActive()) {
                 draw(aerial.getSprite(), aerial.getRigidBody().getModelMatrix());
