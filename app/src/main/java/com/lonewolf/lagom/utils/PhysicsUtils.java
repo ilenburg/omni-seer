@@ -136,5 +136,4 @@ public final class PhysicsUtils {
             rigidBody.setAccelerationY(0.1f);
         }
     }
-
 }

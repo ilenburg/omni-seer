@@ -1,11 +1,11 @@
 package com.lonewolf.lagom.engine.Handlers;
 
-import com.lonewolf.lagom.entities.enemies.Aerial;
+import com.lonewolf.lagom.engine.Vector2;
 import com.lonewolf.lagom.entities.Capsule;
+import com.lonewolf.lagom.entities.enemies.Aerial;
 import com.lonewolf.lagom.entities.enemies.Minion;
 import com.lonewolf.lagom.entities.enemies.Roller;
 import com.lonewolf.lagom.modules.RigidBody;
-import com.lonewolf.lagom.engine.Vector2;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.utils.GameConstants;
 
@@ -57,6 +57,28 @@ public class EnemyHandler {
         updateRollers(deltaTime);
         updateDrop(deltaTime);
         updateRespawn(level);
+    }
+
+    public void reset() {
+        for (Minion minion : resourceManager.getMinions()) {
+            minion.setActive(false);
+        }
+        activeMinionCount = 0;
+
+        for (Capsule capsule : resourceManager.getCapsules()) {
+            capsule.setActive(false);
+        }
+
+        for (Roller roller : resourceManager.getRollers()) {
+            roller.setActive(false);
+        }
+
+        for (Aerial aerial : resourceManager.getAerials()) {
+            aerial.setActive(false);
+        }
+
+        resourceManager.getShadowLord().getRigidBody().setPositionX(GameConstants
+                .SHADOW_STARTING_POSITION.getX() + 0.7f);
     }
 
     private void updateDrop(float deltaTime) {
@@ -210,9 +232,14 @@ public class EnemyHandler {
         if (resourceManager.getShadowLord().isActive()) {
             RigidBody shadowLordRigidBody = resourceManager.getShadowLord().getRigidBody();
 
-            if (resourceManager.getShadowLord().reachedLimit()) {
-                resourceManager.getShadowLord().getRigidBody().setVelocityX(GameConstants
-                        .SHADOW_VELOCITY_X);
+            if (Float.compare(shadowLordRigidBody.getVelocity().getX(), GameConstants
+                    .SHADOW_VELOCITY_X) > 0) {
+                shadowLordRigidBody.addVelocityX(GameConstants.SHADOW_VELOCITY_X * 0.05f);
+            }
+
+            if (Float.compare(shadowLordRigidBody.getVelocity().getX(), GameConstants
+                    .SHADOW_VELOCITY_X) < 0) {
+                shadowLordRigidBody.setVelocityX(GameConstants.SHADOW_VELOCITY_X);
             }
 
             float shadowLordPositionY = shadowLordRigidBody.getPosition().getY();
@@ -331,24 +358,5 @@ public class EnemyHandler {
         capsuleRigidBody.setPosition(rigidBody.getPosition());
         capsuleRigidBody.setVelocity(CAPSULE_STARTING_VELOCITY);
         capsule.setActive(true);
-    }
-
-    public void reset() {
-        for (Minion minion : resourceManager.getMinions()) {
-            minion.setActive(false);
-        }
-        activeMinionCount = 0;
-
-        for (Capsule capsule : resourceManager.getCapsules()) {
-            capsule.setActive(false);
-        }
-
-        for (Roller roller : resourceManager.getRollers()) {
-            roller.setActive(false);
-        }
-
-        for (Aerial aerial : resourceManager.getAerials()) {
-            aerial.setActive(false);
-        }
     }
 }

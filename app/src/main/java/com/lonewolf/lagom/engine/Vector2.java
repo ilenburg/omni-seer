@@ -95,6 +95,6 @@ public class Vector2 {
 
     @Override
     public String toString() {
-        return "X: " + this.x + "Y: " + this.y;
+        return "X: " + this.x + " Y: " + this.y;
     }
 }

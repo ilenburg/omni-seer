@@ -43,7 +43,7 @@ public class ScoreBoard extends DrawableEntity {
 
     public boolean update(Score finalScore) {
         if (input.isTouchPending()) {
-            input.consumeTouchPosition();
+            consumeTouch();
             currentScore.increment(finalScore.getValue());
             finalScore.reset();
             if (currentScore.getValue() > highScore.getValue()) {
@@ -60,5 +60,9 @@ public class ScoreBoard extends DrawableEntity {
             return true;
         }
         return false;
+    }
+
+    private void consumeTouch() {
+        input.consumeTouchPosition();
     }
 }

@@ -17,7 +17,7 @@ public class ShadowLord extends PhysicalEntity {
 
     public ShadowLord(int shaderProgram, int texture) {
 
-        startingPosition = new Vector2(1.57f, 0.2f);
+        startingPosition = GameConstants.SHADOW_STARTING_POSITION.copy();
 
         float radius = 1.0f;
 
