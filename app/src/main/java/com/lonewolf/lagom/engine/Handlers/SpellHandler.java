@@ -95,9 +95,9 @@ public class SpellHandler {
                 if (!shadowLord.reachedLimit() && Float.compare(shadowLordRigidBody
                         .getAcceleration().getX(), GameConstants.SHADOW_VELOCITY_X * -2.0f) < 0) {
                     if (spell instanceof MegaSpell) {
-                        shadowLordRigidBody.addVelocityX(GameConstants.SHADOW_VELOCITY_X * -2.0f);
+                        shadowLordRigidBody.addVelocityX(GameConstants.SHADOW_VELOCITY_X * -3.0f);
                     } else {
-                        shadowLordRigidBody.addVelocityX(GameConstants.SHADOW_VELOCITY_X * -0.6f);
+                        shadowLordRigidBody.addVelocityX(GameConstants.SHADOW_VELOCITY_X * -0.7f);
                     }
                 }
                 spell.setActive(false);

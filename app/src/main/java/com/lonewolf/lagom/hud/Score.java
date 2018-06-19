@@ -62,6 +62,6 @@ public class Score {
     }
 
     public void reset() {
-        this.value = 0;
+        this.setValue(0);
     }
 }

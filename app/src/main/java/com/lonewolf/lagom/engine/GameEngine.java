@@ -101,8 +101,6 @@ public class GameEngine implements Runnable {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-
         }
     }
-
 }
