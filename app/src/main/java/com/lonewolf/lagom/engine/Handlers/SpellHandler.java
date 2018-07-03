@@ -90,7 +90,7 @@ public class SpellHandler {
         ShadowLord shadowLord = resourceManager.getShadowLord();
         RigidBody shadowLordRigidBody = shadowLord.getRigidBody();
         if (shadowLord.isActive()) {
-            if (PhysicsUtils.Collide(spellRigidBody, shadowLord.getRigidBody())) {
+            if (PhysicsUtils.Collide(spellRigidBody, shadowLord.getRigidBody(), false)) {
                 activateImpact(spell.getImpact(), spellRigidBody);
                 if (!shadowLord.reachedLimit() && Float.compare(shadowLordRigidBody
                         .getAcceleration().getX(), GameConstants.SHADOW_VELOCITY_X * -2.0f) < 0) {
@@ -158,7 +158,7 @@ public class SpellHandler {
 
     private void checkImpactPlayer(Spell spell) {
         RigidBody spellRigidBody = spell.getRigidBody();
-        if (PhysicsUtils.Collide(spellRigidBody, resourceManager.getPlayer().getRigidBody())) {
+        if (PhysicsUtils.Collide(spellRigidBody, resourceManager.getPlayer().getRigidBody(), false)) {
             activateImpact(spell.getImpact(), spellRigidBody);
             resourceManager.getPlayer().getStats().dealDamage(1);
             spell.setActive(false);
@@ -166,7 +166,7 @@ public class SpellHandler {
     }
 
     private void activateImpact(Impact spellImpact, RigidBody rigidBody) {
-        spellImpact.setPosition(rigidBody.getPosition().copy());
+        spellImpact.setPosition(rigidBody.getPosition());
         spellImpact.trigger();
         if (spellImpact.isMega()) {
             resourceManager.playBigHit();

@@ -7,6 +7,7 @@ import com.lonewolf.lagom.entities.enemies.Minion;
 import com.lonewolf.lagom.entities.enemies.Roller;
 import com.lonewolf.lagom.entities.spell.MegaSpell;
 import com.lonewolf.lagom.modules.RigidBody;
+import com.lonewolf.lagom.modules.effects.ColorTransitionTriggerable;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.utils.GameConstants;
 
@@ -42,6 +43,8 @@ public class EnemyHandler {
     private static final int MINION_DROP_CHANCE_IN = 3;
     private static final int DROP_CHANCE_IN = 2;
     private static final int ALWAYS_ALIVE_MINIONS = 1;
+
+    private static final Vector2 VECTOR_AUX = new Vector2();
 
     private final ResourceManager resourceManager;
 
@@ -106,6 +109,10 @@ public class EnemyHandler {
                 }
 
                 updateRigidBody(capsuleRigidBody, deltaTime);
+
+                if (capsuleRigidBody.getPosition().getX() < -2.0f) {
+                    capsule.setActive(false);
+                }
             }
         }
     }
@@ -190,11 +197,11 @@ public class EnemyHandler {
                     }
 
                     if (minionRigidBody.getPosition().getY() < PLAYER_GROUND_POSITION -
-                            minionRigidBody
-                                    .getRadius()) {
+                            minionRigidBody.getRadius()) {
                         minionRigidBody.setPositionY(PLAYER_GROUND_POSITION - minionRigidBody
                                 .getRadius());
                         minionRigidBody.setVelocityY(0.5f);
+                        resourceManager.playBumpLow();
                     }
 
                     if (minionRigidBody.getPosition().getX() < -1.0f && resourceManager.getPlayer
@@ -244,6 +251,11 @@ public class EnemyHandler {
                 shadowLordRigidBody.setVelocityX(GameConstants.SHADOW_VELOCITY_X);
             }
 
+            if (Float.compare(shadowLordRigidBody.getPosition().getX(), 0.0f) < 0 && Float
+                    .compare(shadowLordRigidBody.getVelocity().getX(), GameConstants.ZERO) < 0) {
+                shadowLordRigidBody.addVelocityX(GameConstants.SHADOW_VELOCITY_X * -0.1f);
+            }
+
             float shadowLordPositionY = shadowLordRigidBody.getPosition().getY();
 
             floatEffect(shadowLordRigidBody, shadowLordPositionY);
@@ -257,15 +269,23 @@ public class EnemyHandler {
             updateRigidBody(shadowLordRigidBody, deltaTime);
 
             MegaSpell enemySpell = resourceManager.getEnemySpell();
-            if (!enemySpell.isActive() && random.nextInt(SPELL_CHANCE_IN) == 0) {
-                Vector2 startingVelocity = resourceManager.getPlayer().getRigidBody()
-                        .getPosition().copy();
+            if (!enemySpell.isActive() && (random.nextInt(SPELL_CHANCE_IN) == 0)) {
+
+                resourceManager.playBeam();
+
+                ColorTransitionTriggerable colorTransitionTriggerable =
+                        (ColorTransitionTriggerable) resourceManager.getShadowLord().getSprite()
+                                .getColorTransition();
+                colorTransitionTriggerable.trigger();
+
+                Vector2 startingVelocity = VECTOR_AUX;
+                startingVelocity.setCoordinates(resourceManager.getPlayer().getRigidBody()
+                        .getPosition());
                 Vector2.sub(startingVelocity, startingVelocity, shadowLordRigidBody
                         .getPosition());
                 Vector2.normalize(startingVelocity, startingVelocity);
 
-                Vector2 spellPosition = shadowLordRigidBody.getPosition().copy();
-                enemySpell.getRigidBody().setPosition(spellPosition);
+                enemySpell.getRigidBody().setPosition(shadowLordRigidBody.getPosition());
                 Vector2.multiply(startingVelocity, startingVelocity, 2.0f);
                 enemySpell.getRigidBody().setVelocity(startingVelocity);
                 enemySpell.getRigidBody().setAngle(shadowLordRigidBody.getAngle());
@@ -285,6 +305,7 @@ public class EnemyHandler {
                 if (!aerial.getStats().isDead()) {
                     if (aerialRigidBody.getPosition().getY() <= PLAYER_GROUND_POSITION - 0.03f) {
                         aerialRigidBody.setVelocityY(1.5f + random.nextFloat());
+                        resourceManager.playBump();
                     }
                 }
 

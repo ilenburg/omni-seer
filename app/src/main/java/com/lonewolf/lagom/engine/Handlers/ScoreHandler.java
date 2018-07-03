@@ -20,8 +20,6 @@ public class ScoreHandler {
     private final StateReference resetState;
     private final StateReference displayScoreState;
 
-    private float timer = 0.0f;
-
     public ScoreHandler(ResourceManager resourceManager, ShareHandler shareHandler,
                         StateReference resetState, StateReference displayScoreState) {
         this.resourceManager = resourceManager;

@@ -51,7 +51,7 @@ public class ResourceManager {
 
     private int[] shaderPrograms = new int[9];
     private int[] textures = new int[20];
-    private int[] sounds = new int[8];
+    private int[] sounds = new int[9];
 
     private final MinorSpell[] minorSpells = new MinorSpell[30];
 
@@ -65,7 +65,7 @@ public class ResourceManager {
 
     private final Impact[] impacts = new Impact[minorSpells.length + megaSpells.length + 1];
 
-    private final Capsule[] capsules = new Capsule[6];
+    private final Capsule[] capsules = new Capsule[10];
 
     private PerfectLoopMediaPlayer musicPlayer;
 
@@ -208,8 +208,16 @@ public class ResourceManager {
         playSound(6, 0.6f);
     }
 
+    public void playBumpLow() {
+        playSound(6, 0.3f);
+    }
+
     public void playCount() {
         playSound(7, 0.6f);
+    }
+
+    public void playBeam() {
+        playSound(8, 0.4f);
     }
 
     public void playJump(float jumpPower) {
@@ -306,6 +314,7 @@ public class ResourceManager {
         sounds[5] = soundPool.load(context, R.raw.damage, 1);
         sounds[6] = soundPool.load(context, R.raw.bump, 1);
         sounds[7] = soundPool.load(context, R.raw.count, 1);
+        sounds[8] = soundPool.load(context, R.raw.beam, 1);
     }
 
     private void playSound(int index, float volume, float rate) {

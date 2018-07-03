@@ -13,11 +13,11 @@ import com.lonewolf.lagom.modules.Input;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.states.StateReference;
+import com.lonewolf.lagom.utils.GameConstants;
 import com.lonewolf.lagom.utils.PhysicsUtils;
 
 import static com.lonewolf.lagom.utils.GameConstants.GHOST_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.GRAVITY_ACCELERATION;
-import static com.lonewolf.lagom.utils.GameConstants.HEAVEN;
 import static com.lonewolf.lagom.utils.GameConstants.PLAYER_GROUND_POSITION;
 import static com.lonewolf.lagom.utils.GameConstants.PLAYER_VELOCITY;
 import static com.lonewolf.lagom.utils.GameConstants.SPELL_BASE_VELOCITY;
@@ -36,6 +36,9 @@ public class PlayerHandler {
     private final StateReference displayScoreState;
     private final ResourceManager resourceManager;
     private float cameraPosition;
+
+    private static final Vector2 VECTOR_AUX_VELOCITY = new Vector2();
+    private static final Vector2 VECTOR_AUX_POSITION = new Vector2();
 
     public PlayerHandler(ResourceManager resourceManager, StateReference gameState,
                          StateReference scoreDisplayState) {
@@ -101,7 +104,6 @@ public class PlayerHandler {
                 resourceManager.stopMusic();
                 resourceManager.playGhost();
             }
-
         }
 
         if (player.isActive()) {
@@ -130,12 +132,14 @@ public class PlayerHandler {
                 }
 
                 if (playerInput.isTouchPending()) {
-                    Vector2 startingVelocity = playerInput.consumeTouchPosition().copy();
+                    Vector2 startingVelocity = VECTOR_AUX_VELOCITY;
+                    startingVelocity.setCoordinates(playerInput.consumeTouchPosition());
                     Vector2.sub(startingVelocity, startingVelocity, playerRigidBody.getPosition());
                     Vector2.normalize(startingVelocity, startingVelocity);
                     for (MinorSpell minorSpell : resourceManager.getMinorSpells()) {
                         if (!minorSpell.isActive()) {
-                            Vector2 spellPosition = playerRigidBody.getPosition().copy();
+                            Vector2 spellPosition = VECTOR_AUX_POSITION;
+                            spellPosition.setCoordinates(playerRigidBody.getPosition());
                             Vector2.add(spellPosition, spellPosition, SPELL_DISPLACEMENT);
                             minorSpell.getRigidBody().setPosition(spellPosition);
                             Vector2.multiply(startingVelocity, startingVelocity, 2.0f);
@@ -177,14 +181,14 @@ public class PlayerHandler {
                 }
             }
 
-            if (player.isDead() && playerRigidBody.getPosition().getY() > HEAVEN) {
+            if (player.isDead() && playerRigidBody.getPosition().getY() > GameConstants.HEAVEN) {
                 player.setActive(false);
+                player.getInput().setGrounded(false);
                 player.getInput().consumeTouchPosition();
                 gameState.setActive(false);
                 displayScoreState.setActive(true);
                 resourceManager.getScoreBoard().setActive(true);
             }
-
         }
     }
 

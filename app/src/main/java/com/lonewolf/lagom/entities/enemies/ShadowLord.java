@@ -5,6 +5,7 @@ import com.lonewolf.lagom.entities.base.PhysicalEntity;
 import com.lonewolf.lagom.modules.RigidBody;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.effects.ColorTransition;
+import com.lonewolf.lagom.modules.effects.ColorTransitionTriggerable;
 import com.lonewolf.lagom.utils.EntityUtils;
 import com.lonewolf.lagom.utils.GameConstants;
 
@@ -25,7 +26,8 @@ public class ShadowLord extends PhysicalEntity {
         this.rigidBody = new RigidBody(10, radius / 1.7f, startingPosition.copy(), new Vector2
                 (GameConstants.SHADOW_VELOCITY_X, 0.1f));
 
-        ColorTransition colorTransition = new ColorTransition(GameConstants.MAX_RADIANS / 2);
+        ColorTransition colorTransition = new ColorTransitionTriggerable(GameConstants
+                .PI_RADIANS);
 
         this.sprite = new Sprite.Builder(shaderProgram, texture, EntityUtils
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils

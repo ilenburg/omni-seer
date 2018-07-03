@@ -7,6 +7,7 @@ import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.modules.effects.Animation;
 import com.lonewolf.lagom.modules.effects.ColorTransition;
+import com.lonewolf.lagom.modules.effects.ColorTransitionStateful;
 import com.lonewolf.lagom.utils.EntityUtils;
 import com.lonewolf.lagom.utils.GameConstants;
 
@@ -54,12 +55,14 @@ public class Player extends PhysicalEntity {
         float radius = 0.12f;
 
         this.input = new Input();
-        this.rigidBody = new RigidBody(1, radius / 2, GameConstants.PLAYER_POSITION.copy(), GameConstants.PLAYER_VELOCITY.copy());
+        this.rigidBody = new RigidBody(1, radius / 2, GameConstants.PLAYER_POSITION.copy(),
+                GameConstants.PLAYER_VELOCITY.copy());
 
         Animation animation = new Animation.Builder(animationCoordinates, 1.5f).withRigidBody
                 (rigidBody).withJumpTextureCoordinates(jumpCoordinates).withInput(input).build();
 
-        ColorTransition colorTransition = new ColorTransition(GameConstants.MAX_RADIANS, this.input);
+        ColorTransition colorTransition = new ColorTransitionStateful(GameConstants.PI_RADIANS, this
+                .input);
 
         this.sprite = new Sprite.Builder(shaderProgram, texture, EntityUtils
                 .GenerateSymmetricGeometryCoordinates(radius), EntityUtils
