@@ -8,7 +8,7 @@ import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.states.StateReference;
 
 /**
- * Created by Ian on 14/02/2017.
+ * Created by Ian Ilenburg on 14/02/2017.
  */
 
 public class GestureListener implements GestureDetector.OnGestureListener {

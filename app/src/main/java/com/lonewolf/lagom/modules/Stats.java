@@ -3,7 +3,7 @@ package com.lonewolf.lagom.modules;
 import com.lonewolf.lagom.modules.effects.TextureMapping;
 
 /**
- * Created by Ian on 03/09/2017.
+ * Created by Ian Ilenburg on 03/09/2017.
  */
 
 public class Stats {
@@ -43,17 +43,17 @@ public class Stats {
     }
 
     public void dealDamage(int damage) {
-        this.hp -= damage;
-        if (textureMapping != null) {
-            if (isDead()) {
-                textureMapping.setTexturePosition(2);
-            } else if (this.hp <= maxHp / 2) {
-                textureMapping.setTexturePosition(1);
+            this.hp -= damage;
+            if (textureMapping != null) {
+                if (isDead()) {
+                    textureMapping.setTexturePosition(2);
+                } else if (this.hp <= maxHp / 2) {
+                    textureMapping.setTexturePosition(1);
+                }
             }
-        }
-        if (isDead()) {
-            this.killed = true;
-        }
+            if (isDead()) {
+                this.killed = true;
+            }
     }
 
     public void restore() {

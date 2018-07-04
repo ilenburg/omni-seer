@@ -3,7 +3,7 @@ package com.lonewolf.lagom.modules.effects;
 import com.lonewolf.lagom.modules.Input;
 
 /**
- * Created by Ian on 11/02/2017.
+ * Created by Ian Ilenburg on 11/02/2017.
  */
 
 public class ColorTransitionStateful extends ColorTransition {

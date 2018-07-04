@@ -32,7 +32,7 @@ import javax.microedition.khronos.opengles.GL10;
 import static android.content.ContentValues.TAG;
 
 /**
- * Created by Ian on 22/01/2017.
+ * Created by Ian Ilenburg on 22/01/2017.
  */
 
 public class GameRenderer implements GLSurfaceView.Renderer {

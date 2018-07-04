@@ -8,7 +8,7 @@ import java.nio.FloatBuffer;
 import java.util.Random;
 
 /**
- * Created by Ian on 10/02/2017.
+ * Created by Ian Ilenburg on 10/02/2017.
  */
 
 public class Animation {

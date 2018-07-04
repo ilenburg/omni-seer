@@ -10,7 +10,7 @@ import com.lonewolf.lagom.engine.GestureListener;
 import com.lonewolf.lagom.resources.ResourceManager;
 
 /**
- * Created by Ian on 22/01/2017.
+ * Created by Ian Ilenburg on 22/01/2017.
  */
 
 public class GameView extends GLSurfaceView {

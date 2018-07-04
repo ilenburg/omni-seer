@@ -3,7 +3,7 @@ package com.lonewolf.lagom.modules.effects;
 import java.nio.FloatBuffer;
 
 /**
- * Created by Ian on 18/02/2018.
+ * Created by Ian Ilenburg on 18/02/2018.
  */
 
 public class TextureMapping {

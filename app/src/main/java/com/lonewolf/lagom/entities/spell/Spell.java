@@ -4,7 +4,7 @@ import com.lonewolf.lagom.entities.Impact;
 import com.lonewolf.lagom.entities.base.PhysicalEntity;
 
 /**
- * Created by Ian on 27/02/2018.
+ * Created by Ian Ilenburg on 27/02/2018.
  */
 
 public class Spell extends PhysicalEntity {

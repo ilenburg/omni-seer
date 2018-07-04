@@ -3,7 +3,7 @@ package com.lonewolf.lagom.utils;
 import com.lonewolf.lagom.engine.Vector2;
 
 /**
- * Created by Ian on 18/02/2018.
+ * Created by Ian Ilenburg on 18/02/2018.
  */
 
 public final class GameConstants {

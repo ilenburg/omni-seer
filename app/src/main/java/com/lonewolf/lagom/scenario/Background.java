@@ -5,7 +5,7 @@ import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.effects.TextureTransition;
 
 /**
- * Created by Ian on 11/02/2017.
+ * Created by Ian Ilenburg on 11/02/2017.
  */
 
 public class Background {

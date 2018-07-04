@@ -9,7 +9,7 @@ import com.lonewolf.lagom.engine.Vector2;
 import com.lonewolf.lagom.utils.EntityUtils;
 
 /**
- * Created by Ian on 23/01/2017.
+ * Created by Ian Ilenburg on 23/01/2017.
  */
 
 public class MegaSpell extends Spell {

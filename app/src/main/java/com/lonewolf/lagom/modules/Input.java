@@ -3,7 +3,7 @@ package com.lonewolf.lagom.modules;
 import com.lonewolf.lagom.engine.Vector2;
 
 /**
- * Created by Ian on 12/02/2017.
+ * Created by Ian Ilenburg on 12/02/2017.
  */
 
 public class Input {

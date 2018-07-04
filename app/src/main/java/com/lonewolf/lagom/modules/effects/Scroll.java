@@ -1,7 +1,7 @@
 package com.lonewolf.lagom.modules.effects;
 
 /**
- * Created by Ian on 10/02/2017.
+ * Created by Ian Ilenburg on 10/02/2017.
  */
 
 public class Scroll {

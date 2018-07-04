@@ -16,7 +16,7 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
 /**
- * Created by Ian on 28/01/2017.
+ * Created by Ian Ilenburg on 28/01/2017.
  */
 
 public class Sprite {

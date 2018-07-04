@@ -7,7 +7,7 @@ import static com.lonewolf.lagom.engine.Vector2.dotProduct;
 import static com.lonewolf.lagom.utils.GameConstants.VECTOR_FORWARD;
 
 /**
- * Created by Ian on 12/02/2017.
+ * Created by Ian Ilenburg on 12/02/2017.
  */
 
 public final class PhysicsUtils {

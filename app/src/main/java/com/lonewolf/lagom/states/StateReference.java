@@ -1,7 +1,7 @@
 package com.lonewolf.lagom.states;
 
 /**
- * Created by Ian on 25/02/2018.
+ * Created by Ian Ilenburg on 25/02/2018.
  */
 
 public class StateReference {

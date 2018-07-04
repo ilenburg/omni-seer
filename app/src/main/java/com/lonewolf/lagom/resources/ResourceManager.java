@@ -38,7 +38,7 @@ import static android.content.ContentValues.TAG;
 import static com.lonewolf.lagom.graphics.GameRenderer.checkGlError;
 
 /**
- * Created by Ian on 28/01/2017.
+ * Created by Ian Ilenburg on 28/01/2017.
  */
 
 public class ResourceManager {

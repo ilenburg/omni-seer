@@ -6,7 +6,7 @@ import com.lonewolf.lagom.engine.Vector2;
 import com.lonewolf.lagom.utils.EntityUtils;
 
 /**
- * Created by Ian on 17/02/2018.
+ * Created by Ian Ilenburg on 17/02/2018.
  */
 
 public class Score {

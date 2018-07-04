@@ -27,7 +27,7 @@ import static com.lonewolf.lagom.utils.GameConstants.ZERO;
 import static com.lonewolf.lagom.utils.PhysicsUtils.updatePlayerPosition;
 
 /**
- * Created by Ian on 18/02/2018.
+ * Created by Ian Ilenburg on 18/02/2018.
  */
 
 public class PlayerHandler {

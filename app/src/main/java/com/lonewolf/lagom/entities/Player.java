@@ -12,7 +12,7 @@ import com.lonewolf.lagom.utils.EntityUtils;
 import com.lonewolf.lagom.utils.GameConstants;
 
 /**
- * Created by Ian on 23/01/2017.
+ * Created by Ian Ilenburg on 23/01/2017.
  */
 
 public class Player extends PhysicalEntity {

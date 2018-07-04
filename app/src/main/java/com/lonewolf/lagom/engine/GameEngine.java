@@ -9,7 +9,7 @@ import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.states.StateReference;
 
 /**
- * Created by Ian on 28/01/2017.
+ * Created by Ian Ilenburg on 28/01/2017.
  */
 
 public class GameEngine implements Runnable {
@@ -90,7 +90,6 @@ public class GameEngine implements Runnable {
             if (resetState.isActive()) {
                 playerHandler.reset();
                 enemyHandler.reset();
-                scoreHandler.reset();
                 resetState.setActive(false);
                 gameState.setActive(true);
                 this.lastTime = System.currentTimeMillis();

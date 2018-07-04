@@ -7,7 +7,7 @@ import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.states.StateReference;
 
 /**
- * Created by Ian on 25/02/2018.
+ * Created by Ian Ilenburg on 25/02/2018.
  */
 
 public class ScoreHandler {
@@ -60,6 +60,7 @@ public class ScoreHandler {
                     resourceManager.playCount();
                 }
             } else {
+                resetAndPersist();
                 sleep(2000);
                 scoreBoard.setActive(false);
                 gameOverBoard.setActive(true);
@@ -68,8 +69,8 @@ public class ScoreHandler {
         }
     }
 
-    public void reset() {
-        resourceManager.saveHighScore(resourceManager.getScoreBoard().getHighScore().getValue());
+    private void resetAndPersist() {
+        resourceManager.saveHighScore(resourceManager.getScoreBoard().getCurrentScore().getValue());
         traveledDistance = 0;
     }
 

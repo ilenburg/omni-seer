@@ -10,7 +10,7 @@ import com.lonewolf.lagom.utils.EntityUtils;
 import java.util.Random;
 
 /**
- * Created by Ian on 21/05/2017.
+ * Created by Ian Ilenburg on 21/05/2017.
  */
 
 public class Minion extends PhysicalEntity {

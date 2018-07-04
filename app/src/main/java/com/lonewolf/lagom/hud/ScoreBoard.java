@@ -6,7 +6,7 @@ import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.utils.EntityUtils;
 
 /**
- * Created by Ian on 24/03/2018.
+ * Created by Ian Ilenburg on 24/03/2018.
  */
 
 public class ScoreBoard extends DrawableEntity {

@@ -10,7 +10,7 @@ import com.lonewolf.lagom.utils.PhysicsUtils;
 import com.lonewolf.lagom.utils.BoardAction;
 
 /**
- * Created by Ian on 24/03/2018.
+ * Created by Ian Ilenburg on 24/03/2018.
  */
 
 public class GameOverBoard extends DrawableEntity {

@@ -10,7 +10,7 @@ import com.lonewolf.lagom.utils.EntityUtils;
 import java.util.Random;
 
 /**
- * Created by Ian on 04/03/2018.
+ * Created by Ian Ilenburg on 04/03/2018.
  */
 
 public class Capsule extends PhysicalEntity {

@@ -4,7 +4,7 @@ import com.lonewolf.lagom.modules.effects.Scroll;
 import com.lonewolf.lagom.modules.Sprite;
 
 /**
- * Created by Ian on 10/02/2017.
+ * Created by Ian Ilenburg on 10/02/2017.
  */
 
 public class Panorama {

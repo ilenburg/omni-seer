@@ -30,7 +30,7 @@ import static com.lonewolf.lagom.utils.PhysicsUtils.lookAtPlayer;
 import static com.lonewolf.lagom.utils.PhysicsUtils.updateRigidBody;
 
 /**
- * Created by Ian on 25/02/2018.
+ * Created by Ian Ilenburg on 25/02/2018.
  */
 
 public class EnemyHandler {

@@ -5,7 +5,7 @@ import android.opengl.Matrix;
 import com.lonewolf.lagom.engine.Vector2;
 
 /**
- * Created by Ian on 25/02/2018.
+ * Created by Ian Ilenburg on 25/02/2018.
  */
 
 public class Position {

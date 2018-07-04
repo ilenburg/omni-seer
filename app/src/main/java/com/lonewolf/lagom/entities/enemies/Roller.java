@@ -11,7 +11,7 @@ import com.lonewolf.lagom.utils.EntityUtils;
 import java.util.Random;
 
 /**
- * Created by Ian on 23/01/2017.
+ * Created by Ian Ilenburg on 23/01/2017.
  */
 
 public class Roller extends PhysicalEntity {

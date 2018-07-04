@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 /**
- * Created by Ian on 24/03/2018.
+ * Created by Ian Ilenburg on 24/03/2018.
  */
 
 public class ShareHandler {

@@ -5,7 +5,7 @@ import com.lonewolf.lagom.engine.Vector2;
 import static com.lonewolf.lagom.utils.GameConstants.VECTOR_ZERO;
 
 /**
- * Created by Ian on 11/02/2017.
+ * Created by Ian Ilenburg on 11/02/2017.
  */
 
 public class RigidBody {
