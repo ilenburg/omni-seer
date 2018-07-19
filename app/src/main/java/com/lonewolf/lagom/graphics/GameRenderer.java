@@ -18,6 +18,7 @@ import com.lonewolf.lagom.entities.spell.MinorSpell;
 import com.lonewolf.lagom.hud.GameOverBoard;
 import com.lonewolf.lagom.hud.ManaGauge;
 import com.lonewolf.lagom.hud.ScoreBoard;
+import com.lonewolf.lagom.hud.TutorialBoard;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.modules.effects.Animation;
@@ -191,7 +192,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         }
 
         ScoreBoard scoreBoard = resourceManager.getScoreBoard();
+        TutorialBoard tutorialBoard = resourceManager.getTutorialBoard();
         if (scoreBoard.isActive()) {
+            tutorialBoard.setActive(false);
             draw(scoreBoard.getSprite());
 
             for (Sprite sprite : scoreBoard.getHighScore().getSprites()) {
@@ -206,6 +209,11 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         GameOverBoard gameOverBoard = resourceManager.getGameOverBoard();
         if (gameOverBoard.isActive()) {
             draw(gameOverBoard.getSprite());
+        }
+
+
+        if (tutorialBoard.isActive()) {
+            draw(tutorialBoard.getSprite());
         }
     }
 

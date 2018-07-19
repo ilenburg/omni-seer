@@ -3,6 +3,7 @@ package com.lonewolf.lagom.engine.Handlers;
 import com.lonewolf.lagom.hud.GameOverBoard;
 import com.lonewolf.lagom.hud.Score;
 import com.lonewolf.lagom.hud.ScoreBoard;
+import com.lonewolf.lagom.hud.TutorialBoard;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.states.StateReference;
 
@@ -19,10 +20,13 @@ public class ScoreHandler {
 
     private final StateReference resetState;
     private final StateReference displayScoreState;
+    private final StateReference gameState;
 
-    public ScoreHandler(ResourceManager resourceManager, ShareHandler shareHandler,
+    public ScoreHandler(ResourceManager resourceManager, StateReference gameState, ShareHandler
+            shareHandler,
                         StateReference resetState, StateReference displayScoreState) {
         this.resourceManager = resourceManager;
+        this.gameState = gameState;
         this.shareHandler = shareHandler;
         this.resetState = resetState;
         this.displayScoreState = displayScoreState;
@@ -44,7 +48,7 @@ public class ScoreHandler {
                     gameOverBoard.setActive(false);
                     break;
                 case SHARE:
-                    shareHandler.facebookShare();
+                    shareHandler.defaultShare();
                     break;
             }
         }
@@ -61,10 +65,17 @@ public class ScoreHandler {
                 }
             } else {
                 resetAndPersist();
-                sleep(2000);
+                sleep(1000);
                 scoreBoard.setActive(false);
                 gameOverBoard.setActive(true);
                 sleep(1000);
+            }
+        }
+
+        TutorialBoard tutorialBoard = resourceManager.getTutorialBoard();
+        if (tutorialBoard.isActive()) {
+            if (tutorialBoard.checkAction()) {
+                tutorialBoard.setActive(false);
             }
         }
     }

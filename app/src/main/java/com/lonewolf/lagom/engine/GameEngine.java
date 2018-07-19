@@ -29,6 +29,8 @@ public class GameEngine implements Runnable {
     private float deltaTime;
     private float animationDeltaTime;
 
+    private boolean initialized;
+
     private ResourceManager resourceManager;
 
     public StateReference getInputState() {
@@ -59,8 +61,9 @@ public class GameEngine implements Runnable {
         this.enemyHandler = new EnemyHandler(resourceManager);
         this.spellHandler = new SpellHandler(resourceManager);
 
-        this.shareHandler = new ShareHandler(resourceManager.getContext());
-        this.scoreHandler = new ScoreHandler(resourceManager, shareHandler, resetState, displayScoreState);
+        this.shareHandler = new ShareHandler(resourceManager);
+        this.scoreHandler = new ScoreHandler(resourceManager, gameState, shareHandler, resetState,
+                displayScoreState);
 
         this.deltaTime = 0.0f;
         this.animationDeltaTime = 0.0f;
@@ -73,6 +76,17 @@ public class GameEngine implements Runnable {
         this.inputState.setActive(true);
 
         while (!Thread.currentThread().isInterrupted()) {
+
+            if (!initialized) {
+                initialized = true;
+                if (resourceManager.isFirstRun()) {
+                    resourceManager.getTutorialBoard().setActive(true);
+                    resourceManager.disableTutorial();
+                }
+            }
+
+            scoreHandler.update(deltaTime);
+
             if (gameState.isActive()) {
                 deltaTime = (System.currentTimeMillis() - lastTime) / 1000.0f;
                 animationDeltaTime += deltaTime;
@@ -85,11 +99,10 @@ public class GameEngine implements Runnable {
                 enemyHandler.update(deltaTime, 1 + resourceManager.getScore().getValue() / 200);
             }
 
-            scoreHandler.update(deltaTime);
-
             if (resetState.isActive()) {
                 playerHandler.reset();
                 enemyHandler.reset();
+                spellHandler.reset();
                 resetState.setActive(false);
                 gameState.setActive(true);
                 this.lastTime = System.currentTimeMillis();

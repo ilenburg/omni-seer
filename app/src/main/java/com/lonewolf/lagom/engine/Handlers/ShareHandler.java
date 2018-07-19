@@ -1,7 +1,8 @@
 package com.lonewolf.lagom.engine.Handlers;
 
-import android.content.Context;
 import android.content.Intent;
+
+import com.lonewolf.lagom.resources.ResourceManager;
 
 /**
  * Created by Ian Ilenburg on 24/03/2018.
@@ -9,18 +10,19 @@ import android.content.Intent;
 
 public class ShareHandler {
 
-    private final Context context;
+    private final ResourceManager resourceManager;
 
-    public ShareHandler(Context context) {
-        this.context = context;
+    public ShareHandler(ResourceManager resourceManager) {
+        this.resourceManager = resourceManager;
     }
 
-    public void facebookShare() {
+    public void defaultShare() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        String message = "Text I want to share.";
+        String message = "My Score in Omni Seer is: " + resourceManager.getHighScore();
         shareIntent.putExtra(Intent.EXTRA_TEXT, message);
-        context.startActivity(Intent.createChooser(shareIntent, "Share Omni Seer"));
+        resourceManager.getContext().startActivity(Intent.createChooser(shareIntent, "Share Omni " +
+                "Seer Score"));
     }
 
 }

@@ -85,6 +85,18 @@ public class SpellHandler {
         }
     }
 
+    public void reset() {
+        resourceManager.getEnemySpell().setActive(false);
+
+        for (Spell minorSpell : resourceManager.getMinorSpells()) {
+            minorSpell.setActive(false);
+        }
+
+        for (Spell megaSpell : resourceManager.getMegaSpells()) {
+            megaSpell.setActive(false);
+        }
+    }
+
     private void checkImpactShadowLord(Spell spell) {
         RigidBody spellRigidBody = spell.getRigidBody();
         ShadowLord shadowLord = resourceManager.getShadowLord();
@@ -158,7 +170,8 @@ public class SpellHandler {
 
     private void checkImpactPlayer(Spell spell) {
         RigidBody spellRigidBody = spell.getRigidBody();
-        if (PhysicsUtils.Collide(spellRigidBody, resourceManager.getPlayer().getRigidBody(), false)) {
+        if (PhysicsUtils.Collide(spellRigidBody, resourceManager.getPlayer().getRigidBody(),
+                false)) {
             activateImpact(spell.getImpact(), spellRigidBody);
             resourceManager.getPlayer().getStats().dealDamage(1);
             spell.setActive(false);
