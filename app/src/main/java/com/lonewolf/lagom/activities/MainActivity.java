@@ -17,6 +17,7 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.lonewolf.lagom.graphics.GameView;
+import com.lonewolf.lagom.utils.GameConstants;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         gameView = new GameView(this);
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111");
+        MobileAds.initialize(this, GameConstants.AD_MOB_KEY);
 
         final RelativeLayout layout = new RelativeLayout(this);
 
@@ -37,10 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
         AdView adView = new AdView(this);
         adView.setAdSize(AdSize.SMART_BANNER);
-        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        adView.setAdUnitId(GameConstants.AD_MOB_KEY);
 
         AdRequest adRequest = new AdRequest.Builder().addTestDevice
-                ("79932D975E5085B56B15E1182AEB63CC").build();
+                (GameConstants.TEST_DEVICE_CODE).build();
         adView.loadAd(adRequest);
         adView.setBackgroundColor(Color.TRANSPARENT);
 
@@ -73,6 +74,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        gameView.onDestroy();
     }
 
     @Override

@@ -11,6 +11,8 @@ public final class GameConstants {
     public static final String OMNI_PREFERENCE_KEY = "seerPreferenceKey";
     public static final String HIGH_SCORE = "highScore";
     public static final String FIRST_RUN = "firstRun";
+    public static final String AD_MOB_KEY = "ca-app-pub-3940256099942544/6300978111";
+    public static final String TEST_DEVICE_CODE = "79932D975E5085B56B15E1182AEB63CC";
 
     public static final int STARTING_MANA = 3;
 

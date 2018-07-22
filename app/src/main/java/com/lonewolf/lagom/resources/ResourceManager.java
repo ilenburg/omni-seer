@@ -180,12 +180,6 @@ public class ResourceManager {
         editor.commit();
     }
 
-    public void enableTutorial() {
-        SharedPreferences.Editor editor = this.sharedPreferences.edit();
-        editor.putBoolean(GameConstants.FIRST_RUN, true);
-        editor.commit();
-    }
-
     public int getHighScore() {
         return this.sharedPreferences.getInt(GameConstants.HIGH_SCORE, 0);
     }
@@ -247,11 +241,22 @@ public class ResourceManager {
     }
 
     public void playMusic() {
-        musicPlayer.start();
+        if (musicPlayer != null) {
+            musicPlayer.start();
+        }
     }
 
     public void stopMusic() {
-        musicPlayer.pause();
+        if (musicPlayer != null) {
+            musicPlayer.pause();
+        }
+    }
+
+    public void clearMusic() {
+        if (musicPlayer != null) {
+            musicPlayer.stop();
+            musicPlayer.release();
+        }
     }
 
     public void loadResources() {
@@ -327,7 +332,7 @@ public class ResourceManager {
     }
 
     private void initSound() {
-        musicPlayer = PerfectLoopMediaPlayer.create(context, R.raw.background);
+        musicPlayer = PerfectLoopMediaPlayer.create(context, R.raw.background_music);
 
         sounds[0] = soundPool.load(context, R.raw.jump, 1);
         sounds[1] = soundPool.load(context, R.raw.spell, 1);
@@ -396,9 +401,7 @@ public class ResourceManager {
         loadTexture(R.drawable.fire_sprite, 6, false);
         loadTexture(R.drawable.shadow_lord, 7, false);
         loadTexture(R.drawable.minion, 8, false);
-        loadTexture(R.drawable.bomb, 9, false);
         loadTexture(R.drawable.goo, 10, false);
-        loadTexture(R.drawable.egg, 11, false);
         loadTexture(R.drawable.numbers, 12, false);
         loadTexture(R.drawable.impact2, 13, false);
         loadTexture(R.drawable.meat_blow, 14, false);

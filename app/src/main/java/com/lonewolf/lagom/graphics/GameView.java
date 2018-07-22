@@ -42,12 +42,19 @@ public class GameView extends GLSurfaceView {
     public void onPause() {
         super.onPause();
         gameRenderer.pause();
+        resourceManager.stopMusic();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         gameRenderer.resume();
+        resourceManager.playMusic();
+    }
+
+    public void onDestroy() {
+        resourceManager.clearMusic();
+        destroyDrawingCache();
     }
 
     @Override
