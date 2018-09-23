@@ -94,10 +94,6 @@ public class GameEngine implements Runnable {
             if (running) {
                 if (!initialized) {
                     initialized = true;
-                    if (resourceManager.isFirstRun()) {
-                        resourceManager.getTutorialBoard().setActive(true);
-                        resourceManager.disableTutorial();
-                    }
                 }
 
                 scoreHandler.update(deltaTime);

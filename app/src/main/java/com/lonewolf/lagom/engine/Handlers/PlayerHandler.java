@@ -91,6 +91,7 @@ public class PlayerHandler {
                         resourceManager.getManaGauge().add();
                         capsule.setActive(false);
                         resourceManager.playGetItem();
+                        resourceManager.getPowerButton().setActive(true);
                     }
                 }
             }
@@ -113,52 +114,55 @@ public class PlayerHandler {
             if (playerAlive) {
                 playerInput.update(deltaTime);
 
-                if (playerInput.isMegaSpell()) {
-                    ManaGauge manaGauge = resourceManager.getManaGauge();
-                    if (manaGauge.consume()) {
-                        for (MegaSpell megaSpell : resourceManager.getMegaSpells()) {
-                            if (!megaSpell.isActive()) {
-                                Vector2 startingPosition = playerRigidBody.getPosition();
-                                megaSpell.getRigidBody().setPosition(startingPosition.getX() + 0.1f,
-                                        startingPosition.getY());
-                                megaSpell.getRigidBody().setVelocity(SPELL_BASE_VELOCITY);
-                                megaSpell.setActive(true);
-                                resourceManager.playMegaSpell();
+                if (playerInput.isTouchPending()) {
+                    if (resourceManager.getJumpButton().checkPress()) {
+                        if (playerInput.isGrounded()) {
+                            playerRigidBody.setVelocityY(2.5f);
+                            playerInput.setGrounded(false);
+                            resourceManager.playJump(2.5f);
+                        }
+                    } else if (resourceManager.getPowerButton().checkPress()) {
+                        ManaGauge manaGauge = resourceManager.getManaGauge();
+                        if (manaGauge.consume()) {
+                            for (MegaSpell megaSpell : resourceManager.getMegaSpells()) {
+                                if (!megaSpell.isActive()) {
+                                    Vector2 startingPosition = playerRigidBody.getPosition();
+                                    megaSpell.getRigidBody().setPosition(startingPosition.getX()
+                                                    + 0.1f,
+                                            startingPosition.getY());
+                                    megaSpell.getRigidBody().setVelocity(SPELL_BASE_VELOCITY);
+                                    megaSpell.setActive(true);
+                                    resourceManager.playMegaSpell();
+                                    break;
+                                }
+                            }
+                            if(manaGauge.isEmpty()) {
+                                resourceManager.getPowerButton().setActive(false);
+                            }
+                        }
+                    } else {
+                        Vector2 startingVelocity = VECTOR_AUX_VELOCITY;
+                        startingVelocity.setCoordinates(playerInput.consumeTouchPosition());
+                        Vector2.sub(startingVelocity, startingVelocity, playerRigidBody
+                                .getPosition());
+                        Vector2.normalize(startingVelocity, startingVelocity);
+                        for (MinorSpell minorSpell : resourceManager.getMinorSpells()) {
+                            if (!minorSpell.isActive()) {
+                                Vector2 spellPosition = VECTOR_AUX_POSITION;
+                                spellPosition.setCoordinates(playerRigidBody.getPosition());
+                                Vector2.add(spellPosition, spellPosition, SPELL_DISPLACEMENT);
+                                minorSpell.getRigidBody().setPosition(spellPosition);
+                                Vector2.multiply(startingVelocity, startingVelocity, 2.0f);
+                                minorSpell.getRigidBody().setVelocity(startingVelocity);
+                                float angle = PhysicsUtils.CalcAngle(startingVelocity,
+                                        VECTOR_FORWARD);
+                                minorSpell.getRigidBody().setAngle(angle);
+                                minorSpell.setActive(true);
+                                resourceManager.playMinorSpell();
                                 break;
                             }
                         }
                     }
-                    playerInput.setMegaSpell(false);
-                }
-
-                if (playerInput.isTouchPending()) {
-                    Vector2 startingVelocity = VECTOR_AUX_VELOCITY;
-                    startingVelocity.setCoordinates(playerInput.consumeTouchPosition());
-                    Vector2.sub(startingVelocity, startingVelocity, playerRigidBody.getPosition());
-                    Vector2.normalize(startingVelocity, startingVelocity);
-                    for (MinorSpell minorSpell : resourceManager.getMinorSpells()) {
-                        if (!minorSpell.isActive()) {
-                            Vector2 spellPosition = VECTOR_AUX_POSITION;
-                            spellPosition.setCoordinates(playerRigidBody.getPosition());
-                            Vector2.add(spellPosition, spellPosition, SPELL_DISPLACEMENT);
-                            minorSpell.getRigidBody().setPosition(spellPosition);
-                            Vector2.multiply(startingVelocity, startingVelocity, 2.0f);
-                            minorSpell.getRigidBody().setVelocity(startingVelocity);
-                            float angle = PhysicsUtils.CalcAngle(startingVelocity, VECTOR_FORWARD);
-                            minorSpell.getRigidBody().setAngle(angle);
-                            minorSpell.setActive(true);
-                            resourceManager.playMinorSpell();
-                            break;
-                        }
-                    }
-                }
-
-                float playerJumpPower = playerInput.getJumpPower();
-
-                if (playerJumpPower != ZERO) {
-                    playerRigidBody.setVelocityY(playerJumpPower);
-                    resourceManager.playJump(playerJumpPower);
-                    playerInput.setJumpPower(ZERO);
                 }
             }
 
@@ -206,6 +210,7 @@ public class PlayerHandler {
         player.setActive(true);
 
         resourceManager.getManaGauge().reset();
+        resourceManager.getPowerButton().setActive(true);
         resourceManager.playMusic();
     }
 }

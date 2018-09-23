@@ -19,7 +19,6 @@ public class Player extends PhysicalEntity {
 
     private final Input input;
     private final Stats stats;
-    private boolean wasAlive;
 
     public Player(int shaderProgram, int texture) {
 
@@ -70,7 +69,6 @@ public class Player extends PhysicalEntity {
                 (colorTransition).build();
 
         this.stats = new Stats(1);
-        this.wasAlive = true;
         this.setActive(true);
     }
 

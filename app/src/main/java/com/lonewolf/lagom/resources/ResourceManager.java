@@ -21,11 +21,12 @@ import com.lonewolf.lagom.entities.enemies.ShadowLord;
 import com.lonewolf.lagom.entities.spell.MegaSpell;
 import com.lonewolf.lagom.entities.spell.MinorSpell;
 import com.lonewolf.lagom.external.PerfectLoopMediaPlayer;
-import com.lonewolf.lagom.hud.ManaGauge;
-import com.lonewolf.lagom.hud.Score;
 import com.lonewolf.lagom.hud.GameOverBoard;
+import com.lonewolf.lagom.hud.JumpButton;
+import com.lonewolf.lagom.hud.ManaGauge;
+import com.lonewolf.lagom.hud.PowerButton;
+import com.lonewolf.lagom.hud.Score;
 import com.lonewolf.lagom.hud.ScoreBoard;
-import com.lonewolf.lagom.hud.TutorialBoard;
 import com.lonewolf.lagom.scenario.Background;
 import com.lonewolf.lagom.scenario.Panorama;
 import com.lonewolf.lagom.utils.GameConstants;
@@ -50,8 +51,8 @@ public class ResourceManager {
 
     private SoundPool soundPool;
 
-    private int[] shaderPrograms = new int[9];
-    private int[] textures = new int[21];
+    private int[] shaderPrograms = new int[10];
+    private int[] textures = new int[22];
     private int[] sounds = new int[9];
 
     private final MinorSpell[] minorSpells = new MinorSpell[30];
@@ -79,8 +80,9 @@ public class ResourceManager {
     private Score score;
     private ManaGauge manaGauge;
     private GameOverBoard gameOverBoard;
-    private TutorialBoard tutorialBoard;
     private ScoreBoard scoreBoard;
+    private JumpButton jumpButton;
+    private PowerButton powerButton;
     private MegaSpell enemySpell;
 
     public ResourceManager(Context context) {
@@ -154,12 +156,16 @@ public class ResourceManager {
         return gameOverBoard;
     }
 
-    public TutorialBoard getTutorialBoard() {
-        return tutorialBoard;
-    }
-
     public ScoreBoard getScoreBoard() {
         return scoreBoard;
+    }
+
+    public JumpButton getJumpButton() {
+        return jumpButton;
+    }
+
+    public PowerButton getPowerButton() {
+        return powerButton;
     }
 
     public Impact[] getImpacts() {
@@ -168,16 +174,6 @@ public class ResourceManager {
 
     public Capsule[] getCapsules() {
         return capsules;
-    }
-
-    public boolean isFirstRun() {
-        return this.sharedPreferences.getBoolean(GameConstants.FIRST_RUN, true);
-    }
-
-    public void disableTutorial() {
-        SharedPreferences.Editor editor = this.sharedPreferences.edit();
-        editor.putBoolean(GameConstants.FIRST_RUN, false);
-        editor.commit();
     }
 
     public int getHighScore() {
@@ -279,7 +275,8 @@ public class ResourceManager {
         this.score = new Score(shaderPrograms[0], textures[12], -1.55f, 0.83f);
         this.manaGauge = new ManaGauge(shaderPrograms[0], textures[15]);
         this.gameOverBoard = new GameOverBoard(shaderPrograms[0], textures[16], player.getInput());
-        this.tutorialBoard = new TutorialBoard(shaderPrograms[0], textures[20], player.getInput());
+        this.jumpButton = new JumpButton(shaderPrograms[8], textures[21], player.getInput());
+        this.powerButton = new PowerButton(shaderPrograms[8], textures[21], player.getInput());
 
         Score highScore = new Score(shaderPrograms[0], textures[12], -0.15f, 0.23f);
         Score currentScore = new Score(shaderPrograms[0], textures[12], -0.15f, -0.26f);
@@ -364,6 +361,7 @@ public class ResourceManager {
         String colorSwapFragmentShader = null;
         String damageFragmentShader = null;
         String colorTransitionFragmentShaderShadow = null;
+        String transparentFrag = null;
 
         try {
             vertexShader = getShaderCode(R.raw.base_vert);
@@ -376,6 +374,7 @@ public class ResourceManager {
             damageFragmentShader = getShaderCode(R.raw.damage_frag);
             colorTransitionFragmentShaderShadow = getShaderCode(R.raw
                     .color_transition_base_frag_shadow);
+            transparentFrag = getShaderCode(R.raw.transparent_frag);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -389,6 +388,8 @@ public class ResourceManager {
         shaderPrograms[6] = generateShaderProgram(vertexShader, damageFragmentShader);
         shaderPrograms[7] = generateShaderProgram(vertexShader,
                 colorTransitionFragmentShaderShadow);
+        shaderPrograms[8] = generateShaderProgram(vertexShader,
+                transparentFrag);
     }
 
     private void initTextures() {
@@ -411,6 +412,7 @@ public class ResourceManager {
         loadTexture(R.drawable.enemy_fire_sprite, 18, false);
         loadTexture(R.drawable.enemy_impact, 19, false);
         loadTexture(R.drawable.tutorial, 20, false);
+        loadTexture(R.drawable.button, 21, false);
     }
 
     private String getShaderCode(int resourceId) throws IOException {

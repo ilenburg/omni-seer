@@ -78,6 +78,20 @@ public final class PhysicsUtils {
         return false;
     }
 
+    public static boolean EdgeCollide(Vector2 p1, RigidBody r2) {
+        Vector2 p2 = r2.getPosition();
+
+        float dx = (float) Math.pow(p2.getX() + (0.17f * Math.signum(p2.getX())) - p1.getX(), 2);
+        float dy = (float) Math.pow(p2.getY() + (0.05f * Math.signum(p2.getY())) - p1.getY(), 2);
+        float dist = (float) Math.sqrt(dx + dy);
+
+        if (dist < r2.getRadius()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static void CollisionResponse(RigidBody r1, RigidBody r2) {
 
         Vector2.sub(OPERAND_AUX_1, r1.getPosition(), r2.getPosition());

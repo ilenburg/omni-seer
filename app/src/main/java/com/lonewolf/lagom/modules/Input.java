@@ -1,5 +1,7 @@
 package com.lonewolf.lagom.modules;
 
+import android.util.Log;
+
 import com.lonewolf.lagom.engine.Vector2;
 
 /**
@@ -8,7 +10,6 @@ import com.lonewolf.lagom.engine.Vector2;
 
 public class Input {
 
-    private float jumpPower;
     private Vector2 touchPosition;
     private boolean grounded;
     private boolean megaSpell;
@@ -23,7 +24,6 @@ public class Input {
     private float time;
 
     public Input() {
-        this.jumpPower = 0.0f;
         this.grounded = true;
         this.touchPosition = new Vector2(0.0f, 0.0f);
         this.screenHeight = 0.0f;
@@ -33,6 +33,10 @@ public class Input {
         this.touchPending = false;
         this.time = 0.0f;
         this.active = true;
+    }
+
+    public Vector2 readTouchPosition() {
+        return touchPosition;
     }
 
     public Vector2 consumeTouchPosition() {
@@ -47,22 +51,15 @@ public class Input {
     public void setTouchPosition(float x, float y) {
         this.touchPosition.setX(getNormalizedX(x));
         this.touchPosition.setY(getNormalizedY(y));
+        Log.d("NormX", Float.toString(getNormalizedX(x)));
+        Log.d("NormY", Float.toString(getNormalizedY(y)));
         this.touchPending = true;
-
     }
 
     public void setScreenSize(float screenWidth, float screenHeight, float ratio) {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         this.ratio = ratio;
-    }
-
-    public float getJumpPower() {
-        return jumpPower;
-    }
-
-    public void setJumpPower(float jumpPower) {
-        this.jumpPower = jumpPower;
     }
 
     public boolean isGrounded() {
@@ -107,13 +104,11 @@ public class Input {
     }
 
     public void update(float deltaTime) {
-
         if (this.time > 1.0f) {
             this.invulnerable = false;
             this.time = 0.0f;
         } else {
             this.time += deltaTime;
         }
-
     }
 }

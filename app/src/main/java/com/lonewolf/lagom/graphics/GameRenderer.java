@@ -16,9 +16,10 @@ import com.lonewolf.lagom.entities.enemies.ShadowLord;
 import com.lonewolf.lagom.entities.spell.MegaSpell;
 import com.lonewolf.lagom.entities.spell.MinorSpell;
 import com.lonewolf.lagom.hud.GameOverBoard;
+import com.lonewolf.lagom.hud.JumpButton;
 import com.lonewolf.lagom.hud.ManaGauge;
+import com.lonewolf.lagom.hud.PowerButton;
 import com.lonewolf.lagom.hud.ScoreBoard;
-import com.lonewolf.lagom.hud.TutorialBoard;
 import com.lonewolf.lagom.modules.Sprite;
 import com.lonewolf.lagom.modules.Stats;
 import com.lonewolf.lagom.modules.effects.Animation;
@@ -183,10 +184,18 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             draw(manaSprites[i], manaSprites[i].getModelMatrix());
         }
 
+        JumpButton jumpButton = resourceManager.getJumpButton();
+        if (jumpButton.isActive()) {
+            draw(jumpButton.getSprite(), jumpButton.getRigidBody().getModelMatrix());
+        }
+
+        PowerButton powerButton = resourceManager.getPowerButton();
+        if (powerButton.isActive()) {
+            draw(powerButton.getSprite(), powerButton.getRigidBody().getModelMatrix());
+        }
+
         ScoreBoard scoreBoard = resourceManager.getScoreBoard();
-        TutorialBoard tutorialBoard = resourceManager.getTutorialBoard();
         if (scoreBoard.isActive()) {
-            tutorialBoard.setActive(false);
             draw(scoreBoard.getSprite());
 
             for (Sprite sprite : scoreBoard.getHighScore().getSprites()) {
@@ -201,11 +210,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         GameOverBoard gameOverBoard = resourceManager.getGameOverBoard();
         if (gameOverBoard.isActive()) {
             draw(gameOverBoard.getSprite());
-        }
-
-
-        if (tutorialBoard.isActive()) {
-            draw(tutorialBoard.getSprite());
         }
     }
 

@@ -2,11 +2,10 @@ package com.lonewolf.lagom.graphics;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.support.v4.view.GestureDetectorCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.lonewolf.lagom.engine.GameEngine;
-import com.lonewolf.lagom.engine.GestureListener;
 import com.lonewolf.lagom.resources.ResourceManager;
 
 /**
@@ -14,8 +13,6 @@ import com.lonewolf.lagom.resources.ResourceManager;
  */
 
 public class GameView extends GLSurfaceView {
-
-    private GestureDetectorCompat mDetector;
 
     private final GameEngine gameEngine;
     private final GameRenderer gameRenderer;
@@ -33,9 +30,6 @@ public class GameView extends GLSurfaceView {
         this.gameRenderer = new GameRenderer(resourceManager, gameEngine);
 
         setRenderer(gameRenderer);
-
-        this.mDetector = new GestureDetectorCompat(context, new GestureListener(resourceManager,
-                gameEngine.getInputState()));
     }
 
     @Override
@@ -59,7 +53,11 @@ public class GameView extends GLSurfaceView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        this.mDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
+        if (event.getAction() == MotionEvent.ACTION_DOWN && gameEngine.getInputState().isActive()) {
+            Log.d("X", Float.toString(event.getX()));
+            Log.d("Y", Float.toString(event.getY()));
+            resourceManager.getPlayer().getInput().setTouchPosition(event.getX(), event.getY());
+        }
+        return true;
     }
 }

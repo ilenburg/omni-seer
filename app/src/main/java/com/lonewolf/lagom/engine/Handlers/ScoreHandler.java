@@ -3,7 +3,6 @@ package com.lonewolf.lagom.engine.Handlers;
 import com.lonewolf.lagom.hud.GameOverBoard;
 import com.lonewolf.lagom.hud.Score;
 import com.lonewolf.lagom.hud.ScoreBoard;
-import com.lonewolf.lagom.hud.TutorialBoard;
 import com.lonewolf.lagom.resources.ResourceManager;
 import com.lonewolf.lagom.states.StateReference;
 
@@ -69,13 +68,6 @@ public class ScoreHandler {
                 scoreBoard.setActive(false);
                 gameOverBoard.setActive(true);
                 sleep(1000);
-            }
-        }
-
-        TutorialBoard tutorialBoard = resourceManager.getTutorialBoard();
-        if (tutorialBoard.isActive()) {
-            if (tutorialBoard.checkAction()) {
-                tutorialBoard.setActive(false);
             }
         }
     }
