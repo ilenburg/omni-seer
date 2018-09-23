@@ -30,6 +30,7 @@ public class GameEngine implements Runnable {
     private float animationDeltaTime;
 
     private boolean initialized;
+    private boolean running;
 
     private ResourceManager resourceManager;
 
@@ -67,6 +68,15 @@ public class GameEngine implements Runnable {
 
         this.deltaTime = 0.0f;
         this.animationDeltaTime = 0.0f;
+        this.running = true;
+    }
+
+    public void activate() {
+        this.running = true;
+    }
+
+    public void deactivate() {
+        this.running = false;
     }
 
     @Override
@@ -77,35 +87,38 @@ public class GameEngine implements Runnable {
 
         while (!Thread.currentThread().isInterrupted()) {
 
-            if (!initialized) {
-                initialized = true;
-                if (resourceManager.isFirstRun()) {
-                    resourceManager.getTutorialBoard().setActive(true);
-                    resourceManager.disableTutorial();
+            deltaTime = (System.currentTimeMillis() - lastTime) / 1000.0f;
+            animationDeltaTime += deltaTime;
+            lastTime = System.currentTimeMillis();
+
+            if (running) {
+                if (!initialized) {
+                    initialized = true;
+                    if (resourceManager.isFirstRun()) {
+                        resourceManager.getTutorialBoard().setActive(true);
+                        resourceManager.disableTutorial();
+                    }
                 }
-            }
 
-            scoreHandler.update(deltaTime);
+                scoreHandler.update(deltaTime);
 
-            if (gameState.isActive()) {
-                deltaTime = (System.currentTimeMillis() - lastTime) / 1000.0f;
-                animationDeltaTime += deltaTime;
-                lastTime = System.currentTimeMillis();
+                if (gameState.isActive()) {
 
-                playerHandler.update(deltaTime);
+                    playerHandler.update(deltaTime);
 
-                spellHandler.update(deltaTime);
+                    spellHandler.update(deltaTime);
 
-                enemyHandler.update(deltaTime, 1 + resourceManager.getScore().getValue() / 200);
-            }
+                    enemyHandler.update(deltaTime, 1 + resourceManager.getScore().getValue() / 200);
+                }
 
-            if (resetState.isActive()) {
-                playerHandler.reset();
-                enemyHandler.reset();
-                spellHandler.reset();
-                resetState.setActive(false);
-                gameState.setActive(true);
-                this.lastTime = System.currentTimeMillis();
+                if (resetState.isActive()) {
+                    playerHandler.reset();
+                    enemyHandler.reset();
+                    spellHandler.reset();
+                    resetState.setActive(false);
+                    gameState.setActive(true);
+                    this.lastTime = System.currentTimeMillis();
+                }
             }
 
             try {
