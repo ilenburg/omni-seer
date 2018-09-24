@@ -2,7 +2,6 @@ package com.lonewolf.lagom.graphics;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.lonewolf.lagom.engine.GameEngine;
@@ -53,10 +52,10 @@ public class GameView extends GLSurfaceView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN && gameEngine.getInputState().isActive()) {
-            Log.d("X", Float.toString(event.getX()));
-            Log.d("Y", Float.toString(event.getY()));
-            resourceManager.getPlayer().getInput().setTouchPosition(event.getX(), event.getY());
+        int motionEvent = event.getActionMasked();
+        if ((motionEvent == MotionEvent.ACTION_DOWN || motionEvent == MotionEvent.ACTION_POINTER_DOWN) && gameEngine.getInputState().isActive()) {
+            int pointerId = event.getActionIndex();
+            resourceManager.getPlayer().getInput().setTouchPosition(event.getX(pointerId), event.getY(pointerId));
         }
         return true;
     }

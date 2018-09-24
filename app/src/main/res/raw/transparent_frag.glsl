@@ -7,7 +7,7 @@ uniform sampler2D tex;
 void main() {
     vec4 baseColor = texture2D(tex, texCoord);
     if(baseColor.a > 0.0) {
-        baseColor.a = 0.5;
+        baseColor.a = 0.75;
     }
     gl_FragColor = baseColor;
 }

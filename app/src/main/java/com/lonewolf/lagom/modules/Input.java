@@ -1,7 +1,5 @@
 package com.lonewolf.lagom.modules;
 
-import android.util.Log;
-
 import com.lonewolf.lagom.engine.Vector2;
 
 /**
@@ -10,9 +8,9 @@ import com.lonewolf.lagom.engine.Vector2;
 
 public class Input {
 
-    private Vector2 touchPosition;
+    private Vector2[] touchPositions;
+    private int vectorIndex;
     private boolean grounded;
-    private boolean megaSpell;
 
     private float screenWidth;
     private float screenHeight;
@@ -20,40 +18,44 @@ public class Input {
 
     private boolean active;
     private boolean invulnerable;
-    private boolean touchPending;
     private float time;
 
     public Input() {
         this.grounded = true;
-        this.touchPosition = new Vector2(0.0f, 0.0f);
+        this.touchPositions = new Vector2[3];
+        for (int i = 0; i < touchPositions.length; ++i) {
+            touchPositions[i] = new Vector2();
+        }
         this.screenHeight = 0.0f;
         this.screenWidth = 0.0f;
 
         this.invulnerable = false;
-        this.touchPending = false;
+        this.vectorIndex = 0;
         this.time = 0.0f;
         this.active = true;
     }
 
     public Vector2 readTouchPosition() {
-        return touchPosition;
+        return touchPositions[vectorIndex - 1];
     }
 
     public Vector2 consumeTouchPosition() {
-        this.touchPending = false;
-        return touchPosition;
+        if (vectorIndex > 0) {
+            --vectorIndex;
+        }
+        return touchPositions[vectorIndex];
     }
 
     public boolean isTouchPending() {
-        return touchPending;
+        return vectorIndex > 0;
     }
 
     public void setTouchPosition(float x, float y) {
-        this.touchPosition.setX(getNormalizedX(x));
-        this.touchPosition.setY(getNormalizedY(y));
-        Log.d("NormX", Float.toString(getNormalizedX(x)));
-        Log.d("NormY", Float.toString(getNormalizedY(y)));
-        this.touchPending = true;
+        if (vectorIndex < touchPositions.length - 1) {
+            this.touchPositions[vectorIndex].setX(getNormalizedX(x));
+            this.touchPositions[vectorIndex].setY(getNormalizedY(y));
+            ++vectorIndex;
+        }
     }
 
     public void setScreenSize(float screenWidth, float screenHeight, float ratio) {
@@ -76,14 +78,6 @@ public class Input {
 
     private float getNormalizedY(float y) {
         return -((y / screenHeight) * 2 - 1);
-    }
-
-    public boolean isMegaSpell() {
-        return megaSpell;
-    }
-
-    public void setMegaSpell(boolean megaSpell) {
-        this.megaSpell = megaSpell;
     }
 
     public boolean isInvulnerable() {
