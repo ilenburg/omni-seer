@@ -188,7 +188,7 @@ public class PlayerHandler {
             if (player.isDead() && playerRigidBody.getPosition().getY() > GameConstants.HEAVEN) {
                 player.setActive(false);
                 player.getInput().setGrounded(false);
-                player.getInput().consumeTouchPosition();
+                player.getInput().clearTouch();
                 gameState.setActive(false);
                 displayScoreState.setActive(true);
                 resourceManager.getScoreBoard().setActive(true);

@@ -46,6 +46,10 @@ public class Input {
         return touchPositions[vectorIndex];
     }
 
+    public void clearTouch() {
+        vectorIndex = 0;
+    }
+
     public boolean isTouchPending() {
         return vectorIndex > 0;
     }

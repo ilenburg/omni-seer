@@ -66,6 +66,7 @@ public class ScoreHandler {
                 resetAndPersist();
                 sleep(1000);
                 scoreBoard.setActive(false);
+                resourceManager.getPlayer().getInput().clearTouch();
                 gameOverBoard.setActive(true);
                 sleep(1000);
             }

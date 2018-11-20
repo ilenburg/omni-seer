@@ -19,10 +19,11 @@ public class ShareHandler {
     public void defaultShare() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        String message = "My Score in Omni Seer is: " + resourceManager.getHighScore();
+        String message = "My High Score in Omni Seer is: " + resourceManager.getHighScore() +
+                " https://play.google.com/store/apps/details?id=com.lonewolf.lagom";
         shareIntent.putExtra(Intent.EXTRA_TEXT, message);
         resourceManager.getContext().startActivity(Intent.createChooser(shareIntent, "Share Omni " +
-                "Seer Score"));
+                "Seer High Score"));
     }
 
 }
